@@ -70,48 +70,11 @@ Node.js 교과서를 공부하며 배운 내용
 - 프로그래머의 소양 중 하나는 DRY(중복 제거) 이다. 간단한 프로그램만으로도 의미 없는 단순 작업을 줄일 수 있다.
 
 7. AWS와 GCP로 배포
-ㅋ
+
 ------------------------------------------------------------
 Node_ALL_IN_ONE
 
 1. Node스타그램
-주요 기능: 로그인, Post 작성, 해시태그 검색, DM, 댓글 및 유저호출, 팔로우 && 좋아요
-데이터 베이스: User, Post, Hashtag, Follow([User, User], N:M), Good([User, Post], N:M), PostHashtag([Post, Hashtag], N:M), Comment([Post, Comment], 1:N), Chat([User, User], N:M)
-주요 패키지: multer, socket.io@2
-
-views: {
-
-https://cholol.tistory.com/545
-
-main.html: 미로그인시[ 랜덤 Post, 로그인, 회원가입 ], 로그인시[ follow Post 시간 순으로, 내정보, DM, Post 올리기, 댓글 적기]
-login.html: 로그인, 회원가입(모달)
-
-REST API
-메인 페이지 이동
-get /main
-로그인 페이지 이동
-get /login
-로그인
-post /auth/login
-회원가입
-post /auth/join
-내 프로파일
-get /profile
-검색
-get /search:contents?hashtag=
-포스트 올리기, 삭제
-post /post, delete/post
-댓글 쓰기, 삭제
-post /comment:postId, delete/comment:postId
-팔로우, 취소
-get /follow:userId, delete/follow:userId
-좋아요, 취소
-get /good:postId, delete/good:postId
-DM 창
-
-DM chat
-}
-
 
 2. API
 
