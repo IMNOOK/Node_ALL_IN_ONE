@@ -38,10 +38,74 @@ socket.io@2 - 실시간 DM 용
 	profile.html - 페이지
 	
 	follow.html - 팔로우 페이지
-	
 }
 
-----------------------------REST API----------------------------
+만들기 완료!
+----------------------------DB----------------------------
+
+데이터 베이스: nodeInstagram
+
+User
+	id
+	email
+	password
+	nick
+	
+follow
+	id
+	followerId
+	followingId
+
+Post
+	id
+	userId
+	img
+	content
+	time
+
+comment
+	id
+	postId
+	comment
+	time
+
+Hashtag
+	id
+	title
+
+PostHashtag
+	id
+	postId
+	hashtagId
+
+Good
+	id
+	userId
+	postId
+	
+Room
+	id
+	aId
+	bId
+
+DM
+	id
+	roomId
+	sendUserId
+	receiveUserId
+	content
+	time
+	
+Domain
+	id
+	userId
+	host
+	type // 0 - free, 1 - premium
+	clientSecret VARCHAR(37)
+
+문제:
+Room을 만들까 만들지 않을까?
+----------------------------REST API(라우터)----------------------------
 
 메인 페이지 이동
 get /main
@@ -65,38 +129,9 @@ get /follow:userId, delete/follow:userId
 get /good:postId, delete/good:postId
 DM 창
 
-----------------------------DB----------------------------
+설계 완료!
 
-데이터 베이스:
-
-User
-    id
-    email
-    password
-    following
-    follower
-
-Post
-    id
-    userId
-    content
-    img
-    hashtag
-    comments
-    like
-    time
-
-hashtag
-    id
-    contents
-
-comments
-    id
-    postId
-    comment
-    time
-	
-2. 모듈, 라우터, DB 연동
+2. 프론트, 모듈, 라우터, DB 연동
 
 https://jacobgrowthstory.tistory.com/19
 
@@ -110,4 +145,69 @@ https://jacobgrowthstory.tistory.com/19
 .env -> dotenv
 app.js -> 서버
 
-mysql 연동
+
+----------------------------프론트 연동----------------------------
+index.html
+	user + good->postIds, following, follower
+	DM
+	posts
+	
+new_post.html
+	user
+	
+login.html
+	
+profile.html
+	user
+	
+follow.html
+	user
+----------------------------mysql 연동----------------------------
+user
+	get
+
+post
+	get
+	
+posthashtag
+	get
+
+
+----------------------------라우터 연동----------------------------
+
+indexRouter
+
+	get('/') -> 메인 페이지 이동
+	
+	get('/login') -> 로그인 페이지 이동
+
+	get('/pofile') -> 프로파일 페이지 이동
+	
+	get('post') -> 포스트 페이지 이동
+	
+	get('follow:id')
+	delete('follow:id')
+	
+	get('good:id')
+	delete('good:id')
+	
+	get('comment:postid')
+	
+AuthRouter
+	post('/login') -> 로그인 실행
+		req.body -> email, password
+		passport 
+		fails-> return error + no
+		success-> return '/' + user
+		
+	post('/join') -> 회원가입 실행
+		req.body -> email, password, nick
+		models.create(email, password, nick)
+		fails->
+		success-> return '/login'
+	
+Profile
+	
+	
+Post
+	
