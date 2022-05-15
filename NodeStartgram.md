@@ -183,7 +183,8 @@ indexRouter
 
 	get('/pofile') -> 프로파일 페이지 이동
 	
-	get('post') -> 포스트 페이지 이동
+	get('/post') -> 포스트 페이지 이동
+	
 	
 	get('follow:id')
 	delete('follow:id')
@@ -192,6 +193,8 @@ indexRouter
 	delete('good:id')
 	
 	get('comment:postid')
+	
+	DM
 	
 AuthRouter
 	post('/login') -> 로그인 실행
@@ -207,7 +210,7 @@ AuthRouter
 		success-> return '/login'
 	
 Profile
-	
+		
 	
 Post
 	

@@ -1,61 +1,62 @@
+//다른 사람들이 만든 모듈
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-const path = require('path');
-const session = require('express-session');
-const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
-const passport = require('passport');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const path = require('path');
+const nunjucks = require('nunjucks');
+
+// 내가 만든 모듈 or 미리 설정한 값 가져옴 
 
 dotenv.config();
-const indexRouter = require('./routes');
-const passportConfig = require('./passport');
+const pageRouter = require('./routes');
 
+// server 코드 시작 및 각종 설정
 const app = express();
-passportConfig(); // 패스포트 설정
 app.set('port', process.env.PORT || 8001);
-const sessionConfig = {
-  resave: false,
-  saveUninitialized: false,
-  secret: process.env.COOKIE_SECRET,
-  cookie: {
-    httpOnly: true,
-    secure: false,
-  },
-}
 app.set('view engine', 'html');
 nunjucks.configure('views', {
-  express: app,
-  watch: true,
+	express: app,
+	watch: true,
 });
 
 
+// 미들웨어 장착
 app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, 'public'))); // 
-app.use('/img', express.static(path.join(__dirname, 'uploads'))); //uploads 라는 폴더를 static으로 할 껀데 /img 경로라고 사용할께, 실제는 uploads 지칭은 img 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser(process.env.COOKIE_SECRET));
-app.use(session());
-app.use(passport.initialize());
-app.use(passport.session(sessionConfig));
+app.use(express.static(path.join(__dirname, 'public'))); //사용자가 public 폴더안의 것 사용
+app.use('/img', express.static(path.join(__dirname, 'uploads'))); // + 사용자는 img로 보임
+app.use(express.json()); // body의 json들을 객체로 만들어줌.
+app.use(express.urlencoded({ extended: false})); // body의 url들을 객체로 만들어 줌.
+app.use(cookieParser(process.env.COOKIE_SECRET)); //Header에 쿠키값들 req.cookie 객체에 담아줌, 서명함. -> 
+app.use(session({
+	resave: false, // cookie 바뀐 거 없어도 다시 쿠키 저장 false.
+	saveUninitalized: false, // cookie가 처음 부터 없어도 저장 false.
+	secret: process.env.COOKIE_SECRET,
+	cookie: {
+		httpOnly: true, //유저가 쿠키가지고 장난 칠 수 없게함. javascript 사용 금지!
+		secure: false, // https 프로토콜에서만 사용한다!를 false로 함. 배포시 true로 바꾸자.
+	}
+}));	//req.session 이라는 객체가 생성.
 
+//라우팅
 app.use('/', pageRouter);
 
-
+//에러 처리 미들웨어
 app.use((req, res, next) => {
-  const error =  new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
-  error.status = 404;
-  next(error);
+	const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+	error.status = 404;
+	next(error);
 });
 
 app.use((err, req, res, next) => {
-  res.locals.message = err.message;
-  res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
-  res.status(err.status || 500);
-  res.render('error');
+	res.locals.message = err.message;
+	res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
+	res.status(err.status || 500);
+	res.render('error');
 });
 
-app.listen(app.get('port'), () => {
-  console.log(app.get('port'), '번 포트에서 대기중');
+//서버 리스닝
+app.listen(app.get('port'), ()=> {
+	console.log(`서버가 ${app.get('port')}에서 실행 중`);
 });
