@@ -2,11 +2,11 @@
 const express = require('express');
 
 // routes 코드 시작 및 각종 설정
-const app = express();
 const router = express.Router();
 
 router.get('/', (req, res) => {
-	return res.render('index');
+	console.log('hi');
+	return res.render('index', {title: 'main'});
 })
 
 router.get('/profile', (req, res) => {
@@ -15,11 +15,6 @@ router.get('/profile', (req, res) => {
 
 router.get('/login', (req, res) => {
 	return res.render('login', {title: '회원가입 - NodeBird' });
-});
-
-app.use((req, res) => {
-	console.log('뭐야');
-	return res.render('index');
 });
 
 module.exports = router;

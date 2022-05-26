@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+  </head>
+  <body>
+	<section id="container">
+		
+		<header id="header">
+			<section class="inner">
+
+				<h1 class="logo">
+					<a href="index.html">
+						<div class="sprite_insta_icon"></div>
+						<div class="sprite_write_logo"></div>
+					</a>
+				</h1>
+
+				<div class="search_box">
+					<input type="text" placeholder="검색" id="search-field">
+
+					<div class="fake_field">
+						<span class="sprite_small_search_icon"></span>
+						<span>검색</span>
+					</div>
+				</div>
+
+				<div class="right_icons">
+					<a href="new_post.html"><div class="sprite_camera_icon"></div></a>
+					<a href="login.html"><div class="sprite_compass_icon"></div></a>
+					<a href="follow.html"><div class="sprite_heart_icon_outline"></div></a>
+					<a href="profile.html"><div class="sprite_user_icon_outline"></div></a>
+				</div>
+
+			</section>
+		</header>
+
+		<div class="hidden_menu">
+			<div class="scroll_inner">
+				<div class="user">
+					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
+					<div class="id">kindtigerrr</div>
+				</div>
+
+				<div class="user">
+					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
+					<div class="id">kindtigerrr</div>
+				</div>
+				<div class="user">
+					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
+					<div class="id">kindtigerrr</div>
+				</div>
+				<div class="user">
+					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
+					<div class="id">kindtigerrr</div>
+				</div>
+				<div class="user">
+					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
+					<div class="id">kindtigerrr</div>
+				</div>
+				<div class="user">
+					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
+					<div class="id">kindtigerrr</div>
+				</div>
+				<div class="user">
+					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
+					<div class="id">kindtigerrr</div>
+				</div>
+				<div class="user">
+					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
+					<div class="id">kindtigerrr</div>
+				</div>
+				<div class="user">
+					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
+					<div class="id">kindtigerrr</div>
+				</div>
+				<div class="user">
+					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
+					<div class="id">kindtigerrr</div>
+				</div>
+
+			</div>
+		</div>
+
+    	{% block content %}
+    	{% endblock %}
+		
+	</section> 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      window.onload = () => {
+        if (new URL(location.href).searchParams.get('loginError')) {
+          alert(new URL(location.href).searchParams.get('loginError'));
+        }
+      };
+    </script>
+    {% block script %}
+    {% endblock %}
+  </body>
+</html>

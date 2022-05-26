@@ -10,7 +10,7 @@ const nunjucks = require('nunjucks');
 // 내가 만든 모듈 or 미리 설정한 값 가져옴 
 
 dotenv.config();
-const pageRouter = require('./routes');
+const pageRouter = require('./routes/index');
 
 // server 코드 시작 및 각종 설정
 const app = express();
