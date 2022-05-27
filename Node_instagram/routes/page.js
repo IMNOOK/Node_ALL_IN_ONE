@@ -10,7 +10,7 @@ const router = express.Router();
 //post처럼 모든 자료를 끌고 오는 것이 아니라 각각의 개인 유저의 필요한 정보만 가져옴
 
 router.get('/', (req, res) => {
-	return 	res.render('main', { title: 'Main' });
+	return 	res.render('index', { title: 'Main' });
 });
 
 router.get('/profile', (req, res) => {

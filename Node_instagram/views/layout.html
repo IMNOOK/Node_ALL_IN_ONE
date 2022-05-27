@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <link rel="stylesheet" href="/css/reset.css">
 	<link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/style.css">
+	{% block head %}
+    {% endblock %}
+	  
   </head>
   <body>
 	<section id="container">
@@ -15,7 +18,7 @@
 			<section class="inner">
 
 				<h1 class="logo">
-					<a href="index">
+					<a href="/">
 						<div class="sprite_insta_icon"></div>
 						<div class="sprite_write_logo"></div>
 					</a>
@@ -39,53 +42,6 @@
 
 			</section>
 		</header>
-
-		<div class="hidden_menu">
-			<div class="scroll_inner">
-				<div class="user">
-					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
-					<div class="id">kindtigerrr</div>
-				</div>
-
-				<div class="user">
-					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
-					<div class="id">kindtigerrr</div>
-				</div>
-				<div class="user">
-					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
-					<div class="id">kindtigerrr</div>
-				</div>
-				<div class="user">
-					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
-					<div class="id">kindtigerrr</div>
-				</div>
-				<div class="user">
-					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
-					<div class="id">kindtigerrr</div>
-				</div>
-				<div class="user">
-					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
-					<div class="id">kindtigerrr</div>
-				</div>
-				<div class="user">
-					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
-					<div class="id">kindtigerrr</div>
-				</div>
-				<div class="user">
-					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
-					<div class="id">kindtigerrr</div>
-				</div>
-				<div class="user">
-					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
-					<div class="id">kindtigerrr</div>
-				</div>
-				<div class="user">
-					<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
-					<div class="id">kindtigerrr</div>
-				</div>
-
-			</div>
-		</div>
 
     	{% block content %}
     	{% endblock %}
