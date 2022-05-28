@@ -12,6 +12,7 @@ const passport = require('passport');
 
 dotenv.config();
 const pageRouter = require('./routes/page');
+const authRouter = require('./routes/auth');
 const passportConfig = require('./passport'); //passport 설정들 가져옴
 
 // server 코드 시작 및 각종 설정
@@ -46,6 +47,7 @@ app.use(passport.session());	// passport.deserializeUser 메서드 호출 -> req
 
 //라우팅
 app.use('/', pageRouter);
+app.use('/auth', authRouter);
 
 //에러 처리 미들웨어
 app.use((req, res, next) => {

@@ -7,6 +7,7 @@ const items = {
 			if (rows.length != 0) {
 				return 0;
 			} else {
+				console.log(rows[0]);
 				return rows[0];
 			}
 		},

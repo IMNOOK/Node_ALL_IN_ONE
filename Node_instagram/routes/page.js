@@ -28,4 +28,8 @@ router.get('/new_post', (req, res) => {
 router.get('/login', (req, res) => {
 	return res.render('login', { title: '내 정보 - NodeBird' });
 });
+
+router.get('/join', (req, res) => {
+	return res.render('join', { title: '내 정보 - NodeBird' });
+});
 module.exports = router;

@@ -5,6 +5,7 @@ const { items } = require('../models/items');
 
 module.exports = () => {
 	passport.serializeUser((user, done) => {
+		console.log(user);
 		done(null, user.email);
 	});
 	
@@ -25,6 +26,7 @@ module.exports = () => {
 			done(error);
 		}
 		*/
+		console.log(email);
 		done(null, items.User.getOne(email));
 	});
 	

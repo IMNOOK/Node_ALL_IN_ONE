@@ -33,18 +33,28 @@
 
                 <h1 class="sprite_insta_big_logo title"></h1>
 
-                <form action="/auth/login" method="post">
+                <form action="/auth/join" method="post">
                     <p class="login_user_name">
                         <label for="user_name">이메일:</label>
                         <input type="text" id="user_name" name="email">
+                    </p>
+					
+					<p class="login_user_name">
+                        <label for="user_name">닉네임:</label>
+                        <input type="text" id="user_name" name="nick">
                     </p>
 
                     <p class="login_user_password">
                         <label for="user_password">비밀번호:</label>
                         <input type="text" id="user_password" name="password">
                     </p>
+					
+					<p class="login_user_password">
+                        <label for="user_password">비밀번호 재입력:</label>
+                        <input type="text" id="user_password2" name="password2">
+                    </p>
 
-                    <input type="submit" id="submit_btn" value="로그인" class="submit_btn">
+                    <input type="submit" id="submit_btn" value="회원가입" class="submit_btn">
                 </form>
 
 
@@ -53,7 +63,7 @@
 
             <div class="bottom_box">
                 <div>
-                    <span>아이디가 없으신가요?</span><a href="/join">회원가입</a>
+                    <span>아이디가 있으신가요?</span><a href="/login">로그인</a>
                 </div>
             </div>
 
@@ -65,4 +75,20 @@
 
 {% block script %}
 	<script src="js/insta.js"></script>
+	<script>
+		const btn = document.querySelector('.submit_btn');
+		const password = document.querySelector('#user_password');
+		const password2 = document.querySelector('#user_password2');
+		
+		onBtn = () => {
+			if(password === password2) {
+				
+			} else {
+				alert('비밀번호가 동일하지 않습니다.');
+			}
+		}
+		
+		btn.addEventlistener('click', onBtn);
+	</script>
+
 {% endblock %}
