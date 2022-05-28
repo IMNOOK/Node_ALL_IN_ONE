@@ -2,13 +2,15 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 
+const { items } = require('../models/items');
+
 module.exports = () => {
 	passport.use(new LocalStrategy({
 		usernameField: 'email',
 		passwordField: 'password',
 	}, async (email, password, done) => {
 		try{
-			const rows = await item.User.getUserByEmail(email);
+			const rows = await items.User.getOne(email);
 			if(rows.length != 0) {
 				const result = await bcrypt.compare(password, rows[0].password);
 				if(result) {

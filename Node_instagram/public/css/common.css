@@ -37,6 +37,12 @@ body {
     height: 22px;
 }
 
+.sprite_heart_icon_inline {
+    display: inline-block;
+    background: url('../imgs/background01.png') no-repeat -25px -261px;
+    width: 24px;
+    height: 22px;
+}
 .sprite_small_search_icon {
     display: inline-block;
     background: url('../imgs/background01.png') no-repeat -337px -246px;

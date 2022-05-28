@@ -1,15 +1,13 @@
-const mysql = require('mysql');
+const mysql = require("mysql2");
 const dotenv = require('dotenv');
 const config = require('../config/config');
 
-donenv.config();
+dotenv.config();
 
-const con = mysql.createConnection(
+const pool = mysql.createPool(
 	config[process.env.NODE_ENV || 'development']
 );
 
-con.connect((err) => {
-	if(err) throw err;
-});
+const con = pool.promise();
 
 module.exports = con;

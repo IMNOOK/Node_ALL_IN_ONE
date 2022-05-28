@@ -1,9 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-
-{% if user %}
-<div class="hidden_menu">
+	<div class="hidden_menu">
 		<div class="scroll_inner">
 			<div class="user">
 				<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
@@ -49,13 +47,13 @@
 
 		</div>
 	</div>
-{% endif %}
 
     <section id="main_container">
         <div class="inner">
 
             <div class="contents_box">
-				<article class="contents">
+                
+                <article class="contents">
                     <header class="top">
                         <div class="user_container">
                             <div class="profile_img">
@@ -70,7 +68,7 @@
 
                         <div class="sprite_more_icon" data-name="more">
                             <ul class="toggle_box">
-                               <li><input type="submit" class="follow" value="팔로우" data-name="follow"></li>
+                                <li><input type="submit" class="follow" value="팔로우" data-name="follow"></li>
                                 <li>수정</li>
                                 <li>삭제</li>
                             </ul>
@@ -99,7 +97,6 @@
                     <div class="likes m_text">
                         좋아요
                         <span id="like-count-39">2,346</span>
-                        <span id="bookmark-count-39"></span>
                         개
                     </div>
 
@@ -122,9 +119,6 @@
                         <div class="upload_btn m_text" data-name="comment">게시</div>
                     </div>
                 </article>
-				{% for twit in twits %}
-				<input type="hidden" value="{{twit.contenter}}" class="twit-user-id">
-				<input type="hidden" value="{{twit.id}}" class="twit-id">
                 <article class="contents">
                     <header class="top">
                         <div class="user_container">
@@ -132,7 +126,7 @@
                                 <img src="imgs/thumb.jpeg" alt="프로필이미지">
                             </div>
                             <div class="user_name">
-                                <div class="nick_name m_text">{{twit.auther}}</div>
+                                <div class="nick_name m_text">KindTiger</div>
                                 <div class="country s_text">Seoul, South Korea</div>
                             </div>
 
@@ -140,37 +134,24 @@
 
                         <div class="sprite_more_icon" data-name="more">
                             <ul class="toggle_box">
-								{% if not followerIdList.includes(twit.contenter) and twit.contenter !== user.id %}
-								<li><input type="submit" class="follow" value="팔로우" data-name="follow"></li>
-								{% endif %}
-								{% if twit.contenter == user.id %}
+                                <li><input type="submit" class="follow" value="팔로우" data-name="follow"></li>
                                 <li>수정</li>
                                 <li>삭제</li>
-								{% endif %}
                             </ul>
                         </div>
                     </header>
 
                     <div class="img_section">
                         <div class="trans_inner">
-							{% if twit.img %}
-							<div><img src="imgs/img_section/img01.jpg" alt="visual01"></div>
-							{% endif %}
+                            <div><img src="imgs/img_section/img01.jpg" alt="visual01"></div>
                         </div>
                     </div>
 
                     <div class="bottom_icons">
                         <div class="left_icons">
-						{% if not goodPostIdList.includes(twit.id) and twit.contenter !== user.id %}
-						<div class="heart_btn">
-                        	<div class="sprite_heart_icon_outline" name="39" data-name="heartbeat"></div>
-                        </div>
-						{% endif %}
-						{% if goodPostIdList.includes(twit.id) and twit.contenter !== user.id %}
-						<div class="heart_btn">
-                        	<div class="sprite_heart_icon_inline" name="39" data-name="heartbeat"></div>
-                        </div>
-						{% endif %}
+                            <div class="heart_btn">
+                                <div class="sprite_heart_icon_outline" name="39" data-name="heartbeat"></div>
+                            </div>
                             <div class="sprite_bubble_icon"></div>
                             <div class="sprite_share_icon" data-name="share"></div>
                         </div>
@@ -181,8 +162,7 @@
 
                     <div class="likes m_text">
                         좋아요
-                        <span id="like-count-39">{{twit.LikeCount}}</span>
-                        <span id="bookmark-count-39"></span>
+                        <span id="like-count-39">2,346</span>
                         개
                     </div>
 
@@ -204,11 +184,77 @@
                         <input type="text" placeholder="댓글달기...">
                         <div class="upload_btn m_text" data-name="comment">게시</div>
                     </div>
-				</article>
-        	{% endfor %}
-            </div>
+                </article>
+                <article class="contents">
+                    <header class="top">
+                        <div class="user_container">
+                            <div class="profile_img">
+                                <img src="imgs/thumb.jpeg" alt="프로필이미지">
+                            </div>
+                            <div class="user_name">
+                                <div class="nick_name m_text">KindTiger</div>
+                                <div class="country s_text">Seoul, South Korea</div>
+                            </div>
 
-		{% if user %}
+                        </div>
+
+                        <div class="sprite_more_icon" data-name="more">
+                            <ul class="toggle_box">
+                                <li><input type="submit" class="follow" value="팔로우" data-name="follow"></li>
+                                <li>수정</li>
+                                <li>삭제</li>
+                            </ul>
+                        </div>
+                    </header>
+
+                    <div class="img_section">
+                        <div class="trans_inner">
+                            <div><img src="imgs/img_section/img01.jpg" alt="visual01"></div>
+                        </div>
+                    </div>
+
+                    <div class="bottom_icons">
+                        <div class="left_icons">
+                            <div class="heart_btn">
+                                <div class="sprite_heart_icon_outline" name="39" data-name="heartbeat"></div>
+                            </div>
+                            <div class="sprite_bubble_icon"></div>
+                            <div class="sprite_share_icon" data-name="share"></div>
+                        </div>
+                        <div class="right_icon">
+                            <div class="sprite_bookmark_outline" data-name="bookmark"></div>
+                        </div>
+                    </div>
+
+                    <div class="likes m_text">
+                        좋아요
+                        <span id="like-count-39">2,346</span>
+                        개
+                    </div>
+
+                    <div class="comment_container">
+                        <div class="comment" id="comment-list-ajax-post37">
+                            <div class="comment-detail">
+                                <div class="nick_name m_text">dongdong2</div>
+                                <div>강아지가 너무 귀여워요~!</div>
+                            </div>
+                        </div>
+                        <div class="small_heart">
+                            <div class="sprite_small_heart_icon_outline"></div>
+                        </div>
+                    </div>
+
+                    <div class="timer">1시간 전</div>
+
+                    <div class="comment_field" id="add-comment-post37">
+                        <input type="text" placeholder="댓글달기...">
+                        <div class="upload_btn m_text" data-name="comment">게시</div>
+                    </div>
+                </article>
+
+
+
+            </div>
             <input type="hidden" id="page" value="1">
 
             <div class="side_box">
@@ -238,6 +284,42 @@
                                 <div class="time">1시간 전</div>
                             </div>
                         </div>
+                        <div class="thumb_user">
+                            <div class="profile_thumb">
+                                <img src="imgs/thumb02.jpg" alt="프로필사진">
+                            </div>
+                            <div class="detail">
+                                <div class="id">kind_tigerrrr</div>
+                                <div class="time">1시간 전</div>
+                            </div>
+                        </div>
+                        <div class="thumb_user">
+                            <div class="profile_thumb">
+                                <img src="imgs/thumb02.jpg" alt="프로필사진">
+                            </div>
+                            <div class="detail">
+                                <div class="id">kind_tigerrrr</div>
+                                <div class="time">1시간 전</div>
+                            </div>
+                        </div>
+                        <div class="thumb_user">
+                            <div class="profile_thumb">
+                                <img src="imgs/thumb02.jpg" alt="프로필사진">
+                            </div>
+                            <div class="detail">
+                                <div class="id">kind_tigerrrr</div>
+                                <div class="time">1시간 전</div>
+                            </div>
+                        </div>
+                        <div class="thumb_user">
+                            <div class="profile_thumb">
+                                <img src="imgs/thumb02.jpg" alt="프로필사진">
+                            </div>
+                            <div class="detail">
+                                <div class="id">kind_tigerrrr</div>
+                                <div class="time">1시간 전</div>
+                            </div>
+                        </div>
                     </div>
                 </article>
 
@@ -246,6 +328,16 @@
                         <div>회원님을 위한 추천</div>
                         <div class="more">모두 보기</div>
                     </header>
+
+                    <div class="thumb_user">
+                        <div class="profile_thumb">
+                            <img src="imgs/thumb02.jpg" alt="프로필사진">
+                        </div>
+                        <div class="detail">
+                            <div class="id">kind_tigerrrr</div>
+                            <div class="time">1시간 전</div>
+                        </div>
+                    </div>
                     <div class="thumb_user">
                         <div class="profile_thumb">
                             <img src="imgs/thumb02.jpg" alt="프로필사진">
@@ -258,7 +350,6 @@
                 </article>
             </div>
 
-		{% endif %}
 
         </div>
     </section>

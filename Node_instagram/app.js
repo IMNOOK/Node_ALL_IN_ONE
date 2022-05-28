@@ -12,8 +12,7 @@ const passport = require('passport');
 
 dotenv.config();
 const pageRouter = require('./routes/page');
-//const {passportConfig} = require('./passport'); //passport 설정들 가져옴
-
+const passportConfig = require('./passport'); //passport 설정들 가져옴
 
 // server 코드 시작 및 각종 설정
 const app = express();
@@ -23,7 +22,7 @@ nunjucks.configure('views', {
 	express: app,
 	watch: true,
 });
-//passportConfig();
+passportConfig();
 
 // 미들웨어 장착
 app.use(morgan('dev'));
@@ -41,8 +40,8 @@ app.use(session({
 		secure: false, // https 프로토콜에서만 사용한다!를 false로 함. 배포시 true로 바꾸자.
 	}
 }));	//req.session 이라는 객체가 생성.
-//app.use(passport.initialize());	//req.isAuthenticated,req.login 등의 객체 등록
-//app.use(passport.session());	// passport.deserializeUser 메서드 호출 -> req.user 사용가능
+app.use(passport.initialize());	//req.isAuthenticated,req.login 등의 객체 등록
+app.use(passport.session());	// passport.deserializeUser 메서드 호출 -> req.user 사용가능
 
 
 //라우팅
