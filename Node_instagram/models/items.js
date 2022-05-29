@@ -1,19 +1,20 @@
 const con = require('./con');
 
 const items = {
+	
 	User:{
+		
 		getOne: async (email) => {
 			const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.email = ?`, email);
 			if (rows.length != 0) {
-				return 0;
-			} else {
-				console.log(rows[0]);
 				return rows[0];
+			} else {
+				return 0;
 			}
 		},
 		
 		set: async (email, nick, password) => {
-			const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.mail = ?`, email);
+			const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.email = ?`, email);
 			if (rows.length != 0) {
 				return 0;
 			} else {
@@ -59,6 +60,7 @@ const items = {
 		},
 	},
 	
+	/*
 	Hashtag: {
 		
 	},
@@ -86,6 +88,7 @@ const items = {
 	Comment: {
 		
 	},
+	*/
 }
 
 module.exports = items;

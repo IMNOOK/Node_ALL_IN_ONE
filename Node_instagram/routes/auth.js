@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 // 내가 만든 모듈 or 미리 설정한 값 가져옴 
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
-const { items } = require('../models/items');
+const items = require('../models/items');
 
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
@@ -13,7 +13,7 @@ router.post('/join',isNotLoggedIn, async (req, res, next) => {
 	const { email, nick, password } = req.body;
 	try{
 		const hash = await bcrypt.hash(password, 12);
-		if(items.User.set(email, nick, hash) === 1){
+		if(items.User.set(email, nick, hash) === 0){
 			return res.redirect('/join?error=exist');
 		}
 	} catch(error){

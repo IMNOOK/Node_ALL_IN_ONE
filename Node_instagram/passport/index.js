@@ -1,11 +1,11 @@
 const passport = require('passport');
 const local = require('./localStrategy');
 
-const { items } = require('../models/items');
+const items = require('../models/items');
 
 module.exports = () => {
 	passport.serializeUser((user, done) => {
-		console.log(user);
+		console.log(`${user}유저 로그인 - passport.index`);
 		done(null, user.email);
 	});
 	
@@ -26,8 +26,9 @@ module.exports = () => {
 			done(error);
 		}
 		*/
-		console.log(email);
-		done(null, items.User.getOne(email));
+		const user = items.User.getOne(email);
+		console.log(user);
+		done(null, user);
 	});
 	
 	local();
