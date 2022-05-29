@@ -10,10 +10,11 @@ module.exports = () => {
 	}, async (email, password, done) => {
 		try{
 			const rows = await items.User.getOne(email);
+			console.log(rows);
 			if(rows.length != 0) {
 				const result = await bcrypt.compare(password, rows.password);
 				if(result) {
-					done(null, rows[0]);
+					done(null, rows);
 				} else {
 					done(null, false, { message: '비밀번호가 일치하지 않습니다.'});
 				}

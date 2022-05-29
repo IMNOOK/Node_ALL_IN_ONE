@@ -5,7 +5,7 @@ const items = require('../models/items');
 
 module.exports = () => {
 	passport.serializeUser((user, done) => {
-		console.log(`${user}유저 로그인 - passport.index`);
+		console.log(`${user.email}유저 로그인 - passport.index`);
 		done(null, user.email);
 	});
 	
@@ -26,8 +26,8 @@ module.exports = () => {
 			done(error);
 		}
 		*/
-		const user = items.User.getOne(email);
-		console.log(user);
+		
+		const user = await items.User.getOne(email);
 		done(null, user);
 	});
 	

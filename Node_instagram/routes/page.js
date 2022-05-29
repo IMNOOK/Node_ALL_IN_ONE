@@ -11,7 +11,6 @@ const router = express.Router();
 //post처럼 모든 자료를 끌고 오는 것이 아니라 각각의 개인 유저의 필요한 정보만 가져옴
 
 router.use((req, res, next) => {
-	console.log(req.user);
 	res.locals.user = req.user;
 	next();
 })
@@ -20,23 +19,23 @@ router.get('/', (req, res) => {
 	return 	res.render('index', { title: 'Main' });
 });
 
-router.get('/profile', (req, res) => {
+router.get('/profile', isLoggedIn, (req, res) => {
 	return res.render('profile', { title: '내 정보 - NodeBird' });
 });
 
-router.get('/follow', (req, res) => {
+router.get('/follow', isLoggedIn, (req, res) => {
 	return res.render('follow', { title: '내 정보 - NodeBird' });
 });
 
-router.get('/new_post', (req, res) => {
+router.get('/new_post', isLoggedIn, (req, res) => {
 	return res.render('new_post', { title: '내 정보 - NodeBird' });
 });
 
-router.get('/login', (req, res) => {
+router.get('/login', isNotLoggedIn, (req, res) => {
 	return res.render('login', { title: '내 정보 - NodeBird' });
 });
 
-router.get('/join', (req, res) => {
+router.get('/join', isNotLoggedIn, (req, res) => {
 	return res.render('join', { title: '내 정보 - NodeBird' });
 });
 module.exports = router;

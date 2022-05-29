@@ -217,8 +217,8 @@
                         <img src="imgs/thumb.jpeg" alt="프로필사진">
                     </div>
                     <div class="detail">
-                        <div class="id m_text">KindTiger</div>
-                        <div class="ko_name">심선범</div>
+                        <div class="id m_text">{{user.nick}}</div>
+                        <div class="ko_name">{{user.email}}</div>
                     </div>
                 </div>
 
@@ -268,7 +268,7 @@
   <script>
     window.onload = () => {
       if (new URL(location.href).searchParams.get('error')) {
-        alert('이미 존재하는 이메일입니다.');
+        alert('이미 로그인이된 상태입니다.');
       }
     };
   </script>
