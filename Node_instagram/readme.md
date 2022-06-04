@@ -1,10 +1,40 @@
 0. 웹 기능 설계
-	웹 페이지 설계 - html, css, js
-	DB 모델 설계 - sql
-	router 설계 - REST API
+	만들 웹 기능: SNS
+	- 게시글을 올리는 SNS
+	- 유저 간에 follow 기능
+	- follow한 유저간의 DM 및 소통
+	
+	필요한 객체들
+	- User
+	- Follow
+	- Post
+	- Good
+	- Comment
+	- Hashtag
+	- PostHashtag
+	- Room
+	- DM
+	
+	웹 페이지 설계 - views/readme.md
+	DB 모델 설계 - models/readme.md
+	router 설계 - routes/readme.md
 
 1. 구현
-	front 
+	/config - DB connect
+	/models - DB
+	/views - html
+	/public - css, js
+	/routes - REST API
+	app.js - server
+	+ modules
+	/passport - login
+	.env - security
+
+2. 연결	(MVC 모델 구현)
+	REST API compelet -> 
+	
+	front - router connect
+	
 		1. form entype="multipart/form-data" 
 		http에서 form을 통해 server에 데이터(req.body)를 전송하는데,
 		input 태그를 통해 파일을 넣고, textarea를 통해 문자열을 전송하는 등 말이다.
@@ -30,7 +60,7 @@
 			console.log(e.target.files[0]);
 		}
 		
-		e.target.fiels는 배열이 아니다.
+		e.target.files는 배열이 아니다.
 		
 		FormData 객체 만들기
 		자바스크립트의 내장 객체인 FormData()로 이미지 파일을 formdata 형식으로 만들 수 있다.
@@ -67,5 +97,4 @@
 			window.alert("게시물 작성에 실패했습니다.");
 		});
 		
-	DB
-	
+	DB - router connect
