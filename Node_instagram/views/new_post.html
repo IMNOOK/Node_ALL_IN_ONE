@@ -47,21 +47,28 @@
     let canvas = document.getElementById('imageCanvas');
     let ctx = canvas.getContext('2d');
 
+	//https://velog.io/@bclef25/multipart-form-data-upload
 	function handleImage(e){
-	   let reader = new FileReader();
-	   reader.onload = function(event){
-		   let img = new Image();
-		   // var imgWidth =
-		   img.onload = function(){
+		
+		const file = e.target.files
+		for(let i = 0; i < e.target.files.length: i++){
+			const reader = new FileReader();
+			
+			reader.onload = function(event){
+			let img = new Image();
+			// var imgWidth =
+			img.onload = function(){
 			   canvas.width = 300;
 			   canvas.height = 300;
 			   ctx.drawImage(img,0,0,300,300);
-		   };
-		   img.src = event.target.result;
-		   // img.width = img.width*0.5
-		   // canvas.height = img.height;
-	   };
-	   reader.readAsDataURL(e.target.files[0]);
+			};
+			img.src = event.target.result;
+			// img.width = img.width*0.5
+			// canvas.height = img.height;
+			};
+			
+			reader.readAsDataURL(file[i]);
+		}
 	}
 	
     fileInput.addEventListener('change', handleImage, false);
