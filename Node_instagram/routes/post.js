@@ -28,18 +28,22 @@ const upload = multer({
 	limits: { fileSize: 5 * 1024 * 1024}
 });
 
+const upload2 = multer({});
 
 //게시판 글 올림
-router.post('/', isLoggedIn, upload.single('img'), async (req, res, next) => {
-	console.log('일단 여기까진 성공');
+router.post('/img', isLoggedIn, upload.single('photo'), async (req, res) => {
 	console.log(req.file);
-	try{
-		await items.Post.set(req.user.id, req.body.content, req.body.url);
-		return res.redirect('/');
-	} catch(error){
-		console.error(error);
-		next(error);
-	}
+	return res.json({url: `/img/${req.file.filename}`});
 });
+
+router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
+	const content = req.body.content;
+	const url = req.body.url;
+	console.log(content);
+	console.log(url);
+	if(items.Post.set(req.user.id, content, url)){
+		res.redirect('/');
+	}
+})
 
 module.exports = router;

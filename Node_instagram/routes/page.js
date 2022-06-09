@@ -27,8 +27,8 @@ router.get('/follow', isLoggedIn, (req, res) => {
 	return res.render('follow', { title: '내 정보 - NodeBird' });
 });
 
-router.get('/new_post', isLoggedIn, (req, res) => {
-	return res.render('new_post', { title: '내 정보 - NodeBird' });
+router.get('/post', isLoggedIn, (req, res) => {
+	return res.render('post', { title: '내 정보 - NodeBird' });
 });
 
 router.get('/login', isNotLoggedIn, (req, res) => {

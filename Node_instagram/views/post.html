@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/new_post.css">
+{% endblock %}
+
+{% block content %}
+	<div id="main_container">
+
+			<div class="post_form_container">
+				<form class="post_form" action="/post" method="post" enctype="multipart/form-data">
+					<div class="title">
+						NEW POST
+					</div>
+					<div class="preview">
+						<div class="upload">
+							<div class="post_btn">
+								<div class="plus_icon">
+									<span></span>
+									<span></span>
+								</div>
+								<p>포스트 이미지 추가</p>
+								<canvas id="imageCanvas"></canvas>
+								<!--<p><img id="img_id" src="#" style="width: 300px; height: 300px; object-fit: cover" alt="thumbnail"></p>-->
+							</div>
+						</div>
+					</div>
+					<p>
+						<input type="file" id="id_photo" multiple="multiple" required="required" accept="image/*"><!--여긴 name 주면 안됨!! multer의 unexpect field 뜸 아래서 js로 해주자.-->
+						<input id="img-url" type="hidden" name="url">
+					</p>
+					<p>
+						<textarea name="content" id="text_field" cols="50" rows="5" placeholder="140자 까지 등록 가능합니다.
+	#태그명 을 통해서 검색 태그를 등록할 수 있습니다."></textarea>
+					</p>
+					<input class="submit_btn" type="submit" value="저장">
+				</form>
+
+			</div>
+
+		</div>
+	{% endblock %}
+
+	{% block script %}
+	<script>
+	let fileInput  = document.querySelector( "#id_photo" );
+	let canvas = document.getElementById('imageCanvas');
+	let ctx = canvas.getContext('2d');
+
+
+	const handleImage = (e) => {
+		const file = e.target.files;
+		let reader = new FileReader();
+		reader.onload = function(event){
+		   var img = new Image();
+		   // var imgWidth =
+		   img.onload = function(){
+			   canvas.width = 300;
+			   canvas.height = 300;
+			   ctx.drawImage(img,0,0,300,300);
+		   };
+		   img.src = event.target.result;
+		   // img.width = img.width*0.5
+		   // canvas.height = img.height;
+		};
+		reader.readAsDataURL(file[0]);
+		
+		const formData = new FormData();
+		formData.append('photo', file[0]); //여기서의 photo의 값은 multer의 single('이값')과 같아야 한다.!!
+		axios.post('/post/img', formData)
+		.then((res) => {
+			console.log(res.data.url);
+			document.querySelector('#img-url').value = res.data.url;
+		})
+		.catch((err) => {
+			console.error(err);
+		})
+	}
+
+	fileInput.addEventListener('change', handleImage, false);
+
+	</script>
+{% endblock %}
