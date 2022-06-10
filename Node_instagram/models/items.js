@@ -60,6 +60,19 @@ const items = {
 		},
 	},
 	
+	Good: {
+		getByPostId: async (id) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ?`, id);
+			return rows.length;
+		},
+		
+		getByIds: async (userId, postId) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ?, userId = ?`, postId, userId);
+			if(rows.length == 0) return 0;
+			return 1;
+		}
+	},
+	
 	/*
 	Hashtag: {
 		
@@ -70,10 +83,6 @@ const items = {
 	},
 	
 	Follow: {
-		
-	},
-	
-	Good: {
 		
 	},
 	

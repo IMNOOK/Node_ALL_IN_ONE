@@ -3,6 +3,7 @@ const express = require('express');
 
 // 내가 만든 모듈 or 미리 설정한 값 가져옴
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const items = require('../models/items');
 
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
@@ -12,11 +13,26 @@ const router = express.Router();
 
 router.use((req, res, next) => {
 	res.locals.user = req.user;
+	
 	next();
 })
 
-router.get('/', (req, res) => {
-	return 	res.render('index', { title: 'Main' });
+router.get('/', async (req, res) => {
+	try{
+		const twits = await items.Post.getAll();
+		for(let i = 0; i < twits.length; i++) {
+			const goodNum = await items.Good.getByPostId(twits[i].id);
+			twits[i].goodNum = goodNum;
+			if(!req.user){
+				continue;
+			}
+			const userGood = await items.Good.getByIds(req.user.id, twits[i].id);
+			twits[i].userGood = userGood;	
+		}
+		return 	res.render('index', { title: 'Main', twits });
+	} catch(err){
+		console.error(err)
+	}
 });
 
 router.get('/profile', isLoggedIn, (req, res) => {

@@ -227,7 +227,11 @@ body{
 
 .contents .img_section img{
     width: 100%;
+	min-height: 321px;
+	max-height: 767px;
+	object-fit: cover;
 }
+
 
 
 .contents .bottom_icons{
