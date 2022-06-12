@@ -21,8 +21,15 @@ router.get('/', async (req, res) => {
 	try{
 		const twits = await items.Post.getAll();
 		for(let i = 0; i < twits.length; i++) {
+			//각 포스터의 좋아요 수
 			const goodNum = await items.Good.getByPostId(twits[i].id);
 			twits[i].goodNum = goodNum;
+			
+			//각 포스터의 댓글
+			const comments = await items.Comment.getByPostId(twits[i].id);
+			twits[i].comments = comments;
+			
+			// 현재 사용자가 좋아요를 했는지
 			if(!req.user){
 				continue;
 			}

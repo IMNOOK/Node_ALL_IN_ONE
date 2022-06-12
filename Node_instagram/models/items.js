@@ -73,6 +73,13 @@ const items = {
 		}
 	},
 	
+	Comment: {
+		getByPostId: async (id) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Comment WHERE postId = ?`, id);
+			return rows;
+		},
+	},
+	
 	/*
 	Hashtag: {
 		
@@ -91,10 +98,6 @@ const items = {
 	},
 	
 	DM: {
-		
-	},
-	
-	Comment: {
 		
 	},
 	*/

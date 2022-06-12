@@ -11,12 +11,14 @@
 2. index
 	
 	contents
-	- 내가 follow 한 사람들의 게시글 보여줌 + 랜덤 게시글
-	- 게시글에 댓글
-	- 댓글에 댓글
-	- 게시글 좋아요
-	- follow 한 사람들의 story
-	- 나에게 추천하는 사람 목록
+	- 게시글: SELECT * FROM Post {
+		- 게시자: Post.userId Join User.id => User.nick
+		- 게시물: Post.img + Post.content + Good.postId.length
+		- 게시물 좋아요: -> good/:postId
+		- 게시자 팔로우: -> follow/:userId
+		- 댓글: Post.id Join Comment.postId => Comment.nick + Comment.content
+		- 이미지 다운: -> 
+	}
 
 3. login
 

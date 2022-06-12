@@ -93,6 +93,7 @@ DROP TABLE IF EXISTS nodeInstagram.Comment;
 CREATE TABLE nodeInstagram.Comment (
 id INT NOT NULL AUTO_INCREMENT,
 userId INT NOT NULL,
+userNick VARCHAR(20) NOT NULL,
 postId INT NOT NULL,
 content VARCHAR(140) NOT NULL,
 date TIMESTAMP DEFAULT NOW(),

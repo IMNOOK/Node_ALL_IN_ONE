@@ -32,7 +32,7 @@
 
                         <div class="sprite_more_icon" data-name="more">
                             <ul class="toggle_box">
-                               <li><input type="submit" class="follow" value="팔로우" data-name="follow"></li>
+                               <li><input type="submit" class="follow" value="follow" data-name="follow"></li>
                                 <li>수정</li>
                                 <li>삭제</li>
                             </ul>
@@ -99,14 +99,15 @@
                             </div>
 
                         </div>
-
-                        <div class="sprite_more_icon" data-name="more">
+						<div class="toggle">
+							<div class="sprite_more_icon" data-name="more">
                             <ul class="toggle_box">
-								<li><input type="submit" class="follow" value="팔로우" data-name="follow"></li>
+								<li><input type="submit" class="follow" value="follow" data-name="follow"></li>
                                 <li>수정</li>
                                 <li>삭제</li>
                             </ul>
-                        </div>
+                        	</div>
+						</div>
                     </header>
 
                     <div class="img_section">
@@ -142,19 +143,19 @@
                         <span id="bookmark-count-39"></span>
                         개
                     </div>
-
+					{% for comment in twit.comments %}
                     <div class="comment_container">
                         <div class="comment" id="comment-list-ajax-post37">
                             <div class="comment-detail">
-                                <div class="nick_name m_text">dongdong2</div>
-                                <div>강아지가 너무 귀여워요~!</div>
+                                <div class="nick_name m_text">{{comment.userNick}}</div>
+                                <div>{{comment.content}}</div>
                             </div>
                         </div>
                         <div class="small_heart">
                             <div class="sprite_small_heart_icon_outline"></div>
                         </div>
                     </div>
-
+					{% endfor %}
                     <div class="timer">1시간 전</div>
 
                     <div class="comment_field" id="add-comment-post37">
@@ -223,10 +224,25 @@
 
 {% block script %}
   <script>
-    window.onload = () => {
-      if (new URL(location.href).searchParams.get('error')) {
-        alert('이미 로그인이된 상태입니다.');
-      }
-    };
+	  const more = document.querySelector('.toggle');
+	  const toggle = document.querySelector('.toggle_box');
+	  
+	  more.addEventListener('focus', (event) => {
+		  console.log('hihihi');
+	  });
+
+	  
+	  more.addEventListener('click', () => {
+		  console.log('click');
+		  console.log(toggle.style.display);
+		  if(toggle.style.display == 'none'){
+			  console.log('HI');
+			  toggle.style.display == 'absolute'
+		  } else {
+			  console.log('??');
+			  toggle.style.display == 'none'
+		  }
+	  })
+	  
   </script>
 {% endblock %}
