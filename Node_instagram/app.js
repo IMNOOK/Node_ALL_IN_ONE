@@ -16,6 +16,8 @@ const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
 const passportConfig = require('./passport'); //passport 설정들 가져옴
 
+const { swaggerUi, specs } = require('./swagger');
+
 // server 코드 시작 및 각종 설정
 const app = express();
 app.set('port', process.env.PORT || 8002);
@@ -43,8 +45,7 @@ app.use(session({
 	}
 }));	//req.session 이라는 객체가 생성.
 app.use(passport.initialize());	//req.isAuthenticated,req.login 등의 객체 등록
-app.use(passport.session());	// passport.deserializeUser 메서드 호출 -> req.user 사용가능
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 //라우팅
 app.use('/', pageRouter);

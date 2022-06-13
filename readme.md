@@ -1,10 +1,9 @@
-Node.js 교과서를 공부하며 배운 내용
-------------------------------------------------------------
-1. nodeBird
-주요 기능: 로그인, 이미지 업로드, 게시글 작성, 해시태그 검색, 팔로일 && 좋아요
-데이터 베이스: User, Post, Hashtag, Follow([User, User], N:M), Good([User, Post], N:M), PostHashtag([Post, Hashtag], N:M) 
-주요 패키지: express, passport, multer, sequelize, mysql2
+# ![camera](https://github.githubassets.com/images/icons/emoji/unicode/1f4f7.png) 인스타그램 클론 코딩
 
+NodeJs 교과서를 통해 배운 내용을 스스로 적용하여 시도하는 첫 프로젝트입니다.
+
+## Node.js 교과서를 공부하며 배운 내용
+1. nodeBird
 - 서버는 요청에 응답하는 것이 핵심이기에 요청을 수락하던 거절하던 반드시 응답해야 한다. (단 한번만)
 - 개발 시 서버를 매번 수동으로 재시작하지 않으려면 nodemon을 사용하자.
 - dotenv 패키지와 .env 파일로 유출되면 안되는 비밀 키를 관리하자.
@@ -15,10 +14,6 @@ Node.js 교과서를 공부하며 배운 내용
 - 프런트엔드 form 태그의 인코딩 방식이 multipart일 때는 multer 같은 multipart 처리용 패키지를 사용하자.
 
 2. nodeApi
-주요 기능: 웹 api 서버, JWT 토큰 인증, 사용량 제한, CORS, API 문서 작성(swagger or apidoc)
-데이터 베이스: Domain([User, Domain] 1:N) 
-주요 패키지: jsonwebtoken, express-rate-limit, cors
-
 - API는 다른 애플리케이션의 기능을 사용할 수 있게 해주는 창구이다.
 - 모바일 서버를 구성할 때 서버를 REST API 방식으로 구현하면 된다.
 - API 사용자가 API를 쉽게 사용할 수 있도록 사용 방법, 요청 형식, 응답 내용에 관한 문서를 준비하자.
@@ -29,31 +24,20 @@ Node.js 교과서를 공부하며 배운 내용
 - 브라우저와 서버의 도메인이 다르면 요청이 거절된다는 특성(CORS)를 이해하자. 서버간에는 CORS 문제가 발생하지 않는다.
 
 3. nodeTest
-주요 기능: 유닛 테스트, 테스트 커버리지, 통합 테스트, 부하 테스트
-주요 패키지: jest, supertest, artillery, 
-
 - 테스트를 작성한다고 해서 에러가 발생하지 않는 것은 아니다. 하지만 자시의 코드의 믿음을 가질 수 있다.
 - 테스트를 올바르게 작성하지 않으면 테스트를 하지 않은 것보다 못한 상황이 발생한다.
 - 테스트를 작성하면 나중에 코드 변경 사항이 생겼을 때 어떤 부분에 영향을 미치는지 쉽게 파알 할 수 있다.
 - 실제 서비스에서는 모든 기능을 테스트하기가 어려우므로 우선순위를 정하여 우순선위가 높은 기능 위주로 테스트 한다.
 
 4. git-chat
-주요 기능: 웹 소켓을 통한 실시간 양방향 채팅, 미들웨어와 소켓 연결, 
-데이터 베이스: Room, Chat,
-주요 패키지: ws, socket.io@2, cookie-signature, mongoose
-
 - 웹 소켓과 HTTP는 같은 포트를 사용할 수 있으므로 따로 포트를 설정할 필요가 없다.
 - 웹 소켓은 양방향 통신이므로 서버뿐만 아니라 프런트엔드 쪽 스크립트도 사용해야 한다.
 - Socket.IO를 사용하면 웹 소켓을 지원하지 않는 브라우저에서까지 실시간 통신을 구현할 수 있다.
-- Sokcet.IO 네임스페이스와 방 구분을 통해 실시간 데이터를 필요한 사용자에게만 보낼 수 있다.
+- Sokcet.IO의 네임스페이스와 방 구분을 통해 실시간 데이터를 필요한 사용자에게만 보낼 수 있다.
 - app.set('io', io)로 소켓 객체를 익스프레스와 연결하고, req.app.get('io')로 라우터에서 소켓 객체를 가져오는 방식을 기억하자.
 - 소켓 통신과 함께 데이터베이스 조작이 필요한 경우, 소켓만 해결하지 보다는 HTTP 라우터를 거치는 것이 좋다.
 
 5. nodeAuction
-주요 기능: 로그인, SSE를 통한 실시간 경매방 생성, 웹 소켓을 통한 실시간 경매, 경매 시간 스케줄링, 낙찰한 물품 확인
-데이터 베이스: User, Good(Owner[(User, Good), 1:N], Solder[(User, Good), 1:N]), Auction([(User, Good), N:M]) 
-주요 패키지: sse, node-schedule
-
 - 서버에서 클라이언트로 보내는 일방향 통신은 웹 소켓 대신 서버센트 이벤트를 사용해도 된다.
 - 기존 입찰 내역은 데이터베이스에서 불러오고, 방 첨여 후에 추가되는 내역은 웹 소켓에서 불러온다. 이 둘을 매끄럽게 연결하는 방법을 기억하자.
 - 코드가 길어질 것 같으면 app.js 로 부터 socket.js와 checkAuction.js 처럼 분리하자.
@@ -61,9 +45,6 @@ Node.js 교과서를 공부하며 배운 내용
 - 스케줄링을 통해 주기적으로 일어나는 작업을 처리할 수 있지만, 노드 서버가 계속 켜져 있어야만 하므로 서버가 꺼졌을 때 대처할 방법을 마련해야 한다.
 
 6. cli
-주요 기능: 콘솔 명령어 만들기
-주요 패키지: commander, inquire
-
 - 노드는 단순히 서버가 아니라 자바스크립트를 실행하는 런타임이라는 점을 기억하자.
 - npm에는 서버를 위한 패키지 뿐만 아니라 다양한 프로그램을 위한 패키지도 준비되어 있다.
 - 다른 사람이 사용할 것을 감안하여 명령어에 대한 설명을 자세히 적자.
@@ -71,14 +52,13 @@ Node.js 교과서를 공부하며 배운 내용
 
 7. AWS와 GCP로 배포
 
-------------------------------------------------------------
-프로젝트 및 웹 개발
+# ![thinking](https://github.githubassets.com/images/icons/emoji/unicode/1f914.png) 기능명세서
 
 1. 설계
 먼저 어떤 기능을 하는 웹 페이지를 만들지 구상하고
 페이지를 설계해 봅니다.
 
- -front-
+-front-
 메인 페이지
 	사용자의 팔로우된 사람들의 게시물을 우선적으로 가져옵니다. 이후 랜덤 게시물을 가져온다.
 	게시물에는 로그인된 글쓴이가 글과 그림을 올릴 수 있으며 @기능으로 유저를 호출하거나 #기능으로 해시태그를 달 수 있다.
@@ -97,21 +77,13 @@ Node.js 교과서를 공부하며 배운 내용
 포스트 페이지 
 	게시물을 올릴 수 있는 곳이다.
 
-이후 웹 서버에 필요한 객체들을 담을 DB를 구상해 봅니다.
-User
-Post
-Hashtag
-Follow
-Good
-PostHashtag
-Comment
-DM
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) ERD
+이후 웹 서버에 필요한 객체들을 담을 DB를 구상해 본다.
 
-이후에 웹 페이지와 DB를 연결하기 위한 API를 구상해 본다,
-REST API
-get	/	메인 페이지 이동
-get /profile 프로파일 페이지 이동
-get /
+
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) API
+이후에 웹 페이지와 DB를 연결하기 위한 API를 구상해 본다.
+Swagger API를 사용하였다.
 
 2. 구현
 구상한 모든 것들을 구현한다.
@@ -134,3 +106,20 @@ RestApi
 4. 테스트
 
 5. 배포
+
+
+## 사용한 패키지
+
+-   **Express**  　　　=> node.js의 웹 프레임워크
+-   **eslint**　　　　=> node.js에서 팀 단위 협업시, 문법 검사를 해보자
+-   **prettier**　　　=> node.js에서 팀 단위 협업시, 코딩 스타일을 통일해보자
+-   **cors**　　=> node.js에서 cors 문제를 해결해보자
+-   **nodemon**　　=> node.js에서 파일 수정시 자동으로 서버를 내렸다가 올려보자
+-   **bcrypt**　　=> node.js에서 데이터베이스에 저장할 비밀번호를 암호화 해보자
+-   **multer**　　=> node.js에서 프론트 엔드에서 보내주는 이미지 데이터를 받아보자
+-   **jwt**　　=> node.js에서 jwt 토큰을 이용한 로그인 기능을 구현해보자
+
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) To Study
+
+
+## ![hammer_and_wrench](https://github.githubassets.com/images/icons/emoji/unicode/1f6e0.png) 보안해야 할 점

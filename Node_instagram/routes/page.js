@@ -11,6 +11,27 @@ const router = express.Router();
 //사용자에게 보여줄 자료들을 DB에서 끌어옴
 //post처럼 모든 자료를 끌고 오는 것이 아니라 각각의 개인 유저의 필요한 정보만 가져옴
 
+/**
+ * @swagger
+ *  /page:
+ *    get:
+ *      tags:
+ *      - product
+ *      description: 모든 제품 조회
+ *      produces:
+ *      - application/json
+ *      parameters:
+ *        - in: query
+ *          name: category
+ *          required: false
+ *          schema:
+ *            type: integer
+ *            description: 카테고리
+ *      responses:
+ *       200:
+ *        description: 제품 조회 성공
+ */
+
 router.use((req, res, next) => {
 	res.locals.user = req.user;
 	
