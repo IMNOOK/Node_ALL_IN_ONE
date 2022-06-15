@@ -56,7 +56,7 @@ NodeJs 교과서를 통해 배운 내용을 스스로 적용하여 시도하는 
 
 1. 설계
 먼저 어떤 기능을 하는 웹 페이지를 만들지 구상하고
-페이지를 설계해 봅니다.
+ovenapp 을 통해 페이지를 설계해 봅니다.
 
 -front-
 메인 페이지
@@ -78,10 +78,14 @@ NodeJs 교과서를 통해 배운 내용을 스스로 적용하여 시도하는 
 	게시물을 올릴 수 있는 곳이다.
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) ERD
-이후 웹 서버에 필요한 객체들을 담을 DB를 구상해 본다.
+개념적 데이터 모델링 (ERD cloud) & 논리적 데이터 모델링
+![a](https://user-images.githubusercontent.com/51530880/173850440-a2eda00f-3e0f-44cf-904d-07e20b57fb54.png)
+
+물리적 데이터 모델링
 
 
-## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) API
+
+## ![sunglasses](![a](https://user-images.githubusercontent.com/51530880/173850351-ab84a486-df19-4519-93b9-979f5977e07c.png)
 이후에 웹 페이지와 DB를 연결하기 위한 API를 구상해 본다.
 Swagger API를 사용하였다.
 
