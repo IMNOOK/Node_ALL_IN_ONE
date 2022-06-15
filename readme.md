@@ -79,10 +79,17 @@ ovenapp 을 통해 페이지를 설계해 봅니다.
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) ERD
 
-구상한 데이터를 토대로 개념적 데이터 모델링 (ERD cloud) 을 설계하고
+구상한 데이터를 토대로 개념적 데이터 모델링을 설계하고
 ![a](https://user-images.githubusercontent.com/51530880/173850440-a2eda00f-3e0f-44cf-904d-07e20b57fb54.png)
 
-ERD를 바탕으로 논리적 데이터 모델링과 정규화
+주소: https://www.erdcloud.com/d/fojR3JHRiKhFcM6Zs
+
+ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행해 보았다.
+
+1 Atomic columns -> 컬럼의 값은 하나!
+2 No parital dependencies -> 표의 기본키 중에 중복키인 것이 없어야 한다!
+3 No transitive dependencies -> 이행적 종속성을 없애라!
+블로그에 정리해야 겠다.
 
 물리적 데이터 모델링
 
