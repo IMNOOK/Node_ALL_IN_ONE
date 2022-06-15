@@ -78,14 +78,16 @@ ovenapp 을 통해 페이지를 설계해 봅니다.
 	게시물을 올릴 수 있는 곳이다.
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) ERD
-개념적 데이터 모델링 (ERD cloud) & 논리적 데이터 모델링
+
+구상한 데이터를 토대로 개념적 데이터 모델링 (ERD cloud) 을 설계하고
 ![a](https://user-images.githubusercontent.com/51530880/173850440-a2eda00f-3e0f-44cf-904d-07e20b57fb54.png)
+
+ERD를 바탕으로 논리적 데이터 모델링과 정규화
 
 물리적 데이터 모델링
 
 
-
-## ![sunglasses](![a](https://user-images.githubusercontent.com/51530880/173850351-ab84a486-df19-4519-93b9-979f5977e07c.png)
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) API
 이후에 웹 페이지와 DB를 연결하기 위한 API를 구상해 본다.
 Swagger API를 사용하였다.
 
