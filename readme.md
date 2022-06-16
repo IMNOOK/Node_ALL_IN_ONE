@@ -77,6 +77,7 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
 이후에 Mysql을 통해 필요한 쿼리들을 작성해보았다.
 
 메인 페이지
+
     글 가져 오기 (page)
     SELECT * FROM Post orders LIMIT 10 OFFSET ?
     
@@ -117,6 +118,7 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
     INSERT INTO DM (roomId, content, sender) VALUES (?, ?, ?)
     
 로그인 페이지
+
     유저 있는지 확인
     SELECT email FROM User Where email = ?
 
@@ -127,12 +129,14 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
     SELECT password FROM User Where email = ?
 
 포스트 페이지
+
     글 쓰기
     insert into Post (userId, content, img) values (?,?,?)
 
     글 수정하기
 
 프로필 페이지
+
     팔로잉, 팔로워 숫자 보기
 
     팔로워 유저 보기
