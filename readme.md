@@ -15,9 +15,51 @@ Instagram의 기능을 하는 웹 페이지를 클론 해본다.
 # ![thinking](https://github.githubassets.com/images/icons/emoji/unicode/1f914.png) 1. 기획
 
 구상한 웹의UI 모델링을 제작함으로써 어떤 디자인을 가진 UI를 통해 서비스를 제공할지 결정합니다.
-ovenapp 을 통해 페이지를 설계했습니다.
+보통의 디자이너는 PPT를 통해 많이 하지만 간단하게 ovenapp 을 통해 페이지를 기획했습니다.
+
 https://ovenapp.io/project/H74UvSHifgHqPYXfGzDvTmvZCPjSr08W#P3cGu
+
 설계하면서 UI를 통해 서버와 어떻게 요청할지 구상합니다.
+
+공통 페이지
+
+	로그아웃
+
+메인 페이지
+	
+    글 가져 오기
+	hashtag 검색한 글 가져오기
+	좋아요하기
+	좋아요 취소하기
+	팔로우하기
+	팔로우 취소하기
+	댓글 보기
+	댓글 달기
+	Room 목록 가져오기
+	Room 추가하기
+    Room 열기
+	DM 보내기
+
+로그인 페이지 & 회원가입 페이지
+
+	회원가입
+	로그인
+
+포스트 페이지
+
+	글 쓰기
+	글 수정하기
+
+프로필 페이지
+
+	프로필 정보 수정
+	팔로잉, 팔로워 숫자 보기
+	팔로워 유저 보기
+	팔로우 취소하기 (following, follower)
+	팔로잉 유저 보기
+	내가 게시한글 보기
+	내가 게시한글 삭제하기
+
 
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2-1. DB
@@ -34,7 +76,22 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
 3 No transitive dependencies -> 이행적 종속성을 없애라!
 블로그에 정리해야 겠다.
 
+	모든 키 = id(INT) NOT NULL AUTO_INCREMENT, PRIMARY KEY(id)
+
+	User: email(VC), nick(VC), password(VC), provider(VC), snsId(VC), img(VC)
+	Post: userId(INT), content(VC), img(VC), date
+	Hashtag: title(VC)
+	Domain: userId(INT), host(VC), type(INT), clientSecret(VARCHAR),
+	Follow: followingId(INT), followerId(INT)
+	Good: userId(INT), postId(INT)
+	Room: aId(INT), bId(INT)
+	DM: roomId(INT), senderId(INT), content(VC), date
+	Comment: userId(INT), userNick(VC), postId(INT), content(VC)
+	PostHashtag: postId(INT), hashtagId(INT)
+
 이후에 Mysql을 통해 필요한 쿼리들을 작성해보았습니다.
+
+
 
 메인 페이지
 
@@ -48,73 +105,88 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
     SELECT * FROM Good WHERE postId = ? (Join) 
 
     좋아요하기 (userId, postId)
-    insert into Good (userId, postId) Values(?, ?)
+    INSERT INTO Good (userId, postId) Values(?, ?)
 
     좋아요 취소하기 (userId, postId)
-    delete from Good Where Good.userId = ? AND Good.postId = ? 
+    DELETE FROM Good WHERE Good.userId = ? AND Good.postId = ? 
 
-    팔로우하기 (following, follower)
-    insert into Follow (following, follower) Values (?, ?) 
+    팔로우하기 (userId, follower)
+    INSERT INTO Follow (following, follower) Values (?, ?) 
 
-    팔로우 취소하기 (following, follower)
-    delete from Follow Where following = ? and follower = ?
+    팔로우 취소하기 (userId, follower)
+    DELETE FROM Follow Where following = ? and follower = ?
 
     댓글 달기 (content, postId, usernick)
-    insert into Comment (content, postId) Values (content, postId, usernick)
+    INSERT INTO Comment (content, postId) Values (content, postId, usernick)
 
-    각 글마다 댓글 가져오기
+    각 글마다 댓글 가져오기 (postId)
     SELECT * FROM Comment WHERE postId = ? (Join)
 
-    Room 추가 하기(userA, userB)
-    Insert into Room (userA, userB) Values(?,?)
+    Room 추가 하기(aId, bId)
+    INSERT INTO Room (aId, bId) Values(?,?)
 
-    Room 목록 가져오기(userId)
-    SELECT * FROM Room Where userA = ? Or userB =?
+    Room 열기 = 목록 가져오기 (userId)
+    SELECT * FROM Room WHERE userA = ? Or userB =?
 
     DM 읽기(roomId, page)
-    SELECT * FROM DM Where roomId = ? LIMIT 100 OFFSET ?
+    SELECT * FROM DM WHERE roomId = ? LIMIT 100 OFFSET ?
 
-    DM 보내기 & 받기 (roomId, content, sender)
+    DM 보내기 (roomId, content, sender)
     INSERT INTO DM (roomId, content, sender) VALUES (?, ?, ?)
     
 로그인 페이지
 
-    유저 있는지 확인
-    SELECT email FROM User Where email = ?
+	회원가입:
+    	유저 있는지 확인 (email)
+    	SELECT email FROM User WHERE email = ?
 
-    유저 추가
-    insert into User (email, password, userNick) values (?,?,?)
+    	유저 추가 (email, password, nick)
+    	INSERT INTO User (email, password, nick) values (?,?,?)
 
-    비밀번호 확인하기
-    SELECT password FROM User Where email = ?
+	로그인:
+    	유저 확인 (email)
+    	SELECT * FROM User WHER email = ?
 
 포스트 페이지
 
-    글 쓰기
-    insert into Post (userId, content, img) values (?,?,?)
+    글 쓰기 (userId, content, img)
+    INSERT INTO Post (userId, content, img) values (?,?,?)
 
-    글 수정하기
+    글 수정하기 (content, img, postId)
+	UPDATE Post SET content = ?, img = ? WHERE postId = ?
 
 프로필 페이지
 
-    팔로잉, 팔로워 숫자 보기
+	프로필 정보 수정 (nick, email, img, userId)
+	UPDATE User SET nick = ?, email = ?, img =? WHERE userId = ?
 
-    팔로워 유저 보기
+    팔로잉, 팔로워 숫자 보기:
+		팔로잉 숫자 보기 (userId)
+		SELECT * FROM Follow WHERE following = ?
+		
+		팔로워 숫자 보기 (userId)
+		SELECT * FROM Follow WHERE follower = ?
+		
+    팔로워, 팔로잉 유저 보기 (userId)
+	SELECT * FROM User WHERE userId = ? (JOIN)
 
-    팔로우 취소하기 (following, follower)
-    delete from Follow Where following = ? and follower = ?
-    팔로잉 유저 보기
-
-    내가 게시한글 보기
-
+    팔로우 취소하기 (userId, follower)
+    DELETE FROM Follow Where following = ? and follower = ?
+    
+    내가 게시한글 보기 (userId)
+	SELECT * FROM Post WHERE userId = ?
+	
+	내가 게시한글 삭제하기 (postId)
+	DELETE FROM Post WHERE id = ?
 
 마지막으로 물리적 데이터 모델링 (성능 향상 중요!)
-find slow query -> 교정 필요
+find slow query를 통해 교정을 합니다.
+
 교정 방법 
-1. index -> 쓰기 할 때 복잡한 전상 과정이 필요 + 더 많은 저장 공간 필요 but 읽기 빠름
-2. 캐시
+	1. index -> 쓰기 할 때 복잡한 전상 과정이 필요 + 더 많은 저장 공간 필요 but 읽기 빠름
+	2. 캐시
 하지만 이럼에도 불가능 할 경우
-역정규화(엄청난 희생이 생길 수 있음)을 실시한다.
+	역정규화(엄청난 희생이 생길 수 있음)을 실시한다.
 
 즉 보통 JOIN은 엄청 비싼 자원인데, 이것이 많이 필요한 쿼리 같은 경우에는
 교정이 불가능할 경우 역정규화를 통해 표를 바꾼다.
@@ -125,11 +197,77 @@ find slow query -> 교정 필요
 행을 기준으로 테이블 분리
 지름길을 만든다
 
+교정한 내용
+
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2.2 백엔드
 
-이후에 웹 페이지와 DB를 연결하기 위한 REST API를 구상해 보았습니다.
-Swagger API를 사용하였습니다.
+웹 페이지와 DB를 연결하기 위한 REST API를 설계해 보았습니다.
+https://sharplee7.tistory.com/49
+
+1. 명사를 통한 리소스 식별
+2. HTTP 헤더에 데이터 포멧 포함
+3. GET이나 쿼리 파라미터를 통한 수정 금지
+4. 서브 URL 표현식을 통해 세부 표현
+5. 행위(verb)를 위한 적절한 HTTP 메소드 사용
+6. HTTP 응답 상태 코드 사용
+7. 필드명에 대소문자 규칙 적용
+8. 검색, 정렬, 필터링 그리고 페이징을 위한 규칙 사용
+9. API 버전 관리
+10. HATEOAS 적용
+11. JSON을 통한 ERROR 응답 처리
+
+라우터
+
+/:
+
+    글 가져 오기 (page)
+    hashtag 검색한 글 가져오기 (title, page)
+    각 글마다 좋아요 가져오기 (postId)
+    댓글 달기 (content, postId, usernick)
+    각 글마다 댓글 가져오기 (postId)
+
+/auth:
+
+	회원가입:
+    	유저 있는지 확인 (email)
+    	유저 추가 (email, password, nick)
+	로그인:
+    	유저 확인 (email)
+	로그아웃
+
+/post:
+
+    글 쓰기 (userId, content, img)
+    글 수정하기 (content, img, postId)
+	내가 게시한글 삭제하기 (postId)
+	좋아요하기 (userId, postId)
+	좋아요 취소하기 (userId, postId)
+
+/profile:
+
+	프로필 정보 수정 (nick, email, img, userId)
+    내가 게시한글 보기 (userId)
+	유저프로필 보기 (userId)
+
+	
+/room:
+
+    Room 추가 하기(aId, bId)
+    Room 열기 = 목록 가져오기 (userId)
+    DM 읽기(roomId, page)
+    DM 보내기 (roomId, content, sender)
+
+/follow:
+
+    팔로우하기 (userId, follower)
+    팔로우 취소하기 (userId, follower)    
+	팔로잉, 팔로워 숫자 보기:
+		팔로잉 숫자 보기 (userId)
+		팔로워 숫자 보기 (userId)
+
+
+Swagger OPEN API를 사용해보며 FRONT와의 협업에 어떻게 사용될지 알아보았습니다.
 
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2.3 프론트 엔드
@@ -175,7 +313,33 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 5. 배포
 
-## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) To Study
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 느낀점
 
+FRONT
+	- 
+
+DB
+
+	논리적 모델링의 중요성을 깨달음
+	기존의 완성된 front에서 하나씩 라우팅하면서 필요한 DB 쿼리를 만들면서 생각하던 것이 아니라
+	미리 ovenapp을 통해 UI를 만들어두고 필요한 객체를 모델링하고 (논리적 모델링)
+	정규화를 통해 mysql에 테이블을 생성한 뒤,
+	사용될 sql문을 미리 적어보면서 find slow query 과정을 통해
+	join문이 과도하게 사용될 객체를 역정규화로 최적화하고 주의할점을 명시해보았다.
+	가장 쉽고 간단하게 여겨졌던 DB의 모델링이 가장 크게 웹 성능을 결정하는 어려운 작업임을 느꼈다.
+	
+BACKEND
+
+	보
 
 ## ![hammer_and_wrench](https://github.githubassets.com/images/icons/emoji/unicode/1f6e0.png) 보안해야 할 점
+
+FRONT
+
+DB
+
+	보다 많은 정규화 과정과 역정규화의 좋은 예시들을 거치면서 다듬어 가야할 것 같다.
+	테스팅을 할 수 있는 사이트도 있으니 찾아보자.
+
+BACKEND
+
