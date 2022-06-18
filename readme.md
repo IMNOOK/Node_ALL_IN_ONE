@@ -52,15 +52,16 @@ NodeJs 교과서를 통해 배운 내용을 스스로 적용하여 시도하는 
 
 7. AWS와 GCP로 배포
 
-# ![thinking](https://github.githubassets.com/images/icons/emoji/unicode/1f914.png) 기능명세서
+# ![thinking](https://github.githubassets.com/images/icons/emoji/unicode/1f914.png) 0. 구상
+먼저 어떤 기능을 하는 웹 페이지를 만들지 구상한다.
 
-1. 설계
-먼저 어떤 기능을 하는 웹 페이지를 만들지 구상하고
-ovenapp 을 통해 페이지를 설계해 봅니다.
+
+# ![thinking](https://github.githubassets.com/images/icons/emoji/unicode/1f914.png) 1. 기획
+UI 모델링: ovenapp 을 통해 페이지를 설계해 봅니다.
 
 https://ovenapp.io/project/H74UvSHifgHqPYXfGzDvTmvZCPjSr08W#P3cGu
 
-## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) DB
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2-1. DB
 
 설계한 데이터를 토대로 개념적 데이터 모델링을 하고
 ![a](https://user-images.githubusercontent.com/51530880/173850440-a2eda00f-3e0f-44cf-904d-07e20b57fb54.png)
@@ -166,7 +167,7 @@ find slow query -> 교정 필요
 지름길을 만든다
 
 
-## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 백엔드
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2.2 백엔드
 이후에 웹 페이지와 DB를 연결하기 위한 API를 구상해 본다.
 Swagger API를 사용하였다.
 
@@ -183,17 +184,7 @@ config/mysql
 RestApi
 /routes
 
-
-3. 연결
-서버 app.js를 먼저 구상하고 필요한 모듈을 모두 연결한다.
-이후에 front를 연결하고 Rest API를 연결하고 DB를 연결하여 완성시킨다. 
-
-4. 테스트
-
-5. 배포
-
-
-## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 프론트 엔드
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2.3 프론트 엔드
 ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연동시킨다.
 
 -front-
@@ -215,6 +206,10 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 포스트 페이지 
 	게시물을 올릴 수 있는 곳이다.
 
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 3. 연결
+서버 app.js를 먼저 구상하고 필요한 모듈을 모두 연결한다.
+이후에 front를 연결하고 Rest API를 연결하고 DB를 연결하여 완성시킨다. 
+
 ## 사용한 패키지
 
 -   **Express**  　　　=> node.js의 웹 프레임워크
@@ -225,6 +220,12 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 -   **bcrypt**　　=> node.js에서 데이터베이스에 저장할 비밀번호를 암호화 해보자
 -   **multer**　　=> node.js에서 프론트 엔드에서 보내주는 이미지 데이터를 받아보자
 -   **jwt**　　=> node.js에서 jwt 토큰을 이용한 로그인 기능을 구현해보자
+
+
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 4. 테스트
+
+
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 5. 배포
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) To Study
 
