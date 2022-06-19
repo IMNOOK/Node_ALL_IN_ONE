@@ -200,6 +200,9 @@ find slow query를 통해 교정을 합니다.
 교정한 내용
 
 
+Models 파일에 items.js에 각각의 쿼리들 저장
+
+
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2.2 백엔드
 
 웹 페이지와 DB를 연결하기 위한 REST API를 설계해 보았습니다.
@@ -219,53 +222,105 @@ https://sharplee7.tistory.com/49
 
 라우터
 
+middlewares.js
+//미들웨어
+
+	isLoggedIn, isNotLoggedIn => passport의 req.isAuthenticated() 메소드를 통해
+	현재 로그인이 되어있는 상태를 판단하여 next나 error를 반환하는 미들웨어
+
+page.js
 /:
 
-    글 가져 오기 (page)
-    hashtag 검색한 글 가져오기 (title, page)
-    각 글마다 좋아요 가져오기 (postId)
-    댓글 달기 (content, postId, usernick)
-    각 글마다 댓글 가져오기 (postId)
+	get('/main?page=params1'):    
+		글 가져 오기 (page),
+		각 글마다 좋아요 가져오기 (postId),
+		각 글마다 댓글 가져오기 (postId)
+	
+	get('/main?search=params1&page=params2') 
+		hashtag 검색한 글 가져오기 (title, page)
+		
+	
+    post('/comment/:postId')
+		댓글 달기 (content, postId, usernick)
+    
+	get('/login')
+		로그인 페이지 이동
 
+	get('/join')
+		회원가입 페이지 이동
+	
+	get('/post')
+		포스트 페이지 이동
+
+auth.js
 /auth:
 
-	회원가입:
-    	유저 있는지 확인 (email)
-    	유저 추가 (email, password, nick)
-	로그인:
-    	유저 확인 (email)
-	로그아웃
+	post('/join')
+		회원가입:
+    		유저 있는지 확인 (email)
+    		유저 추가 (email, password, nick)
+			
+	post('/login')
+		로그인:
+			passport
+			
+	get('/logout)
+		로그아웃
+
 
 /post:
 
-    글 쓰기 (userId, content, img)
-    글 수정하기 (content, img, postId)
-	내가 게시한글 삭제하기 (postId)
-	좋아요하기 (userId, postId)
+	post('/')
+		글 쓰기 (userId, content, img)
+		
+	update('/:postId')
+	    글 수정하기 (content, img, postId)
+		
+	delete('/:postId')
+		내가 게시한글 삭제하기 (postId)
+
+	get('/good/:postId')
+		좋아요하기 (userId, postId)
+		
+	detele('/good/:postId)
 	좋아요 취소하기 (userId, postId)
 
 /profile:
+		
+	get('/:userid')
+		유저 프로파일 페이지 이동
+		유저 정보 보기(userId)
+		팔로잉, 팔로워 숫자 보기:
+			팔로잉 숫자 보기 (userId)
+			팔로워 숫자 보기 (userId)
 
-	프로필 정보 수정 (nick, email, img, userId)
-    내가 게시한글 보기 (userId)
-	유저프로필 보기 (userId)
+		유저가 게시한글 보기 (userId)
 
+	update('/:userId')
+		프로필 정보 수정 (nick, email, img, userId)
 	
 /room:
 
-    Room 추가 하기(aId, bId)
-    Room 열기 = 목록 가져오기 (userId)
-    DM 읽기(roomId, page)
-    DM 보내기 (roomId, content, sender)
+	get('/')
+    	Room 열기 = 목록 가져오기 (userId)
+	
+	post('/')
+    	Room 추가 하기(aId, bId)
+		
+	get('/:roomId')
+	    DM 읽기(roomId, page)
+		
+	post('/:roomId')
+    	DM 보내기 (roomId, content, sender)
 
 /follow:
 
-    팔로우하기 (userId, follower)
-    팔로우 취소하기 (userId, follower)    
-	팔로잉, 팔로워 숫자 보기:
-		팔로잉 숫자 보기 (userId)
-		팔로워 숫자 보기 (userId)
-
+	get('/')
+    	팔로우하기 (userId, follower)
+	
+	delete('/')
+    	팔로우 취소하기 (userId, follower)    
+	
 
 Swagger OPEN API를 사용해보며 FRONT와의 협업에 어떻게 사용될지 알아보았습니다.
 

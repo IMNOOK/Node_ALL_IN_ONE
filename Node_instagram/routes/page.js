@@ -8,37 +8,14 @@ const items = require('../models/items');
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
 
-//사용자에게 보여줄 자료들을 DB에서 끌어옴
-//post처럼 모든 자료를 끌고 오는 것이 아니라 각각의 개인 유저의 필요한 정보만 가져옴
-
-/**
- * @swagger
- *  /page:
- *    get:
- *      tags:
- *      - product
- *      description: 모든 제품 조회
- *      produces:
- *      - application/json
- *      parameters:
- *        - in: query
- *          name: category
- *          required: false
- *          schema:
- *            type: integer
- *            description: 카테고리
- *      responses:
- *       200:
- *        description: 제품 조회 성공
- */
-
 router.use((req, res, next) => {
 	res.locals.user = req.user;
 	
 	next();
 })
 
-router.get('/', async (req, res) => {
+router.get('/main', async (req, res) => {
+	
 	try{
 		const twits = await items.Post.getAll();
 		for(let i = 0; i < twits.length; i++) {
@@ -82,4 +59,5 @@ router.get('/login', isNotLoggedIn, (req, res) => {
 router.get('/join', isNotLoggedIn, (req, res) => {
 	return res.render('join', { title: '내 정보 - NodeBird' });
 });
+
 module.exports = router;
