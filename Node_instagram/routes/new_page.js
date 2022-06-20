@@ -43,6 +43,17 @@ router.get('/main', async(req, res) => {
 	}
 });
 
+router.post('/comment/:postId', isLoggedIn, async (req, res) => {
+	const { contents } = req.body;
+	const postId = req.query.postId;
+	
+	try{
+		
+	} catch(err) {
+		console.error(err);
+	}
+})
+
 /*
 /:
 

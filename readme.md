@@ -95,89 +95,138 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
 
 메인 페이지
 
-    글 가져 오기 (page)
+    글 가져 오기 
+	Post.getAll (page)
     SELECT * FROM Post orders LIMIT 10 OFFSET ?
+	return rows;
     
-    hashtag 검색한 글 가져오기 (title, page)
-    SELECT *  LIMIT 10 OFFSET ?
+    hashtag 검색한 글 가져오기 
+	Post.getByHashtag (title, page)
+	SELECT * FROM Post inner JOIN PostHashtag ON Post.id = PostHashtag.postId inner join Hashtag on Hashtag.id = PostHashtag.hashtagId WHERE Hashtag.title = ? orders LIMIT 10 OFFSET ?
+    return rows;
+	
+    각 글마다 좋아요 수 가져오기
+	Good.getByPostId (postId)
+    SELECT * FROM Good WHERE postId = ? (Join)
+	return rows.length;
 
-    각 글마다 좋아요 가져오기 (postId)
-    SELECT * FROM Good WHERE postId = ? (Join) 
-
-    좋아요하기 (userId, postId)
+    좋아요하기
+	Good.set (userId, postId)
     INSERT INTO Good (userId, postId) Values(?, ?)
+	return 1 else 0;
 
-    좋아요 취소하기 (userId, postId)
-    DELETE FROM Good WHERE Good.userId = ? AND Good.postId = ? 
+    좋아요 취소하기 
+	Good.delete (userId, postId)
+    DELETE FROM Good WHERE Good.userId = ? AND Good.postId = ?
+	return none;
 
-    팔로우하기 (userId, follower)
+    팔로우하기 
+	Follow.set (userId, follower)
     INSERT INTO Follow (following, follower) Values (?, ?) 
+	return 1 else 0;
 
-    팔로우 취소하기 (userId, follower)
+    팔로우 취소하기 
+	Follow.delete (userId, follower)
     DELETE FROM Follow Where following = ? and follower = ?
+	return none;
 
-    댓글 달기 (content, postId, usernick)
-    INSERT INTO Comment (content, postId) Values (content, postId, usernick)
+    댓글 달기 
+	Comment.set (content, postId, userId, userNick)
+    INSERT INTO Comment (content, postId, userId, userNick) Values (?, ?, ?, ?)
+	return 1 else 0;
 
-    각 글마다 댓글 가져오기 (postId)
+    각 글마다 댓글 가져오기 
+	Comment.getByPostId (postId)
     SELECT * FROM Comment WHERE postId = ? (Join)
+	return rows;
 
-    Room 추가 하기(aId, bId)
+    Room 추가 하기
+	Room.set (aId, bId)
     INSERT INTO Room (aId, bId) Values(?,?)
+	return 1 else 0;
 
-    Room 열기 = 목록 가져오기 (userId)
+    Room 열기 = 목록 가져오기 
+	Room.getByUserId (userId)
     SELECT * FROM Room WHERE userA = ? Or userB =?
+	return rows;
 
-    DM 읽기(roomId, page)
+    DM 읽기
+	DM.getByRoomId (roomId)
     SELECT * FROM DM WHERE roomId = ? LIMIT 100 OFFSET ?
+	return rows;
 
-    DM 보내기 (roomId, content, sender)
+    DM 보내기 
+	DM.set (roomId, content, sender)
     INSERT INTO DM (roomId, content, sender) VALUES (?, ?, ?)
+	return 1 else 0;
     
 로그인 페이지
 
 	회원가입:
-    	유저 있는지 확인 (email)
+    	유저 있는지 확인 
+		User.check (email)
     	SELECT email FROM User WHERE email = ?
+		return rows[0] else 0
 
-    	유저 추가 (email, password, nick)
+    	유저 추가 
+		User.set (email, password, nick)
     	INSERT INTO User (email, password, nick) values (?,?,?)
+		return 1 else 0
 
 	로그인:
-    	유저 확인 (email)
+    	유저 확인
+		User.check (email)
     	SELECT * FROM User WHER email = ?
+		return rows[0] else 0
 
 포스트 페이지
 
-    글 쓰기 (userId, content, img)
+    글 쓰기 
+	Post.set (userId, content, img)
     INSERT INTO Post (userId, content, img) values (?,?,?)
-
-    글 수정하기 (content, img, postId)
+	return 1 else 0
+	
+    글 수정하기 
+	Post.update (content, img, postId)
 	UPDATE Post SET content = ?, img = ? WHERE postId = ?
+	return 1 else 0
 
 프로필 페이지
 
-	프로필 정보 수정 (nick, email, img, userId)
+	프로필 정보 수정 
+	User.update (nick, email, img, userId)
 	UPDATE User SET nick = ?, email = ?, img =? WHERE userId = ?
 
     팔로잉, 팔로워 숫자 보기:
-		팔로잉 숫자 보기 (userId)
+		팔로잉 숫자 보기 
+		Follow.getFollowing (userId)
 		SELECT * FROM Follow WHERE following = ?
+		return rows.length;
 		
-		팔로워 숫자 보기 (userId)
+		팔로워 숫자 보기 
+		Follow.getFollower (userId)
 		SELECT * FROM Follow WHERE follower = ?
-		
-    팔로워, 팔로잉 유저 보기 (userId)
-	SELECT * FROM User WHERE userId = ? (JOIN)
-
-    팔로우 취소하기 (userId, follower)
-    DELETE FROM Follow Where following = ? and follower = ?
-    
-    내가 게시한글 보기 (userId)
-	SELECT * FROM Post WHERE userId = ?
+		return rows.length;
 	
-	내가 게시한글 삭제하기 (postId)
+    유저 프로필 보기 
+	User.getOne (userId)
+	SELECT * FROM User INNER JOIN Post ON User.id = Post.userId WHERE User.id = ?
+	return rows;
+
+    팔로우 취소하기 
+	Follow.delete (userId, follower)
+    DELETE FROM Follow Where following = ? and follower = ?
+	return none;
+    
+    내가 게시한글 보기
+	Post.getByUserId(userId)
+	SELECT * FROM Post WHERE userId = ?
+	return rows;
+	
+	내가 게시한글 삭제하기 
+	Post.delete (postId)
 	DELETE FROM Post WHERE id = ?
+	return 0;
 
 마지막으로 물리적 데이터 모델링 (성능 향상 중요!)
 find slow query를 통해 교정을 합니다.
