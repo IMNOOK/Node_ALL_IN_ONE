@@ -27,23 +27,60 @@ https://ovenapp.io/project/H74UvSHifgHqPYXfGzDvTmvZCPjSr08W#P3cGu
 
 메인 페이지
 	
-    글 가져 오기
-	hashtag 검색한 글 가져오기
-	좋아요하기
-	좋아요 취소하기
-	팔로우하기
-	팔로우 취소하기
-	댓글 보기
-	댓글 달기
-	Room 목록 가져오기
-	Room 추가하기
-    Room 열기
-	DM 보내기
+    기본 상태
+		글 가져 오기
+			유저가 작성했던 글 10개씩 1페이지로 가져오기
+			이때 각각의 글들에는 마지막에 달린 댓글 1개
+			좋아요 갯수
+		
+	hashtag 검색한 글 가져오기 -> search로 hashtag 검색 -> req.body.title 로 해시태그 전달
+		유저가 작성했던 글 중 hashtag.title이 같은 것을 10개씩 1페이지로 가져오기
+		이때 각각의 글들에는 마지막에 달린 댓글 1개
+		좋아요 갯수
+		
+		댓글 보기 -> 파라미터 값으로 postId 전달
+			해당 게시글의 모든 댓글을 가져옴
+		
+	로그인시
+		상시
+			해당 유저와 팔로우한 유저의 스토리 + 추천유저창 뜸.
+			글을 가져 올 때, 회원이 이 사용자를 팔로우 했는지 않했는지, 회원이 이 글을 좋아요 했는지 안했는지 까지 추가
+		
+		좋아요하기 -> 파라미터  값으로 postId 전달 
+			하트 빨간색으로 변경
+
+		좋아요 취소하기 -> 파라미터 값으로 postId 전달
+			하트 공백으로 변경
+
+		팔로우하기 -> 파라미터 값으로 userId 전달
+			팔로우 표시로 변경
+	
+		팔로우 취소하기 -> 파라미터 값으로 userId 전달
+			미 팔로우 상태로 변경
+	
+		댓글 달기 -> req.body.content로 내용이 파라미터 값으로 postId 전달
+			댓글이 달림
+	
+		Room 목록 가져오기
+			내가 기존에 연락하던 모든 Room들이 전달됨
+			Room들에는 다른 회원의 이름, 사진, 마지막 채팅 내용, 마지막 채팅 시간이 들어있음.
+	
+		Room 열기 -> 파라미터 값으로 roomId 전달
+			다른 회원과의 모든 채팅내용을 가져옴
+	
+		DM 보내기 -> req.body.content로 내용이 파라미터 값으로 roomId 전달
+		다른 사용자에게 문자를 보냄, 상대방에게도 event로 생성, 처음 상대와 대화창 열기를 하면 해당 유저와의 Room이 생성됨.
 
 로그인 페이지 & 회원가입 페이지
 
+	기본 상태
+		로그인 페이지 or 회원가입 페이지
+	
 	회원가입
+		
+
 	로그인
+	로그인되면 메인 페이지로 이동, 안되면 
 
 포스트 페이지
 
@@ -91,11 +128,37 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
 
 이후에 Mysql을 통해 필요한 쿼리들을 작성해보았습니다.
 
+User
 
+	유저 확인 
+	User.check (email)
+	SELECT email FROM User WHERE email = ?
+	return rows[0] else 0
 
-메인 페이지
+	유저 추가 
+	User.set (email, password, nick)
+	INSERT INTO User (email, password, nick) values (?,?,?)
+	return 1 else 0
+	
+	프로필 정보 수정 
+	User.update (nick, email, img, userId)
+	UPDATE User SET nick = ?, email = ?, img =? WHERE userId = ?
 
-    글 가져 오기 
+	
+    유저 프로필 보기 
+	User.getOne (userId)
+	SELECT * FROM User INNER JOIN Post ON User.id = Post.userId WHERE User.id = ?
+	return rows;
+	
+	
+Post
+
+    글 쓰기 
+	Post.set (userId, content, img)
+    INSERT INTO Post (userId, content, img) values (?,?,?)
+	return 1 else 0
+	
+	글 가져 오기 
 	Post.getAll (page)
     SELECT * FROM Post orders LIMIT 10 OFFSET ?
 	return rows;
@@ -105,6 +168,23 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
 	SELECT * FROM Post inner JOIN PostHashtag ON Post.id = PostHashtag.postId inner join Hashtag on Hashtag.id = PostHashtag.hashtagId WHERE Hashtag.title = ? orders LIMIT 10 OFFSET ?
     return rows;
 	
+    글 수정하기 
+	Post.update (content, img, postId)
+	UPDATE Post SET content = ?, img = ? WHERE postId = ?
+	return 1 else 0
+	
+	내가 게시한글 보기
+	Post.getByUserId(userId)
+	SELECT * FROM Post WHERE userId = ?
+	return rows;
+	
+	내가 게시한글 삭제하기 
+	Post.delete (postId)
+	DELETE FROM Post WHERE id = ?
+	return 0;
+
+Good
+
     각 글마다 좋아요 수 가져오기
 	Good.getByPostId (postId)
     SELECT * FROM Good WHERE postId = ? (Join)
@@ -120,6 +200,8 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
     DELETE FROM Good WHERE Good.userId = ? AND Good.postId = ?
 	return none;
 
+Follow
+
     팔로우하기 
 	Follow.set (userId, follower)
     INSERT INTO Follow (following, follower) Values (?, ?) 
@@ -129,6 +211,18 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
 	Follow.delete (userId, follower)
     DELETE FROM Follow Where following = ? and follower = ?
 	return none;
+	
+	팔로잉 숫자 보기 
+	Follow.getFollowing (userId)
+	SELECT * FROM Follow WHERE following = ?
+	return rows.length;
+
+	팔로워 숫자 보기 
+	Follow.getFollower (userId)
+	SELECT * FROM Follow WHERE follower = ?
+	return rows.length;
+	
+Comment
 
     댓글 달기 
 	Comment.set (content, postId, userId, userNick)
@@ -140,6 +234,8 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
     SELECT * FROM Comment WHERE postId = ? (Join)
 	return rows;
 
+Room
+
     Room 추가 하기
 	Room.set (aId, bId)
     INSERT INTO Room (aId, bId) Values(?,?)
@@ -150,6 +246,8 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
     SELECT * FROM Room WHERE userA = ? Or userB =?
 	return rows;
 
+DM
+
     DM 읽기
 	DM.getByRoomId (roomId)
     SELECT * FROM DM WHERE roomId = ? LIMIT 100 OFFSET ?
@@ -159,74 +257,8 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
 	DM.set (roomId, content, sender)
     INSERT INTO DM (roomId, content, sender) VALUES (?, ?, ?)
 	return 1 else 0;
+
     
-로그인 페이지
-
-	회원가입:
-    	유저 있는지 확인 
-		User.check (email)
-    	SELECT email FROM User WHERE email = ?
-		return rows[0] else 0
-
-    	유저 추가 
-		User.set (email, password, nick)
-    	INSERT INTO User (email, password, nick) values (?,?,?)
-		return 1 else 0
-
-	로그인:
-    	유저 확인
-		User.check (email)
-    	SELECT * FROM User WHER email = ?
-		return rows[0] else 0
-
-포스트 페이지
-
-    글 쓰기 
-	Post.set (userId, content, img)
-    INSERT INTO Post (userId, content, img) values (?,?,?)
-	return 1 else 0
-	
-    글 수정하기 
-	Post.update (content, img, postId)
-	UPDATE Post SET content = ?, img = ? WHERE postId = ?
-	return 1 else 0
-
-프로필 페이지
-
-	프로필 정보 수정 
-	User.update (nick, email, img, userId)
-	UPDATE User SET nick = ?, email = ?, img =? WHERE userId = ?
-
-    팔로잉, 팔로워 숫자 보기:
-		팔로잉 숫자 보기 
-		Follow.getFollowing (userId)
-		SELECT * FROM Follow WHERE following = ?
-		return rows.length;
-		
-		팔로워 숫자 보기 
-		Follow.getFollower (userId)
-		SELECT * FROM Follow WHERE follower = ?
-		return rows.length;
-	
-    유저 프로필 보기 
-	User.getOne (userId)
-	SELECT * FROM User INNER JOIN Post ON User.id = Post.userId WHERE User.id = ?
-	return rows;
-
-    팔로우 취소하기 
-	Follow.delete (userId, follower)
-    DELETE FROM Follow Where following = ? and follower = ?
-	return none;
-    
-    내가 게시한글 보기
-	Post.getByUserId(userId)
-	SELECT * FROM Post WHERE userId = ?
-	return rows;
-	
-	내가 게시한글 삭제하기 
-	Post.delete (postId)
-	DELETE FROM Post WHERE id = ?
-	return 0;
 
 마지막으로 물리적 데이터 모델링 (성능 향상 중요!)
 find slow query를 통해 교정을 합니다.
@@ -254,8 +286,20 @@ Models 파일에 items.js에 각각의 쿼리들 저장
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2.2 백엔드
 
-웹 페이지와 DB를 연결하기 위한 REST API를 설계해 보았습니다.
-https://sharplee7.tistory.com/49
+사용한 패키지
+
+-   **Express**  　　　=> node.js의 웹 프레임워크
+-   **eslint**　　　　=> node.js에서 팀 단위 협업시, 문법 검사를 해보자
+-   **prettier**　　　=> node.js에서 팀 단위 협업시, 코딩 스타일을 통일해보자
+-   **cors**　　=> node.js에서 cors 문제를 해결해보자
+-   **nodemon**　　=> node.js에서 파일 수정시 자동으로 서버를 내렸다가 올려보자
+-   **bcrypt**　　=> node.js에서 데이터베이스에 저장할 비밀번호를 암호화 해보자
+-   **multer**　　=> node.js에서 프론트 엔드에서 보내주는 이미지 데이터를 받아보자
+-   **jwt**　　=> node.js에서 jwt 토큰을 이용한 로그인 기능을 구현해보자
+
+라우팅
+- 웹 페이지와 DB를 연결하기 위한 REST API를 설계해 보았습니다.
+- https://sharplee7.tistory.com/49
 
 1. 명사를 통한 리소스 식별
 2. HTTP 헤더에 데이터 포멧 포함
@@ -280,8 +324,8 @@ middlewares.js
 page.js
 /:
 
-	get('/main?page=params1'):    
-		글 가져 오기 (page),
+	get('/main?page=params1'):
+		글 가져 오기 (page)
 		각 글마다 좋아요 가져오기 (postId),
 		각 글마다 댓글 가져오기 (postId)
 	
@@ -333,6 +377,12 @@ auth.js
 		
 	detele('/good/:postId)
 	좋아요 취소하기 (userId, postId)
+	
+	get('/')
+    	팔로우하기 (userId, follower)
+	
+	delete('/')
+    	팔로우 취소하기 (userId, follower)    
 
 /profile:
 		
@@ -361,14 +411,6 @@ auth.js
 		
 	post('/:roomId')
     	DM 보내기 (roomId, content, sender)
-
-/follow:
-
-	get('/')
-    	팔로우하기 (userId, follower)
-	
-	delete('/')
-    	팔로우 취소하기 (userId, follower)    
 	
 
 Swagger OPEN API를 사용해보며 FRONT와의 협업에 어떻게 사용될지 알아보았습니다.
@@ -395,22 +437,6 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 	
 포스트 페이지 
 	게시물을 올릴 수 있는 곳이다.
-
-## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 3. 연결
-서버 app.js를 먼저 구상하고 필요한 모듈을 모두 연결한다.
-이후에 front를 연결하고 Rest API를 연결하고 DB를 연결하여 완성시킨다. 
-
-## 사용한 패키지
-
--   **Express**  　　　=> node.js의 웹 프레임워크
--   **eslint**　　　　=> node.js에서 팀 단위 협업시, 문법 검사를 해보자
--   **prettier**　　　=> node.js에서 팀 단위 협업시, 코딩 스타일을 통일해보자
--   **cors**　　=> node.js에서 cors 문제를 해결해보자
--   **nodemon**　　=> node.js에서 파일 수정시 자동으로 서버를 내렸다가 올려보자
--   **bcrypt**　　=> node.js에서 데이터베이스에 저장할 비밀번호를 암호화 해보자
--   **multer**　　=> node.js에서 프론트 엔드에서 보내주는 이미지 데이터를 받아보자
--   **jwt**　　=> node.js에서 jwt 토큰을 이용한 로그인 기능을 구현해보자
-
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 4. 테스트
 

@@ -8,36 +8,17 @@ const items = require('../models/items');
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
 
-router.use((req, res, next) => {
-	res.locals.user = req.user;
-	
-	next();
-})
-
-router.get('/main', async (req, res) => {
-	
+router.get('/', async (req, res) => {
+	const page = req.query.page;
 	try{
-		const twits = await items.Post.getAll();
-		for(let i = 0; i < twits.length; i++) {
-			//각 포스터의 좋아요 수
-			const goodNum = await items.Good.getByPostId(twits[i].id);
-			twits[i].goodNum = goodNum;
-			
-			//각 포스터의 댓글
-			const comments = await items.Comment.getByPostId(twits[i].id);
-			twits[i].comments = comments;
-			
-			// 현재 사용자가 좋아요를 했는지
-			if(!req.user){
-				continue;
-			}
-			const userGood = await items.Good.getByIds(req.user.id, twits[i].id);
-			twits[i].userGood = userGood;	
-		}
-		return 	res.render('index', { title: 'Main', twits });
-	} catch(err){
-		console.error(err)
+		const posts = items.Post.getAll(page);
+		
+	} catch (err) {
+		
 	}
+	
+	return 	res.render('index', { title: 'Main' });
+
 });
 
 router.get('/profile', isLoggedIn, (req, res) => {

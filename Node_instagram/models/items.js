@@ -28,7 +28,7 @@ const items = {
 			return 1;
 		},
 		
-		update: (nick, email, img, userId) => {
+		update: async (nick, email, img, userId) => {
 			try{
 				await con.query(`UPDATE User SET nick = ?, email = ?, img =? WHERE userId = ?`, [email, nick, img, userId]);
 			} catch (err) {
@@ -46,8 +46,8 @@ const items = {
 	},
 		
 	Post: {
-		getAll: async (page = 0) => {
-			page = page * 10;
+		getAll: async (num = 0) => {
+			const page = num * 10;
 			const [rows, fields] = await con.query(`SELECT * FROM Post ORDERS LIMIT 10 OFFSET ?`, page);
 			return rows;
 		},
@@ -57,8 +57,8 @@ const items = {
 			return rows;
 		},
 		
-		getByHashtag: async (title, page) => {
-			page = page * 10;
+		getByHashtag: async (title, num = 0) => {
+			const page = num * 10;
 			const [rows, fields] = await con.query(`SELECT * FROM Post inner JOIN PostHashtag ON Post.id = PostHashtag.postId inner join Hashtag on Hashtag.id = PostHashtag.hashtagId WHERE Hashtag.title = ? ORDERS LIMIT 10 OFFSET ?`, [title, page]);
 			return rows;
 		},

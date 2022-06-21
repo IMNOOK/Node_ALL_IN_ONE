@@ -9,6 +9,23 @@ const items = require('../models/items');
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
 
+/*
+auth.js
+/auth:
+
+	post('/join')
+		회원가입:
+    		유저 있는지 확인 (email)
+    		유저 추가 (email, password, nick)
+			
+	post('/login')
+		로그인:
+			passport
+			
+	get('/logout)
+		로그아웃
+*/
+
 router.post('/join',isNotLoggedIn, async (req, res, next) => {
 	const { email, nick, password } = req.body;
 	try{

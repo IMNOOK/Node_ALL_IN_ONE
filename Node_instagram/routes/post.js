@@ -8,6 +8,28 @@ const router = express.Router();
 const { isLoggedIn } = require('./middlewares');
 const items = require('../models/items');
 
+/*
+
+/post:
+
+	post('/')
+		글 쓰기 (userId, content, img)
+		
+	update('/:postId')
+	    글 수정하기 (content, img, postId)
+		
+	delete('/:postId')
+		내가 게시한글 삭제하기 (postId)
+
+	get('/good/:postId')
+		좋아요하기 (userId, postId)
+		
+	detele('/good/:postId)
+	좋아요 취소하기 (userId, postId)   
+	
+*/
+
+
 try{
 	fs.readdirSync('uploads');
 } catch(error) {
