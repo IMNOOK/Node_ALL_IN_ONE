@@ -9,54 +9,37 @@ const items = require('../models/items');
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
 
-/*
-auth.js
-/auth:
-
-	post('/join')
-		회원가입:
-    		유저 있는지 확인 (email)
-    		유저 추가 (email, password, nick)
-			
-	post('/login')
-		로그인:
-			passport
-			
-	get('/logout)
-		로그아웃
-*/
-
-router.post('/join',isNotLoggedIn, async (req, res, next) => {
+router.post('/join', isNotLoggedIn, async (req, res) => {
 	const { email, nick, password } = req.body;
 	try{
 		const hash = await bcrypt.hash(password, 12);
-		if(items.User.set(email, nick, hash) === 0){
+		if(items.User.set(email, nick, hash) === 0) {
 			return res.redirect('/join?error=exist');
 		}
-	} catch(error){
-		console.error(error);
+		return res.redirect('/');	
+	} catch (err) {
+		console.error(err);
 	}
-	return res.redirect('/');
-});
+})
 
 router.post('/login', isNotLoggedIn, async (req, res, next) => {
-	passport.authenticate('local', (authError, user, info) => {
-		if (authError) {
+	passport.authenticate('local', (authError, user, info) => { //local 스토리지 함수 실행 후 return 되는 값들을 뒤에서 사용
+		if(authError) {
 			console.error(authError);
 			return next(authError);
 		}
-		if (!user) {
-			return res.redirect('/')
+		if(!user){
+			return res.redirect('/');
 		}
-		return req.login(user, (loginError) => {
+		return req.login(user, (loginError) => { //serializeUser 실행하고 
 			if(loginError) {
 				console.error(loginError);
 				return next(loginError);
 			}
 			return res.redirect('/');
-		});
-	})(req, res, next); //미들웨어 내의 미들웨어는 (req, res, next)를 붙여서 인수를 줘야 한다!!
-});
+		}) //req.user 세션을 추가
+	})(req, res, next);
+})
 
 router.get('/logout',isLoggedIn, (req, res, next) => {
 	req.logout();

@@ -11,14 +11,39 @@ const router = express.Router();
 router.get('/', async (req, res) => {
 	const page = req.query.page;
 	try{
-		const posts = items.Post.getAll(page);
-		
+		let posts = await items.Post.getAll(page);
+		for(let i = 0; i < posts.length; i++){
+			//각 글마다 좋아요 갯수 세기
+			posts[i].goodNum = await items.Good.getByPostId(posts[i].id);
+			
+			//각 글마다 마지막 댓글 가져오기
+			posts[i].comments = await items.Comment.getByPostId(posts[i].id);
+		}
+		console.log(posts);
+		return 	res.render('index', { title: 'Main', twits: posts });
 	} catch (err) {
-		
+		console.error(err);
 	}
-	
-	return 	res.render('index', { title: 'Main' });
+});
 
+router.get('/search/:title', async (req, res) => {
+	const page = req.query.page;
+	const title = req.params.title;
+	  
+	try{
+		let posts = await items.Post.getByHashtag(page, title);
+		for(let i = 0; i < posts.length; i++){
+			//각 글마다 좋아요 갯수 세기
+			posts[i].goodNum = await items.Good.getByPostId(posts[i].id);
+			
+			//각 글마다 마지막 댓글 가져오기
+			posts[i].comments = await items.Comment.getByPostId(posts[i].id);
+		}
+		console.log(posts);
+		return res.render('index', { title: 'Main', twits: posts});
+	} catch (err) {
+		console.error(err);
+	}
 });
 
 router.get('/profile', isLoggedIn, (req, res) => {

@@ -44,7 +44,8 @@ app.use(session({
 		secure: false, // https 프로토콜에서만 사용한다!를 false로 함. 배포시 true로 바꾸자.
 	}
 }));	//req.session 이라는 객체가 생성.
-app.use(passport.initialize());	//req.isAuthenticated,req.login 등의 객체 등록
+app.use(passport.initialize());	//new LocalStrategy 생성자 생성
+app.use(passport.session());	//req.isAuthenticated,req.login 등의 객체 등록
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 //라우팅

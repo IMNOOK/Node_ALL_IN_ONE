@@ -25,18 +25,24 @@ const items = require('../models/items');
 		좋아요하기 (userId, postId)
 		
 	detele('/good/:postId)
-	좋아요 취소하기 (userId, postId)   
+	좋아요 취소하기 (userId, postId)
+	
+	get('/')
+    	팔로우하기 (userId, follower)
+	
+	delete('/')
+    	팔로우 취소하기 (userId, follower)    
 	
 */
 
-
 try{
 	fs.readdirSync('uploads');
-} catch(error) {
+} catch(err) {
 	console.error('uploads 폴더가 없어 uploads 폴더를 생성합니다.');
 	fs.mkdirSync('uploads');
 }
 
+// img + 글 동시에 받기 위한 multer 사용
 const upload = multer({
 	storage: multer.diskStorage({
 		destination(req, file, cb) {
@@ -54,7 +60,6 @@ const upload2 = multer({});
 
 //게시판 글 올림
 router.post('/img', isLoggedIn, upload.single('photo'), async (req, res) => {
-	console.log(req.file);
 	return res.json({url: `/img/${req.file.filename}`});
 });
 

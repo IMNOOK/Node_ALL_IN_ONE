@@ -4,6 +4,8 @@ const local = require('./localStrategy');
 const items = require('../models/items');
 
 module.exports = () => {
+	
+	//
 	passport.serializeUser((user, done) => {
 		console.log(`${user.email}유저 로그인 - passport.index`);
 		done(null, user.email);
@@ -27,7 +29,7 @@ module.exports = () => {
 		}
 		*/
 		
-		const user = await items.User.getOne(email);
+		const user = await items.User.check(email);
 		done(null, user);
 	});
 	

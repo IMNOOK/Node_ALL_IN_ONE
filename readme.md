@@ -37,7 +37,7 @@ https://ovenapp.io/project/H74UvSHifgHqPYXfGzDvTmvZCPjSr08W#P3cGu
 		유저가 작성했던 글 중 hashtag.title이 같은 것을 10개씩 1페이지로 가져오기
 		이때 각각의 글들에는 마지막에 달린 댓글 1개
 		좋아요 갯수
-		
+
 		댓글 보기 -> 파라미터 값으로 postId 전달
 			해당 게시글의 모든 댓글을 가져옴
 		
@@ -324,13 +324,22 @@ middlewares.js
 page.js
 /:
 
+	use(
+		로그인시
+			각 posts 중에 내가 좋아요한 것들 List
+			각 유저 중에 내가 팔로우 한 것들 List
+			Room창 열기 모달
+	)
+
 	get('/main?page=params1'):
 		글 가져 오기 (page)
 		각 글마다 좋아요 가져오기 (postId),
 		각 글마다 댓글 가져오기 (postId)
+		return res.render('index', {title: 'Main', twits: posts});
 	
 	get('/main?search=params1&page=params2') 
 		hashtag 검색한 글 가져오기 (title, page)
+		return res.render('index', {title: 'Main', twits: posts});
 		
 	
     post('/comment/:postId')
@@ -338,12 +347,25 @@ page.js
     
 	get('/login')
 		로그인 페이지 이동
+		return res.render('login', { title: "로그인"} );
 
 	get('/join')
 		회원가입 페이지 이동
+		return res.render('join', { title: "회원가입"});
 	
 	get('/post')
 		포스트 페이지 이동
+		return res.render('post', { title: "포스트"});
+		
+		
+	get('/profile')
+		포스트 페이지 이동
+		return res.render('profile', { title: "프로파일"});
+		
+		
+	get('/follow')
+		포스트 페이지 이동
+		return res.render('follow', { title: "팔로우"});
 
 auth.js
 /auth:
@@ -351,17 +373,36 @@ auth.js
 	post('/join')
 		회원가입:
     		유저 있는지 확인 (email)
+				return res.redirect('/join?error=exist');
     		유저 추가 (email, password, nick)
+				res.redirect('/');
 			
 	post('/login')
-		로그인:
-			passport
+		passport로그인
+			authenticate('local') -> (authError, user, info)
+			authError
+				return next(authError);
+			!user
+				return res.redirect('/');
+			return req.login(user, (err) => {return redirect('/')}) //passport.serializeUser
+		
+		-> 로그인 완료시 deserializeUser를 통해 req.user에 유저 세션 저장 -> passport.session() 
 			
 	get('/logout)
 		로그아웃
+		req.logout()
+		req.session.destroy();
+		res.redirect('/');
 
 
 /post:
+
+	fs.readdirSync('uploads') else fs.mkdirSync('uploads')
+	multer({ storage( destination, filename ), limits })
+
+	post('/img')
+		이미지 올리기 (img)
+		
 
 	post('/')
 		글 쓰기 (userId, content, img)
