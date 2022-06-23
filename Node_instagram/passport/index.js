@@ -7,30 +7,22 @@ module.exports = () => {
 	
 	//
 	passport.serializeUser((user, done) => {
-		console.log(`${user.email}유저 로그인 - passport.index`);
-		done(null, user.email);
+		console.log(`${user.id}유저 로그인 - passport.index`);
+		done(null, user.id);
 	});
 	
-	passport.deserializeUser( async (email, done) => {
-		/*
+	passport.deserializeUser( async (userId, done) => {
 		try{
-			let [rows, fields] = await con.query(`SELECT * FROM User Where id = ?`, id);
-			const user = rows[0];
-				[rows, fields] = await con.query('SELECT * FROM Follow JOIN User ON Follow.followingId = User.id Where Follow.followerId = ?', id);
-				user.Followers = rows;
-				[rows, fields] = await con.query('SELECT * FROM Follow JOIN User ON Follow.followerId = User.id WHERE Follow.followingId = ?', id);
-				user.Followings = rows;
-				[rows, fields] = await con.query('SELECT * FROM Good JOIN User ON Good.userId = User.id WHERE User.id = ?', id);
-				user.GoodPostId = rows;
-				done(null, user);
-		} catch (error) {
-			console.error(error);
-			done(error);
+			const user = await items.User.getOne(userId);
+			user.Followings = await items.Follow.getFollowing(userId);
+			user.GoodPostId = await items.Good.getByUserId(userId);
+			console.log(user.Followings);
+			console.log(user.GoodPostId);
+			done(null, user);
+		} catch (err){
+			console.error(err);
+			done(err, null);
 		}
-		*/
-		
-		const user = await items.User.check(email);
-		done(null, user);
 	});
 	
 	local();

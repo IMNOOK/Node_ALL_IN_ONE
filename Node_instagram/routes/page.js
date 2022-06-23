@@ -8,6 +8,13 @@ const items = require('../models/items');
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
 
+router.use(async (req, res, next) => {
+	res.locals.user = req.user;
+	res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.id) : [];
+	res.locals.goodPostIdList = req.user ? req.user.GoodPostId.map(u => u.postId) : [];
+	next();
+})
+
 router.get('/', async (req, res) => {
 	const page = req.query.page;
 	try{

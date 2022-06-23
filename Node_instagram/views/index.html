@@ -94,7 +94,7 @@
                                 <img src="imgs/thumb.jpeg" alt="프로필이미지">
                             </div>
                             <div class="user_name">
-                                <div class="nick_name m_text">{{twit.userId}}</div>
+                                <div class="nick_name m_text">{{twit.userNick}}</div>
                                 <div class="country s_text">Seoul, South Korea</div>
                             </div>
 
@@ -156,7 +156,7 @@
                         </div>
                     </div>
 					{% endfor %}
-                    <div class="timer">1시간 전</div>
+                    <div class="timer">{{twit.date}}</div>
 
                     <div class="comment_field" id="add-comment-post37">
                         <input type="text" placeholder="댓글달기...">

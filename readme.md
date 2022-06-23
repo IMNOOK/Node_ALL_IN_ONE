@@ -30,8 +30,7 @@ https://ovenapp.io/project/H74UvSHifgHqPYXfGzDvTmvZCPjSr08W#P3cGu
     기본 상태
 		글 가져 오기
 			유저가 작성했던 글 10개씩 1페이지로 가져오기
-			이때 각각의 글들에는 마지막에 달린 댓글 1개
-			좋아요 갯수
+			글에는 작성자 닉네임, 내용, 사진, 작성한 시간, 댓글, 좋아요 갯수가 필요하다.
 		
 	hashtag 검색한 글 가져오기 -> search로 hashtag 검색 -> req.body.title 로 해시태그 전달
 		유저가 작성했던 글 중 hashtag.title이 같은 것을 10개씩 1페이지로 가져오기
@@ -116,7 +115,7 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
 	모든 키 = id(INT) NOT NULL AUTO_INCREMENT, PRIMARY KEY(id)
 
 	User: email(VC), nick(VC), password(VC), provider(VC), snsId(VC), img(VC)
-	Post: userId(INT), content(VC), img(VC), date
+	Post: userId(INT), usernick(VC), content(VC), img(VC), date
 	Hashtag: title(VC)
 	Domain: userId(INT), host(VC), type(INT), clientSecret(VARCHAR),
 	Follow: followingId(INT), followerId(INT)

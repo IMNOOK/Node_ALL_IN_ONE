@@ -63,9 +63,9 @@ const items = {
 			return rows;
 		},
 		
-		set: async (userId, content, img) => {
+		set: async (userId, userNick,content, img) => {
 			try{
-				await con.query(`INSERT INTO Post(userId, content, img) VALUES (?,?,?)`, [userId, content, img]);
+				await con.query(`INSERT INTO Post(userId, userNick, content, img) VALUES (?,?,?,?)`, [userId, userNick, content, img]);
 			} catch(err) {
 				console.error(err);
 				return 0;
@@ -92,6 +92,11 @@ const items = {
 		getByPostId: async (id) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ?`, id);
 			return rows.length;
+		},
+		
+		getByUserId: async (id) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE userId = ?` ,id);
+			return rows;
 		},
 		
 		getByIds: async (userId, postId) => {
@@ -133,13 +138,13 @@ const items = {
 	
 	Follow: {
 		getFollowing: async (userId) => {
-			const [rows, fields] = await con.query(`SELECT * Follow FROM WHERE followerId = ?`, userId);
-			return rows.length;
+			const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followerId = ?`, userId);
+			return rows;
 		},
 		
 		getFollower: async (userId) => {
-			const [rows, fields] = await con.query(`SELECT * Follow FROM WHERE followingId = ?`, userId);
-			return rows.length;
+			const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followingId = ?`, userId);
+			return rows;
 		},
 		
 		
@@ -162,13 +167,14 @@ const items = {
 	Hashtag: {
 		set: async (title) => {
 			try{
-				await con.query(`INSERT INTO Hashtag (title) VALUES(?)`,title);
+				await con.query(`INSERT INTO Hashtag (title) SELECT ? FROM Hashtag WHERE NOT EXISTS (SELECT title FROM Hashtag WHERE title = ?)`,[title, title]);
 			} catch(err) {
 				console.error(err);
 				return 0;
 			}
 			return 1;
 		}
+		
 	},
 	
 	Room: {
