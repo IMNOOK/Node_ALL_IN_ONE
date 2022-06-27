@@ -14,10 +14,10 @@ module.exports = () => {
 	passport.deserializeUser( async (userId, done) => {
 		try{
 			const user = await items.User.getOne(userId);
-			user.Followings = await items.Follow.getFollowing(userId);
-			user.GoodPostId = await items.Good.getByUserId(userId);
-			console.log(user.Followings);
-			console.log(user.GoodPostId);
+			let result = await items.Follow.getFollowing(userId);
+			user.Followings = result ? result : [];
+			user.GoodPostIds = await items.Good.getByUserId(userId);
+			console.log(user);
 			done(null, user);
 		} catch (err){
 			console.error(err);

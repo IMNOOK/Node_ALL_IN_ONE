@@ -66,17 +66,25 @@ router.post('/img', isLoggedIn, upload.single('photo'), async (req, res) => {
 router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 	let content = req.body.content;
 	const url = req.body.url;
-	if(items.Post.set(req.user.id, req.user.nick, content, url)){
-		async Promise.all( content.match(/#[^\s#]+/g).map(tag => {
-			console.log('hashtag 추가 '+tag.trim().substring(1));
-			await items.Hashtag.set(tag.trim().substring(1));
-		}))
-		.then( => {
-			  
-			  })
-		res.redirect('/');
-	}	
+	console.log(req.user);
+	const postResult = items.Post.set(req.user.id, req.user.nick, content, url);
 	
+	if(postResult){
+		Promise.all(
+			content.match(/#[^\s#]+/g).map(async (tag) => {
+				const title = tag.trim().substring(1);
+				console.log('hashtag 추가 '+title);
+				let hashtagResult = await items.Hashtag.get(title);
+				if(!hashtagResult){
+					hashtagResult = await items.Hashtag.set(title);
+					console.log(hashtagResult);
+				}
+				console.log(result);
+				await items.PostHashtag.set(postResult, hashtagResult);
+			})
+		);
+	}
+	res.redirect('/');
 })
 
 /*#첫번째 #두번쨰#세번쨰 네번째*/

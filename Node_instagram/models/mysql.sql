@@ -1,33 +1,42 @@
+DROP TABLE IF EXISTS nodeInstagram.PostHashtag;
+DROP TABLE IF EXISTS nodeInstagram.Comment;
+DROP TABLE IF EXISTS nodeInstagram.DM;
+DROP TABLE IF EXISTS nodeInstagram.Room;
+DROP TABLE IF EXISTS  nodeInstagram.Good;
+DROP TABLE IF EXISTS nodeInstagram.Follow;
+DROP TABLE IF EXISTS  nodeInstagram.Domain;
+DROP TABLE IF EXISTS nodeInstagram.Hashtag;
+DROP TABLE IF EXISTS nodeInstagram.Post;
 DROP TABLE IF EXISTS nodeInstagram.User;
+
 CREATE TABLE nodeInstagram.User (
 id INT NOT NULL AUTO_INCREMENT,
 email VARCHAR(40),
-nick VARCHAR(20),
+nick VARCHAR(20) UNIQUE,
 password VARCHAR(100),
 provider VARCHAR(10) NOT NULL DEFAULT 'local',
 snsId  VARCHAR(30),
 img VARCHAR(200),
 PRIMARY KEY(id),
-UNIQUE INDEX emailIdx (email ASC))
+UNIQUE INDEX emailIdx (email ASC)
+)
 DEFAULT CHARACTER SET = utf8
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS nodeInstagram.Post;
 CREATE TABLE nodeInstagram.Post (
 id INT NOT NULL AUTO_INCREMENT,
 userId INT NOT NULL,
-userNick VARCHAR (100) NOT NULL,
+userNick VARCHAR (20) NOT NULL,
 content VARCHAR(140) NOT NULL,
 img VARCHAR(200),
 date TIMESTAMP DEFAULT NOW(),
 PRIMARY KEY(id),
 INDEX userIdx (userId ASC),
-CONSTRAINT postUserId FOREIGN KEY (userId) REFERENCES nodeInstagram.User (id) ON DELETE CASCADE ON UPDATE CASCADE
-CONSTRAINT postUserNick FOREIGN KEY (userNick) REFERENCES nodeInstagram.User (nick) ON DELETE CASCADE ONE UPDATE CASCADE)
+CONSTRAINT postUserId FOREIGN KEY (userId) REFERENCES nodeInstagram.User (id) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT postUserNick FOREIGN KEY (userNick) REFERENCES nodeInstagram.User (nick) ON DELETE CASCADE ON UPDATE CASCADE)
 DEFAULT CHARACTER SET = utf8
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS nodeInstagram.Hashtag;
 CREATE TABLE nodeInstagram.Hashtag (
 id INT NOT NULL AUTO_INCREMENT,
 title VARCHAR(100) NOT NULL UNIQUE,
@@ -35,7 +44,6 @@ PRIMARY KEY(id))
 DEFAULT CHARACTER SET = utf8
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS  nodeInstagram.Domain;
 CREATE TABLE nodeInstagram.Domain (
 id INT NOT NULL AUTO_INCREMENT,
 userId INT NOT NULL,
@@ -47,7 +55,6 @@ CONSTRAINT domainUserId FOREIGN KEY (userId) REFERENCES nodeInstagram.User (id) 
 DEFAULT CHARACTER SET = utf8
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS nodeInstagram.Follow;
 CREATE TABLE nodeInstagram.Follow (
 id INT NOT NULL AUTO_INCREMENT,
 followingId INT NOT NULL,
@@ -69,7 +76,6 @@ CONSTRAINT goodPostId FOREIGN KEY (postId) REFERENCES nodeInstagram.Post (id) ON
 DEFAULT CHARACTER SET = utf8
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS nodeInstagram.Room;
 CREATE TABLE nodeInstagram.Room (
 id INT NOT NULL AUTO_INCREMENT,
 aId INT NOT NULL,
@@ -80,7 +86,6 @@ CONSTRAINT bId FOREIGN KEY (bId) REFERENCES nodeInstagram.User (id) ON DELETE CA
 DEFAULT CHARACTER SET = utf8
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS nodeInstagram.DM;
 CREATE TABLE nodeInstagram.DM (
 id INT NOT NULL AUTO_INCREMENT,
 roomId INT NOT NULL,
@@ -93,7 +98,6 @@ CONSTRAINT senderId FOREIGN KEY (senderId) REFERENCES nodeInstagram.User (id) ON
 DEFAULT CHARACTER SET = utf8
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS nodeInstagram.Comment;
 CREATE TABLE nodeInstagram.Comment (
 id INT NOT NULL AUTO_INCREMENT,
 userId INT NOT NULL,
@@ -107,7 +111,6 @@ CONSTRAINT CommentPostId FOREIGN KEY (postId) REFERENCES nodeInstagram.Post (id)
 DEFAULT CHARACTER SET = utf8
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS nodeInstagram.PostHashtag;
 CREATE TABLE nodeInstagram.PostHashtag (
 id INT NOT NULL AUTO_INCREMENT,
 postId INT NOT NULL,
