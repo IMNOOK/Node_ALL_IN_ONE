@@ -21,10 +21,10 @@ router.get('/', async (req, res) => {
 		let posts = await items.Post.getAll(page);
 		for(let i = 0; i < posts.length; i++){
 			//각 글마다 좋아요 갯수 세기
-			posts[i].goodNum = await items.Good.getByPostId(posts[i].id);
+			posts[i].goodNum = await items.Good.getLengthByPostId(posts[i].id);
 			
 			//각 글마다 마지막 댓글 가져오기
-			posts[i].comments = await items.Comment.getByPostId(posts[i].id);
+			posts[i].comments = await items.Comment.getAllByPostId(posts[i].id);
 		}
 		console.log(posts);
 		return 	res.render('index', { title: 'Main', twits: posts });
@@ -41,10 +41,10 @@ router.get('/search/:title', async (req, res) => {
 		let posts = await items.Post.getByHashtag(page, title);
 		for(let i = 0; i < posts.length; i++){
 			//각 글마다 좋아요 갯수 세기
-			posts[i].goodNum = await items.Good.getByPostId(posts[i].id);
+			posts[i].goodNum = await items.Good.getLengthByPostId(posts[i].id);
 			
 			//각 글마다 마지막 댓글 가져오기
-			posts[i].comments = await items.Comment.getByPostId(posts[i].id);
+			posts[i].comments = await items.Comment.getAllByPostId(posts[i].id);
 		}
 		console.log(posts);
 		return res.render('index', { title: 'Main', twits: posts});

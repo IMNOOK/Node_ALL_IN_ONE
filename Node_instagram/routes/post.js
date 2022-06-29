@@ -66,8 +66,8 @@ router.post('/img', isLoggedIn, upload.single('photo'), async (req, res) => {
 router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 	let content = req.body.content;
 	const url = req.body.url;
-	console.log(req.user);
-	const postResult = items.Post.set(req.user.id, req.user.nick, content, url);
+	const postResult = await items.Post.set(req.user.id, url);
+	const commentResult = await items.Comment.set(content, postResult, req.user.id, req.user.nick);
 	
 	if(postResult){
 		Promise.all(
@@ -77,9 +77,7 @@ router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 				let hashtagResult = await items.Hashtag.get(title);
 				if(!hashtagResult){
 					hashtagResult = await items.Hashtag.set(title);
-					console.log(hashtagResult);
 				}
-				console.log(result);
 				await items.PostHashtag.set(postResult, hashtagResult);
 			})
 		);
@@ -87,6 +85,10 @@ router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 	res.redirect('/');
 })
 
-/*#첫번째 #두번쨰#세번쨰 네번째*/
+router.delete('/:postId', isLoggedIn, async (req, res) => {
+	const postId = req.params.postId;
+	await items.Post.delete(postId);
+	return res.redirect('/');
+})
 
 module.exports = router;

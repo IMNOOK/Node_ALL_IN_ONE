@@ -99,15 +99,13 @@
                             </div>
 
                         </div>
-						<div class="toggle">
-							<div class="sprite_more_icon" data-name="more">
-                            <ul class="toggle_box">
-								<li><input type="submit" class="follow" value="follow" data-name="follow"></li>
+                        <div class="sprite_more_icon" data-name="more">
+                            <ul class="toggle_box" id="toggle">
+                               <li><input type="submit" class="follow" value="follow" data-name="follow"></li>
                                 <li>수정</li>
                                 <li>삭제</li>
                             </ul>
-                        	</div>
-						</div>
+                        </div>
                     </header>
 
                     <div class="img_section">
@@ -143,6 +141,7 @@
                         <span id="bookmark-count-39"></span>
                         개
                     </div>
+
 					{% for comment in twit.comments %}
                     <div class="comment_container">
                         <div class="comment" id="comment-list-ajax-post37">
@@ -224,25 +223,19 @@
 
 {% block script %}
   <script>
-	  const more = document.querySelector('.toggle');
-	  const toggle = document.querySelector('.toggle_box');
-	  
-	  more.addEventListener('focus', (event) => {
-		  console.log('hihihi');
-	  });
+	  window.onload = function(){
+		 const more = document.querySelectorAll('.sprite_more_icon');
 
-	  
-	  more.addEventListener('click', () => {
-		  console.log('click');
-		  console.log(toggle.style.display);
-		  if(toggle.style.display == 'none'){
-			  console.log('HI');
-			  toggle.style.display == 'absolute'
-		  } else {
-			  console.log('??');
-			  toggle.style.display == 'none'
-		  }
-	  })
-	  
+		  more.forEach( toggle => {
+			  
+			  toggle.addEventListener('click', (e) => {
+				  if(toggle.firstElementChild.style.display == 'inline'){
+					  toggle.firstElementChild.style.display = 'none';
+				  }else {
+					  toggle.firstElementChild.style.display = 'inline';
+				  }
+			  })
+		  })
+	  } 
   </script>
 {% endblock %}

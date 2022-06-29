@@ -14,14 +14,14 @@ const items = {
 		},
 		
 		getOne: async (userId) => {
-			const [rows, fields] = await con.query(`SELECT * FROM User INNER JOIN Post ON User.id = Post.userId WHERE User.id = ?`, userId);
+			const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.id = ?`, userId);
 			return rows[0]; 
 		},
 		
 		set: async (email, nick, password) => {
 			try{
 				let result = await con.query(`INSERT INTO User(email, nick, password) VALUES (?,?,?)`, [email, nick, password]);
-				return result.insertId;
+				return result[0].insertId;
 			} catch (err) {
 				console.error(err);
 				return 0;
@@ -55,7 +55,7 @@ const items = {
 		
 		getByUserId: async (id) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Post WHERE userId = ?`, id);
-			return rows;
+			return rows[0];
 		},
 		
 		getByHashtag: async (title, num = 0) => {
@@ -64,10 +64,11 @@ const items = {
 			return rows;
 		},
 		
-		set: async (userId, userNick,content, img) => {
+		set: async (userId, img) => {
 			try{
-				const result = await con.query(`INSERT INTO Post(userId, userNick, content, img) VALUES (?,?,?,?)`, [userId, userNick, content, img]);
-				return result.insertId;
+				const result = await con.query(`INSERT INTO Post(userId, img) VALUES (?,?)`, [userId, img]);
+				console.log(result);
+				return result[0].insertId;
 			} catch(err) {
 				console.error(err);
 				return 0;
@@ -76,7 +77,7 @@ const items = {
 		
 		update: async (content, img, postId) => {
 			try{
-				await con.query(`UPDATE Post SET content =?, img = ? WHERE postId = ?`, content, img, postId);
+				await con.query(`UPDATE Post SET content =?, img = ? WHERE postId = ?`, [content, img, postId]);
 			} catch(err) {
 				console.error(err);
 				return 0;
@@ -90,25 +91,25 @@ const items = {
 	},
 	
 	Good: {
-		getByPostId: async (id) => {
+		getLengthByPostId: async (id) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ?`, id);
 			return rows.length;
 		},
 		
-		getByUserId: async (id) => {
+		getAllByUserId: async (id) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE userId = ?` ,id);
 			return rows;
 		},
 		
 		getByIds: async (userId, postId) => {
-			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ?, userId = ?`, postId, userId);
+			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ?, userId = ?`, [postId, userId]);
 			if(rows.length == 0) return 0;
 			return 1;
 		},
 		
 		set: async (userId, postId) => {
 			try{
-				let result = await con.query(`INSERT INTO Good (userId, postId) Values(?, ?)`, userId, postId);
+				let result = await con.query(`INSERT INTO Good (userId, postId) Values(?, ?)`, [userId, postId]);
 				return result.insertId;
 			} catch(err) {
 				console.error(err);
@@ -118,20 +119,20 @@ const items = {
 		},
 		
 		delete: async (userId, postId) => {
-			await con.query(`DELETE FROM Good WHERE userId = ? AND postId = ?`, userId, postId);
+			await con.query(`DELETE FROM Good WHERE userId = ? AND postId = ?`, [userId, postId]);
 		}
 	},
 	
 	Comment: {
-		getByPostId: async (postId) => {
+		getAllByPostId: async (postId) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Comment WHERE postId = ?`, postId);
 			return rows;
 		},
 		
 		set: async (content, postId, userId, userNick) => {
 			try{
-				let result = await con.query(`INSERT INTO Comment (content, postId, userId, userNick) Values (?, ?, ?, ?)`, content, postId, userId, userNick);
-				return result.insertId;
+				let result = await con.query(`INSERT INTO Comment (content, postId, userId, userNick) Values (?, ?, ?, ?)`, [content, postId, userId, userNick]);
+				return result[0].insertId;
 			} catch(err) {
 				console.error(err);
 				return 0;
@@ -140,12 +141,12 @@ const items = {
 	},
 	
 	Follow: {
-		getFollowing: async (userId) => {
+		getFollowings: async (userId) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followerId = ?`, userId);
 			return rows;
 		},
 		
-		getFollower: async (userId) => {
+		getFollowers: async (userId) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followingId = ?`, userId);
 			return rows;
 		},
@@ -153,8 +154,8 @@ const items = {
 		
 		set: async (userId, followerId) => {
 			try{
-				let result = await con.query(`INSERT INTO Follow (following, follower) VALUES (?, ?)`, userId, followerId);
-				return result.insertId;
+				let result = await con.query(`INSERT INTO Follow (following, follower) VALUES (?, ?)`, [userId, followerId]);
+				return result[0].insertId;
 			} catch (err) {
 				console.error(err);
 				return 0;
@@ -163,7 +164,7 @@ const items = {
 		},
 		
 		delete: async (userId, followerId) => {
-			await con.query(`DELETE FROM Follow WHERE following = ? AND follower = ?`, userId, followerId);
+			await con.query(`DELETE FROM Follow WHERE following = ? AND follower = ?`, [userId, followerId]);
 		}
 	},
 	
@@ -171,14 +172,14 @@ const items = {
 	Hashtag: {
 		
 		get: async (title) => {
-			const [rows, fields] = con.query(`SELECT * FROM Hashtag WHERE title = ?`, title)
-			return rows;
+			const [rows, fields] = await con.query(`SELECT * FROM Hashtag WHERE title = ?`, title)
+			return rows[0];
 		},
 		
 		set: async (title) => {
 			try{
 				let result = await con.query(`INSERT INTO Hashtag (title) VALUES (?)`, title);
-				return result.insertId;
+				return result[0].insertId;
 			} catch(err) {
 				console.error(err);
 				return 0;
@@ -190,14 +191,14 @@ const items = {
 	
 	Room: {
 		getByUserId: async (userId) => {
-			const [rows, fields] = await con.query(`SELECT * FROM Room WHERE aId = ? OR bId = ?`, userId, userId);
-			return rows;
+			const [rows, fields] = await con.query(`SELECT * FROM Room WHERE aId = ? OR bId = ?`, [userId, userId]);
+			return rows[0];
 		},
 		
 		set: async (userAId, userBId) => {
 			try{
-				let result = await con.query(`INSERT INTO Room (aId, bId) VALUES`, userAId, userBId);
-				return result.insertId;
+				let result = await con.query(`INSERT INTO Room (aId, bId) VALUES`, [userAId, userBId]);
+				return result[0].insertId;
 			} catch(err){
 				console.error(err);
 				return 0;
@@ -207,14 +208,14 @@ const items = {
 	
 	DM: {
 		getByRoomId: async (roomId) => {
-			const [rows, fields] = await con.query(`SELECT * FROM DM WHERE roomId = ?`);
-			return rows;
+			const [rows, fields] = await con.query(`SELECT * FROM DM WHERE roomId = ?`, roomId);
+			return rows[0];
 		},
 		
 		set: async (roomId, content, sender) => {
 			try{
-				let result = await con.query(`INSERT INTO DM (roomId, content, sender) VALUES (?, ?, ?)`, roomId, content, sender);
-				return result.insertId;
+				let result = await con.query(`INSERT INTO DM (roomId, content, sender) VALUES (?, ?, ?)`, [roomId, content, sender]);
+				return result[0].insertId;
 			} catch (err){
 				console.error(err);
 				return 0;
@@ -226,7 +227,7 @@ const items = {
 		set: async (postId, hashtagId) => {
 			try{
 				let result = await con.query(`INSERT INTO PostHashtag (postId, hashtagId) VALUES (? ,?)`, [postId, hashtagId]);
-				return result.insertId;
+				return result[0].insertId;
 			} catch(err) {
 				console.error(err);
 				return 0;

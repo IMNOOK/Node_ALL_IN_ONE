@@ -14,10 +14,8 @@ module.exports = () => {
 	passport.deserializeUser( async (userId, done) => {
 		try{
 			const user = await items.User.getOne(userId);
-			let result = await items.Follow.getFollowing(userId);
-			user.Followings = result ? result : [];
-			user.GoodPostIds = await items.Good.getByUserId(userId);
-			console.log(user);
+			user.Followings = await items.Follow.getFollowings(userId);
+			user.GoodPostIds = await items.Good.getAllByUserId(userId);
 			done(null, user);
 		} catch (err){
 			console.error(err);

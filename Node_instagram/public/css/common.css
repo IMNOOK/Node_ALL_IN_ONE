@@ -51,7 +51,6 @@ body {
 }
 
 .sprite_more_icon {
-    display: inline-block;
     background: url('../imgs/background01.png') no-repeat -301px -218px;
     width: 15px;
     height: 3px;
@@ -188,11 +187,6 @@ body {
 #header .h_inner .logo > a {
     display: flex;
     align-items: center;
-}
-
-#header .search_field {
-
-
 }
 
 #header .search_field input {
