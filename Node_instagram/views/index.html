@@ -224,7 +224,22 @@
 {% block script %}
   <script>
 	  window.onload = function(){
-		 const more = document.querySelectorAll('.sprite_more_icon');
+		let title;
+		
+		document.getElementById('search-field').addEventListener('keyup', (e)=>{
+			if (e.keyCode === 13) { //Enter 입력시 이벤트
+			axios({
+			  method: 'get',
+			  url: '/search/' + title
+			});
+		  }else {
+			title = document.getElementById('search-field').value;
+			console.log(title);
+		  }
+		});
+		  
+		  
+		  const more = document.querySelectorAll('.sprite_more_icon');
 
 		  more.forEach( toggle => {
 			  
@@ -236,6 +251,6 @@
 				  }
 			  })
 		  })
-	  } 
+	  }
   </script>
 {% endblock %}

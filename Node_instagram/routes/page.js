@@ -34,11 +34,10 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/search/:title', async (req, res) => {
-	const page = req.query.page;
 	const title = req.params.title;
 	  
 	try{
-		let posts = await items.Post.getByHashtag(page, title);
+		let posts = await items.Post.getByHashtag(title);
 		for(let i = 0; i < posts.length; i++){
 			//각 글마다 좋아요 갯수 세기
 			posts[i].goodNum = await items.Good.getLengthByPostId(posts[i].id);

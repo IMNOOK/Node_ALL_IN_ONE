@@ -75,7 +75,10 @@ router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 				const title = tag.trim().substring(1);
 				console.log('hashtag 추가 '+title);
 				let hashtagResult = await items.Hashtag.get(title);
-				if(!hashtagResult){
+				console.log(hashtagResult);
+				if(hashtagResult){
+					hashtagResult = hashtagResult.id;
+				} else {
 					hashtagResult = await items.Hashtag.set(title);
 				}
 				await items.PostHashtag.set(postResult, hashtagResult);

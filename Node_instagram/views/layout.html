@@ -24,7 +24,7 @@
 					</a>
 				</h1>
 
-				<div class="search_box">
+				<div class="search_box" id="input">
 					<input type="text" placeholder="검색" id="search-field">
 
 					<div class="fake_field">
@@ -49,13 +49,27 @@
 	</section> 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-      window.onload = () => {
-        if (new URL(location.href).searchParams.get('loginError')) {
-          alert(new URL(location.href).searchParams.get('loginError'));
-        }
+		
+	window.onload = () => {
+		let title;
+		
+		document.getElementById('search-field').addEventListener('keyup', (e)=>{
+			if (e.keyCode === 13) { //Enter 입력시 이벤트
+			axios({
+			  method: 'get',
+			  url: '/search/' + title
+			})
+			.then((result) => {
+				console.log(result.data);	
+			})
+		  }else {
+			title = document.getElementById('search-field').value;
+			console.log(title);
+		  }
+		});
       };
     </script>
-    {% block script %}
+	{% block script %}
     {% endblock %}
   </body>
 </html>
