@@ -58,13 +58,13 @@ const items = {
 		},
 		
 		getByHashtag: async (title) => {
-			const [rows, fields] = await con.query(`SELECT Post.id, Post.userId, Post.img FROM Post inner JOIN PostHashtag ON Post.id = PostHashtag.postId inner join Hashtag on Hashtag.id = PostHashtag.hashtagId WHERE Hashtag.title = ?`, title);
+			const [rows, fields] = await con.query(`SELECT Post.id, Post.userNick, Post.userId, Post.img FROM Post inner JOIN PostHashtag ON Post.id = PostHashtag.postId inner join Hashtag on Hashtag.id = PostHashtag.hashtagId WHERE Hashtag.title = ?`, title);
 			return rows;
 		},
 		
-		set: async (userId, img) => {
+		set: async (userId, userNick, img) => {
 			try{
-				const result = await con.query(`INSERT INTO Post(userId, img) VALUES (?,?)`, [userId, img]);
+				const result = await con.query(`INSERT INTO Post(userId, userNick, img) VALUES (?,?,?)`, [userId, userNick, img]);
 				console.log(result);
 				return result[0].insertId;
 			} catch(err) {
@@ -84,7 +84,7 @@ const items = {
 		},
 		
 		delete: async (postId) => {
-			con.query(`DELETE FROM Post WHERE postId = ?`, postId);
+			con.query(`DELETE FROM Post WHERE id = ?`, postId);
 		}
 	},
 	

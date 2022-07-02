@@ -66,7 +66,7 @@ router.post('/img', isLoggedIn, upload.single('photo'), async (req, res) => {
 router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 	let content = req.body.content;
 	const url = req.body.url;
-	const postResult = await items.Post.set(req.user.id, url);
+	const postResult = await items.Post.set(req.user.id, req.user.nick, url);
 	const commentResult = await items.Comment.set(content, postResult, req.user.id, req.user.nick);
 	
 	if(postResult){
@@ -86,6 +86,14 @@ router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 		);
 	}
 	res.redirect('/');
+})
+
+router.post('/:postId', isLoggedIn, async (req, res) => {
+	const comment = req.body.comment;
+	const postId = req.params.postId;
+	const result = await items.Comment.set(comment, postId, req.user.id, req.user.nick);
+	console.log(result);
+	return res.redirect('/');
 })
 
 router.delete('/:postId', isLoggedIn, async (req, res) => {

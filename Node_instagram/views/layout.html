@@ -58,10 +58,7 @@
 			axios({
 			  method: 'get',
 			  url: '/search/' + title
-			})
-			.then((result) => {
-				console.log(result.data);	
-			})
+			});
 		  }else {
 			title = document.getElementById('search-field').value;
 			console.log(title);

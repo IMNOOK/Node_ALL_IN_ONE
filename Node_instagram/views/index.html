@@ -101,9 +101,20 @@
                         </div>
                         <div class="sprite_more_icon" data-name="more">
                             <ul class="toggle_box" id="toggle">
-                               <li><input type="submit" class="follow" value="follow" data-name="follow"></li>
-                                <li>수정</li>
-                                <li>삭제</li>
+                               <li><form>
+								   <input type="submit" class="follow" value="follow" data-name="follow">
+								   </form>
+								</li>
+								{% if twit.userNick == user.nick %}
+								<li><form>
+								   <input type="submit" class="follow" value="수정">
+								   </form>
+								</li>
+								<li><form method="POST" action="/post/{{twit.id}}?_method=DELETE">
+								   <input type="submit" class="follow" value="삭제">
+								   </form>
+								</li>
+								{% endif %}
                             </ul>
                         </div>
                     </header>
@@ -144,7 +155,7 @@
 
 					{% for comment in twit.comments %}
                     <div class="comment_container">
-                        <div class="comment" id="comment-list-ajax-post37">
+                        <div class="comment">
                             <div class="comment-detail">
                                 <div class="nick_name m_text">{{comment.userNick}}</div>
                                 <div>{{comment.content}}</div>
@@ -157,10 +168,10 @@
 					{% endfor %}
                     <div class="timer">{{twit.date}}</div>
 
-                    <div class="comment_field" id="add-comment-post37">
-                        <input type="text" placeholder="댓글달기...">
-                        <div class="upload_btn m_text" data-name="comment">게시</div>
-                    </div>
+                    <form method="post" action='post/{{twit.id}}' class="comment_field">
+                        <input type="text" name="comment" placeholder="댓글달기...">
+                        <button class="upload_btn m_text" data-name="comment">게시</button>
+                    </form>
 				</article>
         	{% endfor %}
             </div>
@@ -228,16 +239,12 @@
 		
 		document.getElementById('search-field').addEventListener('keyup', (e)=>{
 			if (e.keyCode === 13) { //Enter 입력시 이벤트
-			axios({
-			  method: 'get',
-			  url: '/search/' + title
-			});
+				window.location = '/search/' + title;
 		  }else {
 			title = document.getElementById('search-field').value;
 			console.log(title);
 		  }
 		});
-		  
 		  
 		  const more = document.querySelectorAll('.sprite_more_icon');
 

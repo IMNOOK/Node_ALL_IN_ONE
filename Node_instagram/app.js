@@ -7,6 +7,7 @@ const session = require('express-session');
 const path = require('path');
 const nunjucks = require('nunjucks');
 const passport = require('passport');
+const methodOverride = require('method-override');
 
 // 내가 만든 모듈 or 미리 설정한 값 가져옴 
 
@@ -46,6 +47,7 @@ app.use(session({
 }));	//req.session 이라는 객체가 생성.
 app.use(passport.initialize());	//new LocalStrategy 생성자 생성
 app.use(passport.session());	//req.isAuthenticated,req.login 등의 객체 등록
+app.use(methodOverride('_method'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 //라우팅

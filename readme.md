@@ -295,6 +295,7 @@ Models 파일에 items.js에 각각의 쿼리들 저장
 -   **bcrypt**　　=> node.js에서 데이터베이스에 저장할 비밀번호를 암호화 해보자
 -   **multer**　　=> node.js에서 프론트 엔드에서 보내주는 이미지 데이터를 받아보자
 -   **jwt**　　=> node.js에서 jwt 토큰을 이용한 로그인 기능을 구현해보자
+-   **method-override**　　=> node.js에서 form태그로 delete, put 사용을 해보자
 
 라우팅
 - 웹 페이지와 DB를 연결하기 위한 REST API를 설계해 보았습니다.
