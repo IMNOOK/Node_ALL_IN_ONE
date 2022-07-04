@@ -89,18 +89,18 @@ const items = {
 	},
 	
 	Good: {
-		getLengthByPostId: async (id) => {
-			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ?`, id);
+		getLengthByPostId: async (postId) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ?`, postId);
 			return rows.length;
 		},
 		
-		getAllByUserId: async (id) => {
-			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE userId = ?` ,id);
+		getAllByUserId: async (userId) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE userId = ?`, userId);
 			return rows;
 		},
 		
 		getByIds: async (userId, postId) => {
-			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ?, userId = ?`, [postId, userId]);
+			const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ? AND userId = ?`, [postId, userId]);
 			if(rows.length == 0) return 0;
 			return 1;
 		},
@@ -135,24 +135,33 @@ const items = {
 				console.error(err);
 				return 0;
 			}
-		}		
+		},
+		
+		delete: async (commentId) => {
+			await con.query(`DELETE FROM Comment WHERE id = ?`, commentId);
+		}
 	},
 	
 	Follow: {
 		getFollowings: async (userId) => {
-			const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followerId = ?`, userId);
-			return rows;
-		},
-		
-		getFollowers: async (userId) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followingId = ?`, userId);
 			return rows;
 		},
 		
+		getFollowers: async (userId) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followerId = ?`, userId);
+			return rows;
+		},
+		
+		getByIds: async (userId, followerId) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followingId = ? AND followerId = ?`, [userId, followerId]);
+			if(rows.length == 0) return 0;
+			return 1;
+		},
 		
 		set: async (userId, followerId) => {
 			try{
-				let result = await con.query(`INSERT INTO Follow (following, follower) VALUES (?, ?)`, [userId, followerId]);
+				let result = await con.query(`INSERT INTO Follow (followingId, followerId) VALUES (?, ?)`, [userId, followerId]);
 				return result[0].insertId;
 			} catch (err) {
 				console.error(err);
@@ -162,7 +171,7 @@ const items = {
 		},
 		
 		delete: async (userId, followerId) => {
-			await con.query(`DELETE FROM Follow WHERE following = ? AND follower = ?`, [userId, followerId]);
+			await con.query(`DELETE FROM Follow WHERE followingId = ? AND followerId = ?`, [userId, followerId]);
 		}
 	},
 	

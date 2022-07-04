@@ -8,33 +8,6 @@ const router = express.Router();
 const { isLoggedIn } = require('./middlewares');
 const items = require('../models/items');
 
-/*
-
-/post:
-
-	post('/')
-		글 쓰기 (userId, content, img)
-		
-	update('/:postId')
-	    글 수정하기 (content, img, postId)
-		
-	delete('/:postId')
-		내가 게시한글 삭제하기 (postId)
-
-	get('/good/:postId')
-		좋아요하기 (userId, postId)
-		
-	detele('/good/:postId)
-	좋아요 취소하기 (userId, postId)
-	
-	get('/')
-    	팔로우하기 (userId, follower)
-	
-	delete('/')
-    	팔로우 취소하기 (userId, follower)    
-	
-*/
-
 try{
 	fs.readdirSync('uploads');
 } catch(err) {
@@ -69,7 +42,7 @@ router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 	const postResult = await items.Post.set(req.user.id, req.user.nick, url);
 	const commentResult = await items.Comment.set(content, postResult, req.user.id, req.user.nick);
 	
-	if(postResult){
+	if(commentResult){
 		Promise.all(
 			content.match(/#[^\s#]+/g).map(async (tag) => {
 				const title = tag.trim().substring(1);
@@ -88,6 +61,12 @@ router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 	res.redirect('/');
 })
 
+router.delete('/:postId', isLoggedIn, async (req, res) => {
+	const postId = req.params.postId;
+	await items.Post.delete(postId);
+	return res.redirect('/');
+})
+
 router.post('/:postId', isLoggedIn, async (req, res) => {
 	const comment = req.body.comment;
 	const postId = req.params.postId;
@@ -96,10 +75,29 @@ router.post('/:postId', isLoggedIn, async (req, res) => {
 	return res.redirect('/');
 })
 
-router.delete('/:postId', isLoggedIn, async (req, res) => {
-	const postId = req.params.postId;
-	await items.Post.delete(postId);
+router.delete('/comment/:commentId', isLoggedIn, async (req, res) => {
+	const commentId = req.body.commentId;
+	await items.Comment.delete(commentId);
 	return res.redirect('/');
 })
+
+router.get('/good/:postId', isLoggedIn, async (req, res) => {
+	try{
+		const one = await items.Good.getByIds(req.user.id, req.params.postId);
+		console.log(one);
+		if(!one){
+			const result = await items.Good.set(req.user.id, req.params.postId);	
+		}
+	} catch(err) {
+		console.error(err);
+	}
+	return res.redirect('/');
+})
+
+router.get('/good/delete/:postId', isLoggedIn, async (req, res) => {
+	await items.Good.delete(req.user.id, req.params.postId);
+	return res.redirect('/');
+})
+
 
 module.exports = router;

@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.use(async (req, res, next) => {
 	res.locals.user = req.user;
-	res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.id) : [];
+	res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.followerId) : [];
 	res.locals.goodPostIdList = req.user ? req.user.GoodPostIds.map(u => u.postId) : [];
 	next();
 })
@@ -51,6 +51,24 @@ router.get('/search/:title', async (req, res) => {
 		console.error(err);
 	}
 });
+
+
+router.get('/follow/:userId', isLoggedIn, async (req, res) => {
+	try{
+		const one = await items.Follow.getByIds(req.user.id, req.params.userId);
+		if(!one){	
+			const result = await items.Follow.set(req.user.id, req.params.userId);	
+		}
+	} catch (err) {
+		console.error(err);
+	}
+	return res.redirect('/');
+})
+
+router.get('/follow/delete/:userId', isLoggedIn, async (req, res) => {
+	await items.Follow.delete(req.user.id, req.params.userId);
+	return res.redirect('/');
+})
 
 router.get('/profile', isLoggedIn, (req, res) => {
 	return res.render('profile', { title: '내 정보 - NodeBird' });

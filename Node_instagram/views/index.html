@@ -101,10 +101,18 @@
                         </div>
                         <div class="sprite_more_icon" data-name="more">
                             <ul class="toggle_box" id="toggle">
-                               <li><form>
+								{% if not followerIdList.includes(twit.userId) and twit.userId !== user.id %}
+                                <li><form method="get" action="/follow/{{twit.userId}}">
 								   <input type="submit" class="follow" value="follow" data-name="follow">
 								   </form>
 								</li>
+								{% endif %}
+								{% if followerIdList.includes(twit.userId) %}
+								<li><form method="get" action="/follow/delete/{{twit.userId}}">
+								   <input type="submit" class="follow" value="follow 취소" data-name="follow">
+								   </form>
+								</li>
+								{% endif %}
 								{% if twit.userNick == user.nick %}
 								<li><form>
 								   <input type="submit" class="follow" value="수정">
@@ -129,13 +137,13 @@
 
                     <div class="bottom_icons">
                         <div class="left_icons">
-						{% if twit.userGood %}
+						{% if goodPostIdList.includes(twit.id) %}
 						<div class="heart_btn">
-                        	<div class="sprite_heart_icon_inline" name="39" data-name="heartbeat"></div>
+                        	<div OnClick="location.href ='/post/good/delete/{{twit.id}}'" class="sprite_heart_icon_inline" name="39" data-name="heartbeat" onclick></div>
                         </div>
 						{% else %}
 						<div class="heart_btn">
-                        	<div class="sprite_heart_icon_outline" name="39" data-name="heartbeat"></div>
+                        	<div OnClick="location.href ='/post/good/{{twit.id}}'" class="sprite_heart_icon_outline" name="39" data-name="heartbeat"></div>
                         </div>
 						{% endif %}
 							<div class="sprite_bubble_icon"></div>
@@ -234,30 +242,36 @@
 
 {% block script %}
   <script>
-	  window.onload = function(){
+	window.onload = function(){
+		
 		let title;
 		
 		document.getElementById('search-field').addEventListener('keyup', (e)=>{
 			if (e.keyCode === 13) { //Enter 입력시 이벤트
 				window.location = '/search/' + title;
-		  }else {
-			title = document.getElementById('search-field').value;
-			console.log(title);
-		  }
+			}else {
+				title = document.getElementById('search-field').value;
+				console.log(title);
+			}
 		});
 		  
-		  const more = document.querySelectorAll('.sprite_more_icon');
-
-		  more.forEach( toggle => {
-			  
-			  toggle.addEventListener('click', (e) => {
-				  if(toggle.firstElementChild.style.display == 'inline'){
-					  toggle.firstElementChild.style.display = 'none';
-				  }else {
-					  toggle.firstElementChild.style.display = 'inline';
-				  }
-			  })
-		  })
-	  }
+		const more = document.querySelectorAll('.sprite_more_icon');
+		more.forEach( toggle => {	  
+			toggle.addEventListener('click', (e) => {
+				if(toggle.firstElementChild.style.display == 'inline'){
+					toggle.firstElementChild.style.display = 'none';
+				}else {
+					toggle.firstElementChild.style.display = 'inline';
+				}
+			})
+		})
+		
+		const heart = document.querySelectorAll('.heart_btn');
+		more.forEach( heart => {
+			heart.addEventListener('click', (e) => {
+				console.log(e);
+			})
+		})
+	}
   </script>
 {% endblock %}

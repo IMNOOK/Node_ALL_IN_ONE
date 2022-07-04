@@ -326,24 +326,30 @@ page.js
 
 	use(
 		로그인시
+			res.locals.user = req.user;
 			각 posts 중에 내가 좋아요한 것들 List
 			각 유저 중에 내가 팔로우 한 것들 List
 			Room창 열기 모달
 	)
 
-	get('/main?page=params1'):
+	get('/?page=params'):
 		글 가져 오기 (page)
-		각 글마다 좋아요 가져오기 (postId),
-		각 글마다 댓글 가져오기 (postId)
+			각 글마다 좋아요 가져오기 (postId),
+			각 글마다 댓글 가져오기 (postId)
 		return res.render('index', {title: 'Main', twits: posts});
 	
-	get('/main?search=params1&page=params2') 
-		hashtag 검색한 글 가져오기 (title, page)
+	get('/search/:title') 
+		hashtag 검색한 글 가져오기 (title)
+			각 글마다 좋아요 가져오기 (postId),
+			각 글마다 댓글 가져오기 (postId)
 		return res.render('index', {title: 'Main', twits: posts});
 		
+		
+	get('/follow/:userId')
+    	팔로우하기 (userId, follower)
 	
-    post('/comment/:postId')
-		댓글 달기 (content, postId, usernick)
+	delete('/follow/:userId')
+    	팔로우 취소하기 (userId, follower)  
     
 	get('/login')
 		로그인 페이지 이동
@@ -405,25 +411,28 @@ auth.js
 		
 
 	post('/')
-		글 쓰기 (userId, content, img)
-		
-	update('/:postId')
-	    글 수정하기 (content, img, postId)
+		글 쓰기 (userId, userNick, img)
+		글의 내용 쓰기(댓글)(content, postId, userId, userNick)
+		Promise.all(content.match(hashtag).map(async tag => {
+			if(해시태그 찾기(title))
+			else 해시태그 등록(title)
+			PostHashtag(postId, hashtagId)
+		}))
 		
 	delete('/:postId')
 		내가 게시한글 삭제하기 (postId)
 
+	post('/:postId')
+		댓글달기(comment, postId, userId, userNick)
+	
+	delete('/:postId')
+		댓글 삭제하기(commentId)
+	
 	get('/good/:postId')
 		좋아요하기 (userId, postId)
 		
 	detele('/good/:postId)
-	좋아요 취소하기 (userId, postId)
-	
-	get('/')
-    	팔로우하기 (userId, follower)
-	
-	delete('/')
-    	팔로우 취소하기 (userId, follower)    
+	좋아요 취소하기 (userId, postId)  
 
 /profile:
 		
