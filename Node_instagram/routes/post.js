@@ -67,6 +67,7 @@ router.delete('/:postId', isLoggedIn, async (req, res) => {
 	return res.redirect('/');
 })
 
+//댓글
 router.post('/:postId', isLoggedIn, async (req, res) => {
 	const comment = req.body.comment;
 	const postId = req.params.postId;
@@ -75,12 +76,18 @@ router.post('/:postId', isLoggedIn, async (req, res) => {
 	return res.redirect('/');
 })
 
-router.delete('/comment/:commentId', isLoggedIn, async (req, res) => {
-	const commentId = req.body.commentId;
-	await items.Comment.delete(commentId);
-	return res.redirect('/');
+router.get('/comment/delete/:commentId', isLoggedIn, async (req, res, next) => {
+	const result = await items.Comment.getById(req.params.commentId);
+	if(result && result.userId == req.user.id){
+		await items.Comment.delete(req.params.commentId);
+		return res.redirect('/');
+	} else {
+		const message = encodeURIComponent('본인의 댓글이 아닙니다.');
+		return res.redirect(`/?error=${message}`);
+	}
 })
 
+//좋아요
 router.get('/good/:postId', isLoggedIn, async (req, res) => {
 	try{
 		const one = await items.Good.getByIds(req.user.id, req.params.postId);

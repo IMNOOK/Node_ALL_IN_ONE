@@ -8,6 +8,7 @@ const items = require('../models/items');
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
 
+//유저계정 UI
 router.use(async (req, res, next) => {
 	res.locals.user = req.user;
 	res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.followerId) : [];
@@ -15,6 +16,7 @@ router.use(async (req, res, next) => {
 	next();
 })
 
+//게시글 & 해시태그
 router.get('/', async (req, res) => {
 	const page = req.query.page;
 	try{
@@ -52,7 +54,7 @@ router.get('/search/:title', async (req, res) => {
 	}
 });
 
-
+//팔로우
 router.get('/follow/:userId', isLoggedIn, async (req, res) => {
 	try{
 		const one = await items.Follow.getByIds(req.user.id, req.params.userId);
@@ -65,6 +67,15 @@ router.get('/follow/:userId', isLoggedIn, async (req, res) => {
 	return res.redirect('/');
 })
 
+router.get('/follow/delete/:userId', isLoggedIn, async (req, res) => {
+	const one = await items.Follow.getByIds(req.user.id, req.params.userId);
+	if(one){	
+		const result = await items.Follow.delete(req.user.id, req.params.userId);	
+	}
+	return res.redirect('/');
+})
+
+//페이지 이동
 router.get('/follow/delete/:userId', isLoggedIn, async (req, res) => {
 	await items.Follow.delete(req.user.id, req.params.userId);
 	return res.redirect('/');

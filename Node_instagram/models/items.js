@@ -122,6 +122,11 @@ const items = {
 	},
 	
 	Comment: {
+		getById: async (commentId) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Comment WHERE id = ?`, commentId);
+			return rows[0];
+		},
+		
 		getAllByPostId: async (postId) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Comment WHERE postId = ?`, postId);
 			return rows;

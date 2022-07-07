@@ -324,6 +324,7 @@ middlewares.js
 page.js
 /:
 
+	//로그인시 변해야할 UI
 	use(
 		로그인시
 			res.locals.user = req.user;
@@ -332,6 +333,7 @@ page.js
 			Room창 열기 모달
 	)
 
+	//게시글
 	get('/?page=params'):
 		글 가져 오기 (page)
 			각 글마다 좋아요 가져오기 (postId),
@@ -344,13 +346,14 @@ page.js
 			각 글마다 댓글 가져오기 (postId)
 		return res.render('index', {title: 'Main', twits: posts});
 		
-		
+	//팔로우	
 	get('/follow/:userId')
     	팔로우하기 (userId, follower)
 	
 	delete('/follow/:userId')
     	팔로우 취소하기 (userId, follower)  
     
+	//페이지 이동
 	get('/login')
 		로그인 페이지 이동
 		return res.render('login', { title: "로그인"} );
@@ -376,6 +379,7 @@ page.js
 auth.js
 /auth:
 
+	//사용자 계정
 	post('/join')
 		회원가입:
     		유저 있는지 확인 (email)
@@ -402,13 +406,13 @@ auth.js
 
 
 /post:
-
+	
 	fs.readdirSync('uploads') else fs.mkdirSync('uploads')
 	multer({ storage( destination, filename ), limits })
 
+	//게시판 글
 	post('/img')
-		이미지 올리기 (img)
-		
+		이미지 올리기 (img)	
 
 	post('/')
 		글 쓰기 (userId, userNick, img)
@@ -422,12 +426,14 @@ auth.js
 	delete('/:postId')
 		내가 게시한글 삭제하기 (postId)
 
+	//댓글
 	post('/:postId')
 		댓글달기(comment, postId, userId, userNick)
 	
 	delete('/:postId')
 		댓글 삭제하기(commentId)
 	
+	//좋아요
 	get('/good/:postId')
 		좋아요하기 (userId, postId)
 		
@@ -435,7 +441,8 @@ auth.js
 	좋아요 취소하기 (userId, postId)  
 
 /profile:
-		
+	
+	//사용자 계정관리
 	get('/:userid')
 		유저 프로파일 페이지 이동
 		유저 정보 보기(userId)

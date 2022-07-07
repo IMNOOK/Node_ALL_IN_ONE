@@ -15,6 +15,7 @@ dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
+const profileRouter = require('./routes/profile');
 const passportConfig = require('./passport'); //passport 설정들 가져옴
 
 const { swaggerUi, specs } = require('./swagger');
@@ -54,6 +55,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/', pageRouter);
 app.use('/auth', authRouter);
 app.use('/post', postRouter);
+app.use('/profile', profileRouter);
 
 //에러 처리 미들웨어
 app.use((req, res, next) => {
