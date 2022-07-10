@@ -54,7 +54,7 @@ const items = {
 		
 		getByUserId: async (id) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Post WHERE userId = ?`, id);
-			return rows[0];
+			return rows;
 		},
 		
 		getByHashtag: async (title) => {

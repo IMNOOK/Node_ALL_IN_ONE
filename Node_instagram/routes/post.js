@@ -71,8 +71,15 @@ router.delete('/:postId', isLoggedIn, async (req, res) => {
 router.post('/:postId', isLoggedIn, async (req, res) => {
 	const comment = req.body.comment;
 	const postId = req.params.postId;
+	if(!comment) {
+		const message = encodeURIComponent('댓글이 빈칸입니다.');
+		return res.redirect(`/?error=${message}`);
+	}
 	const result = await items.Comment.set(comment, postId, req.user.id, req.user.nick);
-	console.log(result);
+	if(!result){
+		const message = encodeURIComponent('댓글 오류가 발생했습니다.');
+		return res.redirect(`/?error=${message}`);
+	}
 	return res.redirect('/');
 })
 

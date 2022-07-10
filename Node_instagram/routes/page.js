@@ -82,7 +82,7 @@ router.get('/follow/delete/:userId', isLoggedIn, async (req, res) => {
 })
 
 router.get('/profile', isLoggedIn, (req, res) => {
-	return res.render('profile', { title: '내 정보 - NodeBird' });
+	return res.redirect(`/profile/${req.user.id}`);
 });
 
 router.get('/follow', isLoggedIn, (req, res) => {

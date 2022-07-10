@@ -23,12 +23,13 @@ const router = express.Router();
 
 router.get('/:userId', isLoggedIn, async (req, res) => {
 	try{
-		const userId = req.params.userId;
+		const userId = req.params.userId
 		let user = await items.User.getOne(userId);
 		user.follower = await items.Follow.getFollowings(userId);
 		user.follow = await items.Follow.getFollowers(userId);
+		console.log(user);
 		const twits = await items.Post.getByUserId(userId);
-		return res.render('profile', { twits, user });	
+		return res.render('profile', { twits, user, id: req.user.id });	
 	} catch (err) {
 		console.error(err);
 	}
