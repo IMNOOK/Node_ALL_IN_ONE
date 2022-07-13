@@ -23,7 +23,7 @@ const router = express.Router();
 
 router.get('/:userId', isLoggedIn, async (req, res) => {
 	try{
-		const userId = req.params.userId
+		const userId = req.params.userId;
 		let user = await items.User.getOne(userId);
 		user.follower = await items.Follow.getFollowings(userId);
 		user.follow = await items.Follow.getFollowers(userId);
@@ -35,8 +35,13 @@ router.get('/:userId', isLoggedIn, async (req, res) => {
 	}
 });
 
-router.get('/:userId', isLoggedIn, async (req, res) => {
-	
+router.post('/:userId', isLoggedIn, async (req, res) => {
+	const userId = req.params.userId;
+	const nick = req.body.nick;
+	if(await items.User.update()){
+		
+	}
+	return res.redirect('/');
 });
 
 module.exports = router;
