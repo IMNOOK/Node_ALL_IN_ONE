@@ -31,7 +31,7 @@ const items = {
 		
 		update: async (nick, img, userId) => {
 			try{
-				await con.query(`UPDATE User SET nick = ?, img =? WHERE userId = ?`, [nick, img, userId]);
+				await con.query(`UPDATE User SET nick = ?, img =? WHERE id = ?`, [nick, img, userId]);
 			} catch (err) {
 				console.error(err);
 				return 0;

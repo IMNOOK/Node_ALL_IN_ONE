@@ -6,8 +6,8 @@
 <div class="hidden_menu">
 		<div class="scroll_inner">
 			<div class="user">
-				<div class="thumb_img"><img src="imgs/thumb.jpeg" alt="프로필사진"></div>
-				<div class="id">kindtigerrr</div>
+				<div class="thumb_img"><img src="{{user.img}}" alt="프로필사진"></div>
+				<div class="id">{{user.nick}}</div>
 			</div>
 		</div>
 	</div>
@@ -24,7 +24,7 @@
                     <header class="top">
                         <div class="user_container">
                             <div class="profile_img">
-                                <img src="imgs/thumb.jpeg" alt="프로필이미지">
+                                <img src="{{twit.userImg}}" alt="프로필이미지">
                             </div>
                             <div class="user_name">
                                 <div class="nick_name m_text">{{twit.userNick}}</div>
@@ -123,7 +123,7 @@
             <div class="side_box">
                 <div class="user_profile">
                     <div class="profile_thumb">
-                        <img src="imgs/thumb.jpeg" alt="프로필사진">
+                        <img src="{{user.img}}" alt="프로필사진">
                     </div>
                     <div class="detail">
                         <div class="id m_text">{{user.nick}}</div>

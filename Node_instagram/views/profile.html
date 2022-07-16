@@ -73,15 +73,14 @@
 					<form action="/profile/{{user.id}}" method="post">
 						<div class="profile_wrap">
 							<div class="profile_img">
-								<img src="{{user.img}}" alt="착한호랑이">
+								<canvas id="imageCanvas"></canvas>
 							</div>
 						</div>
-						<button>사진 변경</button>
 						<input type="file" id="id_photo" multiple="multiple" required="required" accept="image/*"><!--여긴 name 주면 안됨!! multer의 unexpect field 뜸 아래서 js로 해주자.-->
 						<input id="img-url" type="hidden" name="url">
 						<p class="login_user_name">
 							<label for="user_name">닉네임:</label>
-							<input type="text" id="user_name" name="nick">
+							<input type="text" id="user_name" placeholder="{{user.nick}}" name="nick">
 						</p>
 						<input type="submit" id="submit_btn" value="수정" class="submit_btn">
 					</form>
@@ -147,10 +146,46 @@
 {% block script %}
   <script>
     window.onload = () => {
+		
+		//모달 창
 		const modal = document.querySelector("#modal");
 		const update = document.querySelector('.profile_edit');
 		update.addEventListener('click', () => {
 			modal.style.display = "flex";
+			
+			let fileInput = document.querySelector("#id_photo");
+			let canvas = document.querySelector('#imageCanvas');
+			let ctx = canvas.getContext('2d');
+
+			const handleImage = (e) => {
+				const file = e.target.files;
+				let reader = new FileReader();
+				reader.onload = function(event){
+				   var img = new Image();
+				   // var imgWidth =
+				   img.onload = function(){
+					   canvas.width = 300;
+					   canvas.height = 300;
+					   ctx.drawImage(img,0,0,300,300);
+				   };
+				   img.src = event.target.result;
+				   // img.width = img.width*0.5
+				   // canvas.height = img.height;
+				};
+				reader.readAsDataURL(file[0]);
+
+				const formData = new FormData();
+				formData.append('photo', file[0]); //여기서의 photo 이름은 multer의 single("이름")값과 같아야 한다.
+				axios.post('/profile/img', formData)
+				.then((res) => {
+					console.log(res.data.url);
+					document.querySelector('#img-url').value = res.data.url;
+				})
+				.catch((err) => {
+					console.error(err);
+				})
+			}
+			fileInput.addEventListener('change', handleImage, false);
 		})
 		
 		const close = document.querySelector(".close-area");

@@ -1,9 +1,26 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
 
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const items  = require('../models/items');
 
 const router = express.Router();
+
+const upload = multer({
+	storage: multer.diskStorage({
+		destination(req, file, cb) {
+			cb(null, 'uploads/');	
+		},
+		filename(req, file, cb) {
+			const ext = path.extname(file.originalname);
+			cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+		},
+	}),
+	limits: { fileSize: 5 * 1024 * 1024}
+});
+
+const upload2 = multer({});
 
 /*
 /profile:
@@ -21,6 +38,10 @@ const router = express.Router();
 		프로필 정보 수정 (nick, email, img, userId)
 */
 
+router.post('/img', isLoggedIn, upload.single('photo'), async (req, res) => {
+	return res.json({url: `/img/${req.file.filename}`});
+})
+
 router.get('/:userId', isLoggedIn, async (req, res) => {
 	try{
 		const userId = req.params.userId;
@@ -35,13 +56,14 @@ router.get('/:userId', isLoggedIn, async (req, res) => {
 	}
 });
 
-router.post('/:userId', isLoggedIn, async (req, res) => {
+router.post('/:userId', isLoggedIn, upload2.none(), async (req, res) => {
 	const userId = req.params.userId;
 	const nick = req.body.nick;
-	if(await items.User.update()){
-		
+	const url = req.body.url;
+	if(await items.User.update(nick, url, userId)){
+		return res.redirect('/');
 	}
-	return res.redirect('/');
+	return res.redirect('?error');
 });
 
 module.exports = router;
