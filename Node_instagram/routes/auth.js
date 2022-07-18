@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.post('/join', isNotLoggedIn, async (req, res) => {
 	const { email, nick, password } = req.body;
+	console.log(nick);
 	try{
 		const hash = await bcrypt.hash(password, 12);
 		if(items.User.set(email, nick, hash) === 0) {

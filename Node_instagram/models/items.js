@@ -62,9 +62,9 @@ const items = {
 			return rows;
 		},
 		
-		set: async (userId, userNick, img) => {
+		set: async (userId, userNick, userImg, img) => {
 			try{
-				const result = await con.query(`INSERT INTO Post(userId, userNick, img) VALUES (?,?,?)`, [userId, userNick, img]);
+				const result = await con.query(`INSERT INTO Post(userId, userNick, userImg, img) VALUES (?,?,?,?)`, [userId, userNick, userImg, img]);
 				console.log(result);
 				return result[0].insertId;
 			} catch(err) {
@@ -129,12 +129,13 @@ const items = {
 		
 		getAllByPostId: async (postId) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Comment WHERE postId = ?`, postId);
+			console.log(rows[0]);
 			return rows;
 		},
 		
-		set: async (content, postId, userId, userNick) => {
+		set: async (content, postId, userId, userNick, userImg) => {
 			try{
-				let result = await con.query(`INSERT INTO Comment (content, postId, userId, userNick) Values (?, ?, ?, ?)`, [content, postId, userId, userNick]);
+				let result = await con.query(`INSERT INTO Comment (content, postId, userId, userNick, userImg) Values (?, ?, ?, ?, ?)`, [content, postId, userId, userNick, userImg]);
 				return result[0].insertId;
 			} catch(err) {
 				console.error(err);

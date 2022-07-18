@@ -24,84 +24,104 @@
 
             <div class="contents_box">
 
-                <article class="contents cont01">
+			{% for twit in twits %}
+				<input type="hidden" value="{{twit.userId}}" class="twit-user-id">
+				<input type="hidden" value="{{twit.id}}" class="twit-id">
+                <article class="contents">
                     <header class="top">
                         <div class="user_container">
                             <div class="profile_img">
-                                <img src="imgs/thumb.jpeg" alt="">
+                                <img src="{{twit.userImg}}" alt="프로필이미지">
                             </div>
                             <div class="user_name">
-                                <div class="nick_name">KindTiger</div>
-                                <div class="country">Seoul, South Korea</div>
+                                <div class="nick_name m_text">{{twit.userNick}}</div>
+                                <div class="country s_text">Seoul, South Korea</div>
                             </div>
+
                         </div>
-                        <div class="sprite_more_icon"></div>
+                        <div class="sprite_more_icon" data-name="more">
+                            <ul class="toggle_box" id="toggle">
+								{% if not followerIdList.includes(twit.userId) and twit.userId !== user.id %}
+                                <li><form method="get" action="/follow/{{twit.userId}}">
+								   <input type="submit" class="follow" value="follow" data-name="follow">
+								   </form>
+								</li>
+								{% endif %}
+								{% if followerIdList.includes(twit.userId) %}
+								<li><form method="get" action="/follow/delete/{{twit.userId}}">
+								   <input type="submit" class="follow" value="follow 취소" data-name="follow">
+								   </form>
+								</li>
+								{% endif %}
+								{% if twit.userNick == user.nick %}
+								<li><form>
+								   <input type="submit" class="follow" value="수정">
+								   </form>
+								</li>
+								<li><form method="POST" action="/post/{{twit.id}}?_method=DELETE">
+								   <input type="submit" class="follow" value="삭제">
+								   </form>
+								</li>
+								{% endif %}
+                            </ul>
+                        </div>
                     </header>
 
                     <div class="img_section">
                         <div class="trans_inner">
-                            <div><img src="imgs/img_section/img02.jpg" alt=""></div>
+							{% if twit.img %}
+							<div><img src="{{twit.img}}" alt="visual01"></div>
+							{% endif %}
                         </div>
                     </div>
-
 
                     <div class="bottom_icons">
                         <div class="left_icons">
-                            <div class="heart_btn">
-                                <div class="sprite_heart_icon_outline" data-name="heartbeat"></div>
-                            </div>
-                            <div>
-                                <div class="sprite_bubble_icon"></div>
-                            </div>
-                            <div>
-                                <div class="sprite_share_icon"></div>
-                            </div>
+						{% if goodPostIdList.includes(twit.id) %}
+						<div class="heart_btn">
+                        	<div OnClick="location.href ='/post/good/delete/{{twit.id}}'" class="sprite_heart_icon_inline" name="39" data-name="heartbeat" onclick></div>
                         </div>
-
+						{% else %}
+						<div class="heart_btn">
+                        	<div OnClick="location.href ='/post/good/{{twit.id}}'" class="sprite_heart_icon_outline" name="39" data-name="heartbeat"></div>
+                        </div>
+						{% endif %}
+							<div class="sprite_bubble_icon"></div>
+                            <div class="sprite_share_icon" data-name="share"></div>
+                        </div>
                         <div class="right_icon">
-                            <div class="sprite_bookmark_outline"></div>
+                            <div class="sprite_bookmark_outline" data-name="bookmark"></div>
                         </div>
                     </div>
 
-                    <div class="count_likes">
+                    <div class="likes m_text">
                         좋아요
-                        <span class="count">2,351</span>
+                        <span id="like-count-39">{{twit.goodNum}}</span>
+                        <span id="bookmark-count-39"></span>
                         개
                     </div>
 
-                    <div class="commet_container">
-
-                        <div class="commet">
-                            <div class="nick_name">
-                                popo213
-                            </div>
-                            <div>
-                                우와...너무 축하해...!!!
+					{% for comment in twit.comments %}
+                    <div class="comment_container">
+                        <div class="comment">
+                            <div class="comment-detail">
+                                <div class="nick_name m_text">{{comment.userNick}}</div>
+                                <div>{{comment.content}}</div>
                             </div>
                         </div>
-
-                        <div class="small_heart">
+                        <div class="small_heart" OnClick="location.href ='/post/comment/delete/{{comment.id}}'">
                             <div class="sprite_small_heart_icon_outline"></div>
                         </div>
-
                     </div>
+					{% endfor %}
+                    <div class="timer">{{twit.date}}</div>
 
-                    <div class="timer">1시간 전</div>
-
-                    <div class="commit_field">
-                        <input type="text" placeholder="댓글달기..">
-
-                        <div class="upload_btn">게시</div>
-                    </div>
-
-
-                </article>
-
-
-
-
-
-
+                    <form method="post" action='post/{{twit.id}}' class="comment_field">
+                        <input type="text" name="comment" placeholder="댓글달기...">
+                        <button class="upload_btn m_text" data-name="comment">게시</button>
+                    </form>
+				</article>
+        	{% endfor %}
 
             </div>
 

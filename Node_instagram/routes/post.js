@@ -39,8 +39,10 @@ router.post('/img', isLoggedIn, upload.single('photo'), async (req, res) => {
 router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 	let content = req.body.content;
 	const url = req.body.url;
-	const postResult = await items.Post.set(req.user.id, req.user.nick, url);
-	const commentResult = await items.Comment.set(content, postResult, req.user.id, req.user.nick);
+	console.log(req.user);
+	console.log(req.user.nick);
+	const postResult = await items.Post.set(req.user.id, req.user.nick, req.user.img, url);
+	const commentResult = await items.Comment.set(content, postResult, req.user.id, req.user.nick, req.user.img);
 	
 	if(commentResult){
 		Promise.all(
@@ -75,7 +77,7 @@ router.post('/:postId', isLoggedIn, async (req, res) => {
 		const message = encodeURIComponent('댓글이 빈칸입니다.');
 		return res.redirect(`/?error=${message}`);
 	}
-	const result = await items.Comment.set(comment, postId, req.user.id, req.user.nick);
+	const result = await items.Comment.set(comment, postId, req.user.id, req.user.nick, req.user.nick);
 	if(!result){
 		const message = encodeURIComponent('댓글 오류가 발생했습니다.');
 		return res.redirect(`/?error=${message}`);

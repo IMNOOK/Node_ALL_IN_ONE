@@ -85,8 +85,17 @@ router.get('/profile', isLoggedIn, (req, res) => {
 	return res.redirect(`/profile/${req.user.id}`);
 });
 
-router.get('/follow', isLoggedIn, (req, res) => {
-	return res.render('follow', { title: '내 정보 - NodeBird' });
+router.get('/follow', isLoggedIn, async (req, res) => {
+	const follows = await items.Follow.getFollowings(req.user.id);
+	let posts = [];
+	Promise.all( follows.map( async (follow) => {
+		const post = await items.Post.getByUserId(follow.followerId);
+		console.log(post);
+		posts = posts.concat(post);
+		})
+	);
+	console.log(posts);
+	return res.render('follow', { twits: posts });
 });
 
 router.get('/post', isLoggedIn, (req, res) => {

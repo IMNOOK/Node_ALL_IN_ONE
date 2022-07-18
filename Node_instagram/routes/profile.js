@@ -22,26 +22,11 @@ const upload = multer({
 
 const upload2 = multer({});
 
-/*
-/profile:
-		
-	get('/:userid')
-		유저 프로파일 페이지 이동
-		유저 정보 보기(userId)
-		팔로잉, 팔로워 숫자 보기:
-			팔로잉 숫자 보기 (userId)
-			팔로워 숫자 보기 (userId)
-
-		유저가 게시한글 보기 (userId)
-
-	update('/:userId')
-		프로필 정보 수정 (nick, email, img, userId)
-*/
-
 router.post('/img', isLoggedIn, upload.single('photo'), async (req, res) => {
 	return res.json({url: `/img/${req.file.filename}`});
 })
 
+//유저 프로필 페이지 이동 
 router.get('/:userId', isLoggedIn, async (req, res) => {
 	try{
 		const userId = req.params.userId;
@@ -56,14 +41,20 @@ router.get('/:userId', isLoggedIn, async (req, res) => {
 	}
 });
 
-router.post('/:userId', isLoggedIn, upload2.none(), async (req, res) => {
+//유저 프로파일 수정
+router.post('/:userId', isLoggedIn, upload2.none(), async (req, res, next) => {
 	const userId = req.params.userId;
 	const nick = req.body.nick;
 	const url = req.body.url;
-	if(await items.User.update(nick, url, userId)){
+	if(nick == ''){
+		const error = new Error(`닉네임을 입력하세요.`);
+		next(error);
+	} 
+	if (await items.User.update(nick, url, userId)){
 		return res.redirect('/');
 	}
-	return res.redirect('?error');
+	const error = new Error(`이미 존재하는 닉네임입니다.`);
+	next(error);
 });
 
 module.exports = router;
