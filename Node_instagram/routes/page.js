@@ -90,12 +90,18 @@ router.get('/follow', isLoggedIn, async (req, res) => {
 	let posts = [];
 	Promise.all( follows.map( async (follow) => {
 		const post = await items.Post.getByUserId(follow.followerId);
-		console.log(post);
-		posts = posts.concat(post);
+		posts.push.apply(posts, post);
 		})
-	);
-	console.log(posts);
-	return res.render('follow', { twits: posts });
+	).then(() => {
+		posts.sort((a,b) => {
+			return b.id - a.id;
+		})
+		return res.render('follow', { twits: posts });
+	})
+	.catch((err) => {
+		console.error(err);
+		return res.redirect('/');
+	})
 });
 
 router.get('/post', isLoggedIn, (req, res) => {

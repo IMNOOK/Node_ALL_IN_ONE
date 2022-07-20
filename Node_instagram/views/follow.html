@@ -1,21 +1,5 @@
 {% extends 'layout.html' %}
 
-
-{% block head %}
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="shortcut icon" href="imgs/instagram.png">
-
-    <style>
-
-        .b_inner .contents_box{
-            float: none;
-            display: flex;
-            justify-content: center;
-        }
-    </style>
-{% endblock %}
-
-
 {% block content %}
 
     <div id="main_container">
@@ -132,10 +116,29 @@
 
 {% block script %}
   <script>
-    window.onload = () => {
-      if (new URL(location.href).searchParams.get('error')) {
-        alert('이미 존재하는 이메일입니다.');
-      }
-    };
+	window.onload = function(){
+		
+		let title;
+		
+		document.getElementById('search-field').addEventListener('keyup', (e)=>{
+			if (e.keyCode === 13) { //Enter 입력시 이벤트
+				window.location = '/search/' + title;
+			}else {
+				title = document.getElementById('search-field').value;
+				console.log(title);
+			}
+		});
+		  
+		const more = document.querySelectorAll('.sprite_more_icon');
+		more.forEach( toggle => {	  
+			toggle.addEventListener('click', (e) => {
+				if(toggle.firstElementChild.style.display == 'inline'){
+					toggle.firstElementChild.style.display = 'none';
+				}else {
+					toggle.firstElementChild.style.display = 'inline';
+				}
+			})
+		})
+	}
   </script>
 {% endblock %}

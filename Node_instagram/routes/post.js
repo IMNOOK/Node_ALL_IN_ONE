@@ -45,22 +45,31 @@ router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 	const commentResult = await items.Comment.set(content, postResult, req.user.id, req.user.nick, req.user.img);
 	
 	if(commentResult){
-		Promise.all(
-			content.match(/#[^\s#]+/g).map(async (tag) => {
-				const title = tag.trim().substring(1);
-				console.log('hashtag 추가 '+title);
-				let hashtagResult = await items.Hashtag.get(title);
-				console.log(hashtagResult);
-				if(hashtagResult){
-					hashtagResult = hashtagResult.id;
-				} else {
-					hashtagResult = await items.Hashtag.set(title);
-				}
-				await items.PostHashtag.set(postResult, hashtagResult);
+		let hashs = content.match(/#[^\s#]+/g);
+		if(hashs){
+			Promise.all(
+				hashs.map(async (tag) => {
+					const title = tag.trim().substring(1);
+					console.log('hashtag 추가 '+title);
+					let hashtagResult = await items.Hashtag.get(title);
+					console.log(hashtagResult);
+					if(hashtagResult){
+						hashtagResult = hashtagResult.id;
+					} else {
+						hashtagResult = await items.Hashtag.set(title);
+					}
+					await items.PostHashtag.set(postResult, hashtagResult);
+				})
+			)
+			.then(() => {
+				return res.redirect('/');
 			})
-		);
+			.catch((err) => {
+				console.error(err);
+				return res.redirect('/');
+			})
+		}
 	}
-	res.redirect('/');
 })
 
 router.delete('/:postId', isLoggedIn, async (req, res) => {

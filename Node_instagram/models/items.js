@@ -45,20 +45,20 @@ const items = {
 		},
 		*/
 	},
-		
+	
 	Post: {
 		getAll: async (num = 0) => {
-			const [rows, fields] = await con.query(`SELECT * FROM Post ORDERS LIMIT 10 OFFSET ?`, num);
+			const [rows, fields] = await con.query(`SELECT * FROM Post ORDER BY id DESC LIMIT 10 OFFSET ?`, num);
 			return rows;
 		},
 		
 		getByUserId: async (id) => {
-			const [rows, fields] = await con.query(`SELECT * FROM Post WHERE userId = ?`, id);
+			const [rows, fields] = await con.query(`SELECT * FROM Post WHERE userId = ? ORDER BY id DESC`, id);
 			return rows;
 		},
 		
 		getByHashtag: async (title) => {
-			const [rows, fields] = await con.query(`SELECT Post.id, Post.userNick, Post.userId, Post.img FROM Post inner JOIN PostHashtag ON Post.id = PostHashtag.postId inner join Hashtag on Hashtag.id = PostHashtag.hashtagId WHERE Hashtag.title = ?`, title);
+			const [rows, fields] = await con.query(`SELECT Post.id, Post.userNick, Post.userId, Post.img FROM Post inner JOIN PostHashtag ON Post.id = PostHashtag.postId inner join Hashtag on Hashtag.id = PostHashtag.hashtagId WHERE Hashtag.title = ? ORDER BY id DESC`, title);
 			return rows;
 		},
 		
