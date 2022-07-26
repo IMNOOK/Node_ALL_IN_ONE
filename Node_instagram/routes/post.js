@@ -31,6 +31,24 @@ const upload = multer({
 
 const upload2 = multer({});
 
+//게시판 글 하나만 보기
+router.get('/:postId', async (req, res) => {
+	try{
+		let posts = await items.Post.getById(req.params.postId);
+		for(let i = 0; i < posts.length; i++){
+			//각 글마다 좋아요 갯수 세기
+			posts[i].goodNum = await items.Good.getLengthByPostId(posts[i].id);
+			
+			//각 글마다 마지막 댓글 가져오기
+			posts[i].comments = await items.Comment.getAllByPostId(posts[i].id);
+		}
+		console.log(posts);
+		return 	res.render('index', { title: 'Main', twits: posts });
+	} catch (err) {
+		console.error(err);
+	}
+})
+
 //게시판 글 올림
 router.post('/img', isLoggedIn, upload.single('photo'), async (req, res) => {
 	return res.json({url: `/img/${req.file.filename}`});

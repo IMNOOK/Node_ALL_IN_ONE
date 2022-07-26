@@ -76,8 +76,8 @@
 								<canvas id="imageCanvas"></canvas>
 							</div>
 						</div>
-						<input type="file" id="id_photo" multiple="multiple" required="required" accept="image/*"><!--여긴 name 주면 안됨!! multer의 unexpect field 뜸 아래서 js로 해주자.-->
-						<input id="img-url" type="hidden" name="url">
+						<input type="file" id="id_photo" multiple="multiple" accept="image/*"><!--여긴 name 주면 안됨!! multer의 unexpect field 뜸 아래서 js로 해주자.-->
+						<input id="img-url" type="hidden" name="url" value="{{user.img}}">
 						<p class="login_user_name">
 							<label for="user_name">닉네임:</label>
 							<input type="text" id="user_name" value="{{user.nick}}" name="nick">
@@ -150,12 +150,23 @@
 		//모달 창
 		const modal = document.querySelector("#modal");
 		const update = document.querySelector('.profile_edit');
+			
+		let fileInput = document.querySelector("#id_photo");
+		let canvas = document.querySelector('#imageCanvas');
+		let ctx = canvas.getContext('2d');
+
+		let img = new Image();
+		img.onload = function(){
+			canvas.width = 300;
+			canvas.height = 300;
+			ctx.drawImage(img,0,0,300,300);
+		};
+		img.src = document.querySelector('#img-url').value;
+		console.log(img.src);
+		console.log('hi');
+		
 		update.addEventListener('click', () => {
 			modal.style.display = "flex";
-			
-			let fileInput = document.querySelector("#id_photo");
-			let canvas = document.querySelector('#imageCanvas');
-			let ctx = canvas.getContext('2d');
 
 			const handleImage = (e) => {
 				const file = e.target.files;

@@ -4,11 +4,11 @@ dotenv.config();
 
 const config = {
 	development:{
-		host: '3.39.5.152',
+		host: '13.209.97.195',
 		user: 'IMNOOK',
 		password: 'dhksthxpa12',
 		database: 'nodeInstagram',
-		port: '53444',
+		port: '59356',
 	},
 	test:{
 		host: '',

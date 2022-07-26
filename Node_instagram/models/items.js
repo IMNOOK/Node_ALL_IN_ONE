@@ -52,6 +52,12 @@ const items = {
 			return rows;
 		},
 		
+		getById: async (id) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Post WHERE id = ?`, id);
+			return rows;
+		}
+		,
+		
 		getByUserId: async (id) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Post WHERE userId = ? ORDER BY id DESC`, id);
 			return rows;
