@@ -14,7 +14,8 @@ router.post('/join', isNotLoggedIn, async (req, res) => {
 	console.log(nick);
 	try{
 		const hash = await bcrypt.hash(password, 12);
-		if(items.User.set(email, nick, hash) === 0) {
+		const img = `/img/${nick}.png`;
+		if(items.User.set(email, nick, hash, img) === 0) {
 			return res.redirect('/join?error=exist');
 		}
 		return res.redirect('/');	

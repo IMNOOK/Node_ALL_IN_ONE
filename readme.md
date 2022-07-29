@@ -500,24 +500,61 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 5. 배포
 
-## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 느낀점
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 6. 막혔던 지점
+
+
+
+1. 포스터에 사진 올릴 때
+	파일 업로드때 사진만 올릴 수 있도록 설정하기
+	올린 파일 미리보기
+	multer을 사용하여 사진URL과 글이랑 함꼐 데이터 전송하기
+	https://blog.naver.com/leeminwok/222834139988
+
+
+2. 모든 포스터에 박혀있는 userImg를 Profile에서 업데이트 했을 때 UPDATE CASDE가 안되었음 
+ -> FORIGN KEY를 위해서는 외래키가 UNIQUE여야 하며 NOT NULL에 해당 키와 같은 설정 값을 가져야 한다.
+ -> userImg가 UNIQUE가 되면 기본설정 img(DEFAULT 이미지)를 넣을 수가 없어짐.
+ -> 그럼 User 테이블에 값에는 회원가입시에 nick.png가 들어가며 브라우저에서 잃어올 수 없는 사진(nick.png처럼 존재하지 않는 사진 = 기본 프사)을 바꾼다.
+ -> onerror="this.src='/img/기본프사.png'"
+ 
+3. 팔로우 한 사람들의 게시글만 가져오기
+ -> Promise.all(follow.followerIds Posts)
+
+4. 모달링
+
+5. delete method 사용 방법
+ -> app.js에 methodOverride = require('method-override');
+ -> app.use(methodOverride('_method'));
+ -> 
+
+6. 각각의 포스터에 toggle을 열었을 때 반응을 한번에 JS로
+ -> const more = document.querySelectorAll('.sprite_more_icon');
+ -> more.forEach( toggle => {	  
+ -> toggle.addEventListener('click', (e) => {
+ ->		if(toggle.firstElementChild.style.display == 'inline'){
+ ->				toggle.firstElementChild.style.display = 'none';
+ ->			}else {
+ ->				toggle.firstElementChild.style.display = 'inline';
+ ->			}
+ ->		})
+ -> })
+
+7. passport
+
+8. Promise.all map (post-hashtag)
 
 FRONT
-	- 
+	- modaling
+	
 
 DB
-
-	논리적 모델링의 중요성을 깨달음
-	기존의 완성된 front에서 하나씩 라우팅하면서 필요한 DB 쿼리를 만들면서 생각하던 것이 아니라
-	미리 ovenapp을 통해 UI를 만들어두고 필요한 객체를 모델링하고 (논리적 모델링)
-	정규화를 통해 mysql에 테이블을 생성한 뒤,
-	사용될 sql문을 미리 적어보면서 find slow query 과정을 통해
-	join문이 과도하게 사용될 객체를 역정규화로 최적화하고 주의할점을 명시해보았다.
-	가장 쉽고 간단하게 여겨졌던 DB의 모델링이 가장 크게 웹 성능을 결정하는 어려운 작업임을 느꼈다.
+	- contraint -> 외래키, 키 모두 not null 설정해야 정상 동작
+	- 
 	
 BACKEND
-
-	보
+	- Promise.all() 안에 .map(async callback)을 사용해야 정상 동작
+	- 각각의 라우터 단에서의 return 형식 맞추기
+	
 
 ## ![hammer_and_wrench](https://github.githubassets.com/images/icons/emoji/unicode/1f6e0.png) 보안해야 할 점
 

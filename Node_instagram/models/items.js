@@ -18,9 +18,9 @@ const items = {
 			return rows[0]; 
 		},
 		
-		set: async (email, nick, password) => {
+		set: async (email, nick, password, img) => {
 			try{
-				let result = await con.query(`INSERT INTO User(email, nick, password) VALUES (?,?,?)`, [email, nick, password]);
+				let result = await con.query(`INSERT INTO User(email, nick, password, img) VALUES (?,?,?, ?)`, [email, nick, password, img]);
 				return result[0].insertId;
 			} catch (err) {
 				console.error(err);

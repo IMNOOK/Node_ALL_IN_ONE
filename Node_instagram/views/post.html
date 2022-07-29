@@ -47,7 +47,6 @@
 	let canvas = document.getElementById('imageCanvas');
 	let ctx = canvas.getContext('2d');
 
-
 	const handleImage = (e) => {
 		const file = e.target.files;
 		let reader = new FileReader();
@@ -64,7 +63,7 @@
 		   // canvas.height = img.height;
 		};
 		reader.readAsDataURL(file[0]);
-		
+
 		const formData = new FormData();
 		formData.append('photo', file[0]); //여기서의 photo의 값은 multer의 single('이값')과 같아야 한다.!!
 		axios.post('/post/img', formData)
@@ -77,7 +76,21 @@
 		})
 	}
 
-	fileInput.addEventListener('change', handleImage, false);
+	const fileCheck = (obj) => {
+		let pathpoint = obj.value.lastIndexOf('.');
+		let filepoint = obj.value.substring(pathpoint+1, obj.length);
+		let filetype = filepoint.toLowerCase();
+		if(filetype == 'jpg' || filetype =='gif' || filetype == 'png' || filetype == 'jpeg'){
+			handleImage(obj);
+		} else {
+			alert('이미지 파일만 선택할 수 있습니다.');
+			let parentObj = obj.parentNode;
+			let node = parentObj.replaceChild(obj.cloneNode(true), obj);
+			return false;
+		}
+	}
+
+	fileInput.addEventListener('change', fileCheck, false);
 
 	</script>
 {% endblock %}
