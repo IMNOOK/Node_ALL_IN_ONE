@@ -10,7 +10,14 @@ https://blog.naver.com/leeminwok/222778419100
 
 먼저 어떤 기능을 하는 웹 페이지를 만들지 구상합니다.
 Instagram의 기능을 하는 웹 페이지를 클론 해본다.
-이후에 API서비스를 제공하여 
+
+메인 페이지 - 사용자들의 모든 post를 새로만들어진 순서로 계시합니다.
+로그인 및 회원가입 페이지
+프로필 페이지 - 사용자가 올린 모든 post를 새로 만들어진 순서로 계시합니다. 본인 프로필일 경우 회원 정보 수정이 가능합니다.
+팔로우 페이지 - 팔로운 한 사람들만의 post를 볼 수 있는 페이지.
+채팅 페이지 - 웹 소켓을 통해 실시간 sns를 구현합니다
+
+이후에 API서비스를 제공하여 해당 instagram을 사용하는 유저들의 DB를 사용하여 새로운 페이지를 만듭니다.
 
 # ![thinking](https://github.githubassets.com/images/icons/emoji/unicode/1f914.png) 1. 기획
 
@@ -30,20 +37,21 @@ https://ovenapp.io/project/H74UvSHifgHqPYXfGzDvTmvZCPjSr08W#P3cGu
     기본 상태
 		글 가져 오기
 			유저가 작성했던 글 10개씩 1페이지로 가져오기
-			글에는 작성자 닉네임, 내용, 사진, 작성한 시간, 댓글, 좋아요 갯수가 필요하다.
+			글에는 작성자 닉네임, 작성자의 프로필 사진, 내용(글), 사진, 작성한 시간, 댓글들, 좋아요 갯수가 필요하다.
 		
-	hashtag 검색한 글 가져오기 -> search로 hashtag 검색 -> req.body.title 로 해시태그 전달
+		hashtag 검색한 글 가져오기 -> search로 hashtag 검색 -> req.body.title 로 해시태그 전달
 		유저가 작성했던 글 중 hashtag.title이 같은 것을 10개씩 1페이지로 가져오기
-		이때 각각의 글들에는 마지막에 달린 댓글 1개
-		좋아요 갯수
-
+		
 		댓글 보기 -> 파라미터 값으로 postId 전달
 			해당 게시글의 모든 댓글을 가져옴
 		
+		
 	로그인시
 		상시
-			해당 유저와 팔로우한 유저의 스토리 + 추천유저창 뜸.
+			해당 유저와 팔로우한 유저의 채팅방 뜸.
 			글을 가져 올 때, 회원이 이 사용자를 팔로우 했는지 않했는지, 회원이 이 글을 좋아요 했는지 안했는지 까지 추가
+		
+		글 삭제하기
 		
 		좋아요하기 -> 파라미터  값으로 postId 전달 
 			하트 빨간색으로 변경
@@ -59,7 +67,7 @@ https://ovenapp.io/project/H74UvSHifgHqPYXfGzDvTmvZCPjSr08W#P3cGu
 	
 		댓글 달기 -> req.body.content로 내용이 파라미터 값으로 postId 전달
 			댓글이 달림
-	
+		
 		Room 목록 가져오기
 			내가 기존에 연락하던 모든 Room들이 전달됨
 			Room들에는 다른 회원의 이름, 사진, 마지막 채팅 내용, 마지막 채팅 시간이 들어있음.
@@ -76,25 +84,27 @@ https://ovenapp.io/project/H74UvSHifgHqPYXfGzDvTmvZCPjSr08W#P3cGu
 		로그인 페이지 or 회원가입 페이지
 	
 	회원가입
-		
+		회원가입 성공기 메인 페이지 이동, 안되면 메인페이지?error=message
 
 	로그인
-	로그인되면 메인 페이지로 이동, 안되면 
+		로그인되면 메인 페이지로 이동, 안되면 메인페이지?error=message 
 
 포스트 페이지
 
 	글 쓰기
-	글 수정하기
+		사진+글 올리기 -> 미리보기
 
 프로필 페이지
 
 	프로필 정보 수정
+		해당 user일 시 프로필 사진, 닉네임 변경가능
+	
 	팔로잉, 팔로워 숫자 보기
-	팔로워 유저 보기
-	팔로우 취소하기 (following, follower)
-	팔로잉 유저 보기
+	
+	로그아웃
+	
 	내가 게시한글 보기
-	내가 게시한글 삭제하기
+	내가 게시한글 이동하기
 
 
 
@@ -112,152 +122,266 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
 3 No transitive dependencies -> 이행적 종속성을 없애라!
 블로그에 정리해야 겠다.
 
+7.31 수정 본
+
 	모든 키 = id(INT) NOT NULL AUTO_INCREMENT, PRIMARY KEY(id)
 
 	User: email(VC), nick(VC), password(VC), provider(VC), snsId(VC), img(VC)
-	Post: userId(INT), usernick(VC), content(VC), img(VC), date
+	Post: userId(INT), usernick(VC), userImg(VC), content(VC), img(VC), date
 	Hashtag: title(VC)
 	Domain: userId(INT), host(VC), type(INT), clientSecret(VARCHAR),
 	Follow: followingId(INT), followerId(INT)
 	Good: userId(INT), postId(INT)
 	Room: aId(INT), bId(INT)
 	DM: roomId(INT), senderId(INT), content(VC), date
-	Comment: userId(INT), userNick(VC), postId(INT), content(VC)
+	Comment: userId(INT), userNick(VC), userImg, postId(INT), content(VC)
 	PostHashtag: postId(INT), hashtagId(INT)
 
 이후에 Mysql을 통해 필요한 쿼리들을 작성해보았습니다.
-
+	
 User
 
-	유저 확인 
-	User.check (email)
-	SELECT email FROM User WHERE email = ?
-	return rows[0] else 0
+	check: async (email) => {
+		const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.email = ?`, email);
+		if (rows.length != 0) {
+			return rows[0];
+		} else {
+			return 0;
+		}
+	},
 
-	유저 추가 
-	User.set (email, password, nick)
-	INSERT INTO User (email, password, nick) values (?,?,?)
-	return 1 else 0
-	
-	프로필 정보 수정 
-	User.update (nick, email, img, userId)
-	UPDATE User SET nick = ?, email = ?, img =? WHERE userId = ?
+	getOne: async (userId) => {
+		const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.id = ?`, userId);
+		return rows[0]; 
+	},
 
-	
-    유저 프로필 보기 
-	User.getOne (userId)
-	SELECT * FROM User INNER JOIN Post ON User.id = Post.userId WHERE User.id = ?
-	return rows;
-	
-	
+	set: async (email, nick, password, img) => {
+		try{
+			let result = await con.query(`INSERT INTO User(email, nick, password, img) VALUES (?,?,?, ?)`, [email, nick, password, img]);
+			return result[0].insertId;
+		} catch (err) {
+			console.error(err);
+			return 0;
+		}
+		return 1;
+	},
+
+	update: async (nick, img, userId) => {
+		try{
+			await con.query(`UPDATE User SET nick = ?, img =? WHERE id = ?`, [nick, img, userId]);
+		} catch (err) {
+			console.error(err);
+			return 0;
+		}
+		return 1;
+	},
+
 Post
 
-    글 쓰기 
-	Post.set (userId, content, img)
-    INSERT INTO Post (userId, content, img) values (?,?,?)
-	return 1 else 0
-	
-	글 가져 오기 
-	Post.getAll (page)
-    SELECT * FROM Post orders LIMIT 10 OFFSET ?
-	return rows;
-    
-    hashtag 검색한 글 가져오기 
-	Post.getByHashtag (title, page)
-	SELECT * FROM Post inner JOIN PostHashtag ON Post.id = PostHashtag.postId inner join Hashtag on Hashtag.id = PostHashtag.hashtagId WHERE Hashtag.title = ? orders LIMIT 10 OFFSET ?
-    return rows;
-	
-    글 수정하기 
-	Post.update (content, img, postId)
-	UPDATE Post SET content = ?, img = ? WHERE postId = ?
-	return 1 else 0
-	
-	내가 게시한글 보기
-	Post.getByUserId(userId)
-	SELECT * FROM Post WHERE userId = ?
-	return rows;
-	
-	내가 게시한글 삭제하기 
-	Post.delete (postId)
-	DELETE FROM Post WHERE id = ?
-	return 0;
+	getAll: async (num = 0) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Post ORDER BY id DESC LIMIT 10 OFFSET ?`, num);
+		return rows;
+	},
+
+	getById: async (id) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Post WHERE id = ?`, id);
+		return rows;
+	}
+	,
+
+	getByUserId: async (id) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Post WHERE userId = ? ORDER BY id DESC`, id);
+		return rows;
+	},
+
+	getByHashtag: async (title) => {
+		const [rows, fields] = await con.query(`SELECT Post.id, Post.userNick, Post.userId, Post.img FROM Post inner JOIN PostHashtag ON Post.id = PostHashtag.postId inner join Hashtag on Hashtag.id = PostHashtag.hashtagId WHERE Hashtag.title = ? ORDER BY id DESC`, title);
+		return rows;
+	},
+
+	set: async (userId, userNick, userImg, img) => {
+		try{
+			const result = await con.query(`INSERT INTO Post(userId, userNick, userImg, img) VALUES (?,?,?,?)`, [userId, userNick, userImg, img]);
+			console.log(result);
+			return result[0].insertId;
+		} catch(err) {
+			console.error(err);
+			return 0;
+		}
+	},
+
+	update: async (content, img, postId) => {
+		try{
+			await con.query(`UPDATE Post SET content =?, img = ? WHERE postId = ?`, [content, img, postId]);
+		} catch(err) {
+			console.error(err);
+			return 0;
+		}
+		return 1;
+	},
+
+	delete: async (postId) => {
+		con.query(`DELETE FROM Post WHERE id = ?`, postId);
+	}
 
 Good
 
-    각 글마다 좋아요 수 가져오기
-	Good.getByPostId (postId)
-    SELECT * FROM Good WHERE postId = ? (Join)
-	return rows.length;
+	getLengthByPostId: async (postId) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ?`, postId);
+		return rows.length;
+	},
 
-    좋아요하기
-	Good.set (userId, postId)
-    INSERT INTO Good (userId, postId) Values(?, ?)
-	return 1 else 0;
+	getAllByUserId: async (userId) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Good WHERE userId = ?`, userId);
+		return rows;
+	},
 
-    좋아요 취소하기 
-	Good.delete (userId, postId)
-    DELETE FROM Good WHERE Good.userId = ? AND Good.postId = ?
-	return none;
+	getByIds: async (userId, postId) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ? AND userId = ?`, [postId, userId]);
+		if(rows.length == 0) return 0;
+		return 1;
+	},
+
+	set: async (userId, postId) => {
+		try{
+			let result = await con.query(`INSERT INTO Good (userId, postId) Values(?, ?)`, [userId, postId]);
+			return result.insertId;
+		} catch(err) {
+			console.error(err);
+			return 0;
+		}
+		return 1;
+	},
+
+	delete: async (userId, postId) => {
+		await con.query(`DELETE FROM Good WHERE userId = ? AND postId = ?`, [userId, postId]);
+	}
+
+Comment
+
+	getById: async (commentId) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Comment WHERE id = ?`, commentId);
+		return rows[0];
+	},
+
+	getAllByPostId: async (postId) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Comment WHERE postId = ?`, postId);
+		console.log(rows[0]);
+		return rows;
+	},
+
+	set: async (content, postId, userId, userNick, userImg) => {
+		try{
+			let result = await con.query(`INSERT INTO Comment (content, postId, userId, userNick, userImg) Values (?, ?, ?, ?, ?)`, [content, postId, userId, userNick, userImg]);
+			return result[0].insertId;
+		} catch(err) {
+			console.error(err);
+			return 0;
+		}
+	},
+
+	delete: async (commentId) => {
+		await con.query(`DELETE FROM Comment WHERE id = ?`, commentId);
+	}
 
 Follow
 
-    팔로우하기 
-	Follow.set (userId, follower)
-    INSERT INTO Follow (following, follower) Values (?, ?) 
-	return 1 else 0;
+	getFollowings: async (userId) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followingId = ?`, userId);
+		return rows;
+	},
 
-    팔로우 취소하기 
-	Follow.delete (userId, follower)
-    DELETE FROM Follow Where following = ? and follower = ?
-	return none;
-	
-	팔로잉 숫자 보기 
-	Follow.getFollowing (userId)
-	SELECT * FROM Follow WHERE following = ?
-	return rows.length;
+	getFollowers: async (userId) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followerId = ?`, userId);
+		return rows;
+	},
 
-	팔로워 숫자 보기 
-	Follow.getFollower (userId)
-	SELECT * FROM Follow WHERE follower = ?
-	return rows.length;
-	
-Comment
+	getByIds: async (userId, followerId) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followingId = ? AND followerId = ?`, [userId, followerId]);
+		if(rows.length == 0) return 0;
+		return 1;
+	},
 
-    댓글 달기 
-	Comment.set (content, postId, userId, userNick)
-    INSERT INTO Comment (content, postId, userId, userNick) Values (?, ?, ?, ?)
-	return 1 else 0;
+	set: async (userId, followerId) => {
+		try{
+			let result = await con.query(`INSERT INTO Follow (followingId, followerId) VALUES (?, ?)`, [userId, followerId]);
+			return result[0].insertId;
+		} catch (err) {
+			console.error(err);
+			return 0;
+		}
+		return 1;
+	},
 
-    각 글마다 댓글 가져오기 
-	Comment.getByPostId (postId)
-    SELECT * FROM Comment WHERE postId = ? (Join)
-	return rows;
+	delete: async (userId, followerId) => {
+		await con.query(`DELETE FROM Follow WHERE followingId = ? AND followerId = ?`, [userId, followerId]);
+	}
+
+
+Hashtag
+
+	get: async (title) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Hashtag WHERE title = ?`, title)
+		return rows[0];
+	},
+
+	set: async (title) => {
+		try{
+			let result = await con.query(`INSERT INTO Hashtag (title) VALUES (?)`, title);
+			return result[0].insertId;
+		} catch(err) {
+			console.error(err);
+			return 0;
+		}
+		return 1;
+	}
 
 Room
 
-    Room 추가 하기
-	Room.set (aId, bId)
-    INSERT INTO Room (aId, bId) Values(?,?)
-	return 1 else 0;
+	getByUserId: async (userId) => {
+		const [rows, fields] = await con.query(`SELECT * FROM Room WHERE aId = ? OR bId = ?`, [userId, userId]);
+		return rows[0];
+	},
 
-    Room 열기 = 목록 가져오기 
-	Room.getByUserId (userId)
-    SELECT * FROM Room WHERE userA = ? Or userB =?
-	return rows;
+	set: async (userAId, userBId) => {
+		try{
+			let result = await con.query(`INSERT INTO Room (aId, bId) VALUES`, [userAId, userBId]);
+			return result[0].insertId;
+		} catch(err){
+			console.error(err);
+			return 0;
+		}
+	}
 
 DM
 
-    DM 읽기
-	DM.getByRoomId (roomId)
-    SELECT * FROM DM WHERE roomId = ? LIMIT 100 OFFSET ?
-	return rows;
+	getByRoomId: async (roomId) => {
+		const [rows, fields] = await con.query(`SELECT * FROM DM WHERE roomId = ?`, roomId);
+		return rows[0];
+	},
 
-    DM 보내기 
-	DM.set (roomId, content, sender)
-    INSERT INTO DM (roomId, content, sender) VALUES (?, ?, ?)
-	return 1 else 0;
+	set: async (roomId, content, sender) => {
+		try{
+			let result = await con.query(`INSERT INTO DM (roomId, content, sender) VALUES (?, ?, ?)`, [roomId, content, sender]);
+			return result[0].insertId;
+		} catch (err){
+			console.error(err);
+			return 0;
+		}
+	}
 
-    
+PostHashtag
+
+	set: async (postId, hashtagId) => {
+		try{
+			let result = await con.query(`INSERT INTO PostHashtag (postId, hashtagId) VALUES (? ,?)`, [postId, hashtagId]);
+			return result[0].insertId;
+		} catch(err) {
+			console.error(err);
+			return 0;
+		}
+	},
+
 
 마지막으로 물리적 데이터 모델링 (성능 향상 중요!)
 find slow query를 통해 교정을 합니다.
@@ -469,7 +593,7 @@ auth.js
 	post('/:roomId')
     	DM 보내기 (roomId, content, sender)
 	
-
+설계 및 구현 이후
 Swagger OPEN API를 사용해보며 FRONT와의 협업에 어떻게 사용될지 알아보았습니다.
 
 
@@ -501,7 +625,6 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 5. 배포
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 6. 막혔던 지점
-
 
 
 1. 포스터에 사진 올릴 때
