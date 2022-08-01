@@ -8,6 +8,12 @@ const items = require('../models/items');
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
 
+/**
+ *@swagger
+ *tag:
+*/
+
+
 //유저계정 UI
 router.use(async (req, res, next) => {
 	res.locals.user = req.user;

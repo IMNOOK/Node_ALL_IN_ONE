@@ -666,6 +666,14 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 
 8. Promise.all map (post-hashtag)
 
+9. Swagger
+ -> https://any-ting.tistory.com/105
+
+10. socket
+	-> webSocket
+	-> Socket.IO
+	블로그 정리 필요
+
 FRONT
 	- modaling
 	
