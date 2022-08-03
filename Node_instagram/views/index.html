@@ -246,11 +246,26 @@
 {% endblock %}
 
 {% block script %}
-  <script>
+<script src="/socket.io/socket.io.js"></script>
+<script> 
+	//Socket JS
+	const socket = io.connect('https://node-all-in-one-fgigx.run.goorm.io', {
+		path: '/socket.io'
+	});
+	
+	socket.on('newRoom', function (data) {
+		console.log('newRoom 이벤트 발동!', data);
+	})
+	
+	socket.on('removeRoom', function (data) {
+		console.log('방제거 이벤트 발동', data);
+	})
+	
+	//Web UI JS
 	window.onload = function(){
-		
+
 		let title;
-		
+
 		document.getElementById('search-field').addEventListener('keyup', (e)=>{
 			if (e.keyCode === 13) { //Enter 입력시 이벤트
 				window.location = '/search/' + title;
@@ -259,7 +274,7 @@
 				console.log(title);
 			}
 		});
-		  
+
 		const more = document.querySelectorAll('.sprite_more_icon');
 		more.forEach( toggle => {	  
 			toggle.addEventListener('click', (e) => {
@@ -271,5 +286,5 @@
 			})
 		})
 	}
-  </script>
+</script>
 {% endblock %}

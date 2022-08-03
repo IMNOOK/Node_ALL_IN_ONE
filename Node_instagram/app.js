@@ -16,8 +16,10 @@ const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
 const profileRouter = require('./routes/profile');
+const roomRouter = require('./routes/room');
 const passportConfig = require('./passport'); //passport 설정들 가져옴
 const { swaggerUi, specs } = require('./swagger/swagger');
+const webSocket = require('./socket');
 
 
 // server 코드 시작 및 각종 설정
@@ -29,6 +31,15 @@ nunjucks.configure('views', {
 	watch: true,
 });
 passportConfig();
+const sessionMiddleware = session({
+	resave: false, // cookie 바뀐 거 없어도 다시 쿠키 저장 false.
+	saveUninitialized: false, // cookie가 처음 부터 없어도 저장 false.
+	secret: process.env.COOKIE_SECRET,
+	cookie: {
+		httpOnly: true, //유저가 쿠키가지고 장난 칠 수 없게함. javascript 사용 금지!
+		secure: false, // https 프로토콜에서만 사용한다!를 false로 함. 배포시 true로 바꾸자.
+	}
+});
 
 // 미들웨어 장착
 app.use(morgan('dev'));
@@ -37,26 +48,21 @@ app.use('/img', express.static(path.join(__dirname, 'uploads'))); // + 사용자
 app.use(express.json()); // body의 json들을 객체로 만들어줌.
 app.use(express.urlencoded({ extended: false})); // body의 url들을 객체로 만들어 줌.
 app.use(cookieParser(process.env.COOKIE_SECRET)); //Header에 쿠키값들 req.cookie 객체에 담아줌, 서명함. -> 
-app.use(session({
-	resave: false, // cookie 바뀐 거 없어도 다시 쿠키 저장 false.
-	saveUninitialized: false, // cookie가 처음 부터 없어도 저장 false.
-	secret: process.env.COOKIE_SECRET,
-	cookie: {
-		httpOnly: true, //유저가 쿠키가지고 장난 칠 수 없게함. javascript 사용 금지!
-		secure: false, // https 프로토콜에서만 사용한다!를 false로 함. 배포시 true로 바꾸자.
-	}
-}));	//req.session 이라는 객체가 생성.
+app.use(sessionMiddleware);	//req.session 이라는 객체가 생성.
 app.use(passport.initialize());	//new LocalStrategy 생성자 생성
 app.use(passport.session());	//req.isAuthenticated,req.login 등의 객체 등록
 app.use(methodOverride('_method'));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs))// UI와 옵션을 Express Router 환경에 연결
 // url/api-docs 경로로 접속하면 기본 설정 보임 이후 API 문서화를 진행해야 함.
 
+
+
 //라우팅
 app.use('/', pageRouter);
 app.use('/auth', authRouter);
 app.use('/post', postRouter);
 app.use('/profile', profileRouter);
+app.use('/room', roomRouter);
 
 //에러 처리 미들웨어
 app.use((req, res, next) => {
@@ -73,6 +79,8 @@ app.use((err, req, res, next) => {
 });
 
 //서버 리스닝
-app.listen(app.get('port'), ()=> {
+const server = app.listen(app.get('port'), ()=> {
 	console.log(`서버가 ${app.get('port')}에서 실행 중`);
 });
+
+webSocket(server, app, sessionMiddleware);

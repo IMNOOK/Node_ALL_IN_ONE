@@ -209,9 +209,14 @@ const items = {
 	},
 	
 	Room: {
+		get: async (id) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Room WHERE id = ?`, id);
+			return rows[0];
+		},
+		
 		getByUserId: async (userId) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Room WHERE aId = ? OR bId = ?`, [userId, userId]);
-			return rows[0];
+			return rows;
 		},
 		
 		set: async (userAId, userBId) => {
@@ -228,10 +233,10 @@ const items = {
 	DM: {
 		getByRoomId: async (roomId) => {
 			const [rows, fields] = await con.query(`SELECT * FROM DM WHERE roomId = ?`, roomId);
-			return rows[0];
+			return rows;
 		},
 		
-		set: async (roomId, content, sender) => {
+		set: async (roomId, sender, content) => {
 			try{
 				let result = await con.query(`INSERT INTO DM (roomId, content, sender) VALUES (?, ?, ?)`, [roomId, content, sender]);
 				return result[0].insertId;

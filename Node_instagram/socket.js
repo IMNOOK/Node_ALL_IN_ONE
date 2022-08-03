@@ -50,40 +50,7 @@ module.exports = (server, app, sessionMiddleware) => {
 			})
 			
 			socket.on('disconnect', () => {
-				console.log('chat 네임스페이스 접속 해제');
-				socket.leave(roomId)// 방에 나가는 메서드
-				//접속해제 시에는 현재 방의 사람 수를 구해서 0이면 제거 아니면 퇴장했다는 데이터 보낸다.
-				const currentRoom = socket.adapter.rooms[roomId]; // 참여 중인 소켓 정보가 들어있다.
-				const userCount = currentRoom ? currentRoom.length : 0;
-				if (userCount === 0) {
-					/*
-					axios에 요청을 보낼 때 요청자가 누구인지 정보가 들어 있지 않다.
-					express-session에서 세션 쿠키인 req.signedCookies['connect.sid']를 보고 현제 세션이 누구인지 판단한다.
-					브라우저에서 axios 요청을 보낼 떄는 자동으로 쿠키를 넣어 보재니만, 서버에서 axios 요청을 할 때는 쿠키가 같이 보내지지 않는다
-					따라서 express-session이 판단할 수 있게 하려면 직접 헤더에 세션 쿠키를 넣어야 한다.
-					req.signedCookies 내부의 쿠키들은 모두 복호화되어 있으므로 다시 암호화 해서 요청에 담아야 한다.
-					이때 express-session의 세션 쿠키 앞에는 s%3A를 붙여야 한다.
-					*/
-					const signedCookies = req.signedCookies['connect.sid']; //connect.sid는 내 sid를 불러온다, 즉 내 세션에 저장된 데이터의 키값을 불러온다.  lm41sgKRSNXqSDbwmmmDhyiJenGzaiMT
-					const connectSID = cookie.sign(signedCookies, process.env.COOKIE_SECRET); // 내 세션에 저장된 값에 서명된 쿠키값을 붙인다. lm41sgKRSNXqSDbwmmmDhyiJenGzaiMT.vmEkXSVKF0myTOnQNV0BKrNa+Nftn2sJ7gO0KngoXuY
-					axios.delete(`url/room/${roomId}`, {
-						headers: {
-							Cookie: `connect.sid=s%3A${connectSID}`, //단 이때 session에서 쿠키를 암호화하면 앞에 s:를 붙이는데, 이를 따라하기 위해 s%4A$를 붙여준다. s%4A$lm41sgKRSNXqSDbwmmmDhyiJenGzaiMT.vmEkXSVKF0myTOnQNV0BKrNa+Nftn2sJ7gO0KngoXuY -> 세션에서 세션쿠키를 읽어 세션을 사용할 수 있다. 즉, DELETE /room/:id 라우터에서 방 삭제 요청을 누가했는지 알 수 있다.
-						},
-					})
-					.then(() => {
-						console.log('방 제거 요청 성공');
-					})
-					
-					.catch((error) => {
-						console.error(error);
-					})
-				} else {
-					socket.to(roomId).emit('exit', {
-						user: 'system',
-						chat: `${req.session.color} 님이 퇴장하셨습니다.`,
-					});
-				}
+	
 			})
 
 		})

@@ -26,6 +26,7 @@ router.use(async (req, res, next) => {
 router.get('/', async (req, res) => {
 	const page = req.query.page;
 	try{
+		//게시글 가져오기
 		let posts = await items.Post.getAll(page);
 		for(let i = 0; i < posts.length; i++){
 			//각 글마다 좋아요 갯수 세기
@@ -35,7 +36,9 @@ router.get('/', async (req, res) => {
 			posts[i].comments = await items.Comment.getAllByPostId(posts[i].id);
 		}
 		console.log(posts);
-		return 	res.render('index', { title: 'Main', twits: posts });
+		
+		return 	res.render('index', { title: 'Main', twits: posts });	
+		
 	} catch (err) {
 		console.error(err);
 	}
