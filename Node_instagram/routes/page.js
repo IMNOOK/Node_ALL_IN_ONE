@@ -8,11 +8,6 @@ const items = require('../models/items');
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
 
-/**
- *@swagger
- *tag:
-*/
-
 
 //유저계정 UI
 router.use(async (req, res, next) => {
@@ -20,9 +15,33 @@ router.use(async (req, res, next) => {
 	res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.followerId) : [];
 	res.locals.goodPostIdList = req.user ? req.user.GoodPostIds.map(u => u.postId) : [];
 	next();
-})
+});
+
 
 //게시글 & 해시태그
+/**
+ @swagger
+ paths:
+ 	/:
+		get:
+			summary:
+			description:
+			tags: []
+			respnses:
+				"200":
+					description:
+					content:
+						application/json:
+							schema:
+								type: object
+								properties:
+									twits:
+										type: object
+										example:
+											[
+												{"id": 1, "nick": "imnook"}
+											]
+*/
 router.get('/', async (req, res) => {
 	const page = req.query.page;
 	try{

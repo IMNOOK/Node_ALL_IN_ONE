@@ -6,9 +6,9 @@ const options = {
 		openapi: "3.0.0",
 		info: {
 			version: "1.0.0",
-			title: "개발이 취미인 남자",
+			title: "Node Instagram",
 			description:
-			"Instagram 클론닝(프론트 빼고)"
+			"Instagram 클론닝"
 		},
 		server: [
 			{
@@ -16,7 +16,7 @@ const options = {
 			},
 		],
 	},
-	apis: ["./routers/*.js", "./routers/user/*.js"], //Swagger 파일 연동
+	apis: ["./routers/*.js", /* "./routers/user/*.js" */], //Swagger 파일 연동
 }
 
 const specs = swaggereJsdoc(options);

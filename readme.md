@@ -674,6 +674,8 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 	-> Socket.IO
 	블로그 정리 필요
 
+11. sns에서 Room DB를 생성할 때, 어떻게 해야 A와 B 각각에서 1개의  DB만을 생성하고 찾기가 쉬울까?
+
 FRONT
 	- modaling
 	

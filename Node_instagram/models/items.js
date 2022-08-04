@@ -208,6 +208,7 @@ const items = {
 		
 	},
 	
+	/*
 	Room: {
 		get: async (id) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Room WHERE id = ?`, id);
@@ -246,6 +247,7 @@ const items = {
 			}
 		}
 	},
+	*/
 	
 	PostHashtag: {
 		set: async (postId, hashtagId) => {

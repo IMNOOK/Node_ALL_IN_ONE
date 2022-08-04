@@ -16,10 +16,8 @@ const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
 const profileRouter = require('./routes/profile');
-const roomRouter = require('./routes/room');
 const passportConfig = require('./passport'); //passport 설정들 가져옴
 const { swaggerUi, specs } = require('./swagger/swagger');
-const webSocket = require('./socket');
 
 
 // server 코드 시작 및 각종 설정
@@ -62,7 +60,6 @@ app.use('/', pageRouter);
 app.use('/auth', authRouter);
 app.use('/post', postRouter);
 app.use('/profile', profileRouter);
-app.use('/room', roomRouter);
 
 //에러 처리 미들웨어
 app.use((req, res, next) => {
@@ -82,5 +79,3 @@ app.use((err, req, res, next) => {
 const server = app.listen(app.get('port'), ()=> {
 	console.log(`서버가 ${app.get('port')}에서 실행 중`);
 });
-
-webSocket(server, app, sessionMiddleware);

@@ -16,7 +16,7 @@ module.exports = () => {
 			const user = await items.User.getOne(userId);
 			user.Followings = await items.Follow.getFollowings(userId);
 			user.GoodPostIds = await items.Good.getAllByUserId(userId);
-			user.rooms = await items.Room.getByUserId(userId);
+			//user.rooms = await items.Room.getByUserId(userId);
 			done(null, user);
 		} catch (err){
 			console.error(err);
