@@ -273,12 +273,13 @@ body{
 }
 .contents .comment_container .comment{
     display:flex;
-    flex-direction: column;
     font-size: 14px;
 }
 
 .contents .comment_container .comment-detail{
     display: flex;
+	flex-direction: column;
+	margin-left: 3px;
 }
 
 .contents .comment_container .comment .nick_name{

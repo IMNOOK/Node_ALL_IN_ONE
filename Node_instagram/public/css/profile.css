@@ -18,11 +18,23 @@
     margin: 0 auto;
 }
 
+.comment_profile_img{
+    width: 32px;
+    height: 32px;
+    overflow:hidden;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
 .profile_img img{
     width: 100%;
     height: 100%;
 }
 
+.comment_profile_img img{
+    width: 100%;
+    height: 100%;
+}
 
 .detail{
     /*display: flex;*/

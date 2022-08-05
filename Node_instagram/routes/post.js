@@ -104,7 +104,7 @@ router.post('/:postId', isLoggedIn, async (req, res) => {
 		const message = encodeURIComponent('댓글이 빈칸입니다.');
 		return res.redirect(`/?error=${message}`);
 	}
-	const result = await items.Comment.set(comment, postId, req.user.id, req.user.nick, req.user.nick);
+	const result = await items.Comment.set(comment, postId, req.user.id, req.user.nick, req.user.img);
 	if(!result){
 		const message = encodeURIComponent('댓글 오류가 발생했습니다.');
 		return res.redirect(`/?error=${message}`);

@@ -162,40 +162,50 @@
 			ctx.drawImage(img,0,0,300,300);
 		};
 		img.src = document.querySelector('#img-url').value;
-		console.log(img.src);
-		console.log('hi');
 		
 		update.addEventListener('click', () => {
 			modal.style.display = "flex";
 
 			const handleImage = (e) => {
 				const file = e.target.files;
-				let reader = new FileReader();
-				reader.onload = function(event){
-				   var img = new Image();
-				   // var imgWidth =
-				   img.onload = function(){
-					   canvas.width = 300;
-					   canvas.height = 300;
-					   ctx.drawImage(img,0,0,300,300);
-				   };
-				   img.src = event.target.result;
-				   // img.width = img.width*0.5
-				   // canvas.height = img.height;
-				};
-				reader.readAsDataURL(file[0]);
+				
+				let pathpoint = file[0].name.lastIndexOf('.');
+				let filepoint = file[0].name.substring(pathpoint+1, file[0].name.length);
+				let filetype = filepoint.toLowerCase();
+				if(filetype == 'jpg' || filetype =='gif' || filetype == 'png' || filetype == 'jpeg'){
+					let reader = new FileReader();
+					reader.onload = function(event){
+					   var img = new Image();
+					   // var imgWidth =
+					   img.onload = function(){
+						   canvas.width = 300;
+						   canvas.height = 300;
+						   ctx.drawImage(img,0,0,300,300);
+					   };
+					   img.src = event.target.result;
+					   // img.width = img.width*0.5
+					   // canvas.height = img.height;
+					};
+					reader.readAsDataURL(file[0]);
 
-				const formData = new FormData();
-				formData.append('photo', file[0]); //여기서의 photo 이름은 multer의 single("이름")값과 같아야 한다.
-				axios.post('/profile/img', formData)
-				.then((res) => {
-					console.log(res.data.url);
-					document.querySelector('#img-url').value = res.data.url;
-				})
-				.catch((err) => {
-					console.error(err);
-				})
+					const formData = new FormData();
+					formData.append('photo', file[0]); //여기서의 photo 이름은 multer의 single("이름")값과 같아야 한다.
+					axios.post('/profile/img', formData)
+					.then((res) => {
+						console.log(res.data.url);
+						document.querySelector('#img-url').value = res.data.url;
+					})
+					.catch((err) => {
+						console.error(err);
+					})
+				} else {
+					alert('이미지 파일만 선택할 수 있습니다.');
+					fileInput.value = null;
+					return false;
+				}
+				
 			}
+			
 			fileInput.addEventListener('change', handleImage, false);
 		})
 		

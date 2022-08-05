@@ -184,15 +184,21 @@
 
 					{% for comment in twit.comments %}
                     <div class="comment_container">
-                        <div class="comment">
-                            <div class="comment-detail">
-                                <div class="nick_name m_text">{{comment.userNick}}</div>
-                                <div>{{comment.content}}</div>
-                            </div>
-                        </div>
-                        <div class="small_heart" OnClick="location.href ='/post/comment/delete/{{comment.id}}'">
-                            <div class="sprite_small_heart_icon_outline"></div>
-                        </div>
+						<div>
+							<div class="comment">
+								<div class="comment_profile_img">
+									<img src="{{comment.userImg}}" alt="프로필이미지" onerror="this.src='/img/1.png'">
+								</div>
+								<div class="comment-detail">
+									<div class="nick_name m_text">{{comment.userNick}}</div>
+									<div>{{comment.content}}</div>
+								</div>
+                        	</div>
+						</div>
+						<div class="small_heart" OnClick="location.href ='/post/comment/delete/{{comment.id}}'">
+							<div class="sprite_small_heart_icon_outline"></div>
+						</div>
+
                     </div>
 					{% endfor %}
                     <div class="timer">{{twit.date}}</div>
