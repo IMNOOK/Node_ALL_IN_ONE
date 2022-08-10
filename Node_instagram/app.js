@@ -50,10 +50,8 @@ app.use(sessionMiddleware);	//req.session 이라는 객체가 생성.
 app.use(passport.initialize());	//new LocalStrategy 생성자 생성
 app.use(passport.session());	//req.isAuthenticated,req.login 등의 객체 등록
 app.use(methodOverride('_method'));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs))// UI와 옵션을 Express Router 환경에 연결
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));// UI와 옵션을 Express Router 환경에 연결
 // url/api-docs 경로로 접속하면 기본 설정 보임 이후 API 문서화를 진행해야 함.
-
-
 
 //라우팅
 app.use('/', pageRouter);

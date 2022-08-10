@@ -460,7 +460,7 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 8. Promise.all map (post-hashtag)
 
 9. Swagger
- -> https://any-ting.tistory.com/105
+ -> 블로그 정리
 
 10. socket
 	-> webSocket
@@ -493,3 +493,6 @@ DB
 
 BACKEND
 
+	RESTful한 API를 생성하는 것이 매우매우 어려운 일이고 고민해야 하는 일이라는 것을 알게되었다.
+	요든 자원들의 요청 방식이 RESTful 해야 작업이 정상적으로 동작한다는 것을 느꼈다.
+	아직 미숙해서 라우팅과 여러 작업들이 미숙하다.
