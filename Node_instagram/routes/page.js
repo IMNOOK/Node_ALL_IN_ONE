@@ -8,13 +8,6 @@ const items = require('../models/items');
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
 
-/**
- * @swagger
- * tags:
- *   name: Main
- *   description: 게시판 조회
- */
-
 //유저계정 UI
 router.use(async (req, res, next) => {
 	res.locals.user = req.user;
@@ -24,51 +17,6 @@ router.use(async (req, res, next) => {
 });
 
 //게시글 & 해시태그
-
-/**
- * @swagger
- * /:
- *   patch:
- *    summary: "유저 수정"
- *    description: "Patch 방식을 통해 특정 유저 수정(단일 데이터를 수정할 때 사용함)"
- *    tags: [Main]
- *    parameters:
- *      - in: path
- *        name: user_id
- *        required: true
- *        description: 유저 아이디
- *        schema:
- *          type: string
- *    requestBody:
- *      description: 유저 수정
- *      required: true
- *      content:
- *        application/x-www-form-urlencoded:
- *          schema:
- *            type: object
- *            properties:
- *              name:
- *                type: string
- *                description: "유저 이름"
- *    responses:
- *      "200":
- *        description: 사용자가 서버로 전달하는 값에 따라 결과 값은 다릅니다. (유저 수정)
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                ok:
- *                  type: boolean
- *                data:
- *                  type: string
- *                  example:
- *                    [
- *                      { "id": 1, "name": "유저1" },
- *                      { "id": 2, "name": "유저2" },
- *                      { "id": 3, "name": "유저3" },
- *                    ]
- */
 
 router.get('/', async (req, res) => {
 	const page = req.query.page;
@@ -90,6 +38,7 @@ router.get('/', async (req, res) => {
 		console.error(err);
 	}
 });
+
 
 
 router.get('/search/:title', async (req, res) => {
