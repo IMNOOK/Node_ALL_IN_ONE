@@ -109,7 +109,7 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
 1 Atomic columns -> 컬럼의 값은 하나!
 2 No parital dependencies -> 표의 기본키 중에 중복키인 것이 없어야 한다!
 3 No transitive dependencies -> 이행적 종속성을 없애라!
-블로그에 정리해야 겠다.
+블로그에 정리
 
 7.31 수정 본
 
@@ -196,6 +196,8 @@ find slow query를 통해 교정을 합니다.
 
 교정한 내용
 
+블로그 정리 필요
+
 
 Models 파일에 items.js에 각각의 쿼리들 저장
 
@@ -205,13 +207,9 @@ Models 파일에 items.js에 각각의 쿼리들 저장
 사용한 패키지
 
 -   **Express**  　　　=> node.js의 웹 프레임워크
--   **eslint**　　　　=> node.js에서 팀 단위 협업시, 문법 검사를 해보자
--   **prettier**　　　=> node.js에서 팀 단위 협업시, 코딩 스타일을 통일해보자
--   **cors**　　=> node.js에서 cors 문제를 해결해보자
 -   **nodemon**　　=> node.js에서 파일 수정시 자동으로 서버를 내렸다가 올려보자
 -   **bcrypt**　　=> node.js에서 데이터베이스에 저장할 비밀번호를 암호화 해보자
 -   **multer**　　=> node.js에서 프론트 엔드에서 보내주는 이미지 데이터를 받아보자
--   **jwt**　　=> node.js에서 jwt 토큰을 이용한 로그인 기능을 구현해보자
 -   **method-override**　　=> node.js에서 form태그로 delete, put 사용을 해보자
 
 라우팅
@@ -400,7 +398,6 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 	게시물에는 좋아요와 해당 글쓴이를 팔로우 할 수 있는 버튼이 있다.
 	게시물에는 로그인된 유저 모두가 댓글을 달 수 있으며 이때 @기능으로 유저를 호출할 수 있다.
 	만약 글쓴이가 본인이라면 게시물을 삭제할 수 있는 버튼이 활성화 된다.
-	DM이 왔을 경우 DM창이 뜨며 클릭시 모달창이 올라와 DM을 주고 받을 수 있다.
 	
 로그인 페이지
 	로그인할 수 있으며 회원가입을 클릭하면 모달창이 올라와서 회원가입을 할 수 있다.
@@ -414,11 +411,9 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 4. 테스트
 
-
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 5. 배포
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 6. 막혔던 지점
-
 
 1. 포스터에 사진 올릴 때
 	파일 업로드때 사진만 올릴 수 있도록 설정하기
