@@ -7,10 +7,12 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
 	try{
 		
+	} catch(error){
+		
 	}
 });
 
 
-router.post('/domain', isLoggedIn, domain);
+router.post('/domain', isLoggedIn);
 	
 module.exports = router;

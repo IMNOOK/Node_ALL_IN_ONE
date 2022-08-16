@@ -5,6 +5,26 @@ NodeJs 교과서를 통해 배운 내용을 스스로 적용하여 시도하는 
 Node.js 교과서를 공부하며 배운 내용 정리본은 블로그에서 확일하실 수 있습니다. 
 https://blog.naver.com/leeminwok/222778419100
 
+이번 프로젝트의 목표는 NodeJs 교과서에서 배운 기본적인 내용들을 적확히 설명할 수 있도록 활용하는 것입니다. 
+
+1. 프로젝트 구조 갖추기
+2. 데이터베이스 세팅하기
+3. Passport 모듈로 로그인 구현하기
+4. multer 패키지로 이미지 업로드 구현하기
+5. 캐싱하기
+
+- 서버는 요청에 응답하는 것이 핵심이기에 요청을 수락하던 거절하던 반드시 응답해야 한다. (단 한번만)
+- 개발 시 서버를 매번 수동으로 재시작하지 않으려면 nodemon을 사용하자.
+- dotenv 패키지와 .env 파일로 유출되면 안되는 비밀 키를 관리하자.
+- 라우터는 routes 폴더에, 데이터베이스는 models 폴더에, html 파일은 views 폴더에 구분하여 저장하면 프로젝트를 관리하기 쉽다.
+- 데이터베이스를 구성하기 전에 데이터 간 1:1, 1:N, N:M 관계를 잘 파악하자.
+- routes/middlewares.js 처럼 라우터 내에 미들웨어를 사용할 수 있다.
+- Passport 인증 과정을 기억하자. 특히 serializeUser와 deserializeUser가 언제 호출되는지 파악하자.
+- 프런트엔드 form 태그의 인코딩 방식이 multipart일 때는 multer 같은 multipart 처리용 패키지를 사용하자.
+
+나아가기
+1. models 폴더에 데이터베이스를 넣을 때 나만의 sequlize를 만들어서 사용하자.
+
 
 # ![thinking](https://github.githubassets.com/images/icons/emoji/unicode/1f914.png) 0. 구상
 
@@ -207,10 +227,19 @@ Models 파일에 items.js에 각각의 쿼리들 저장
 사용한 패키지
 
 -   **Express**  　　　=> node.js의 웹 프레임워크
--   **nodemon**　　=> node.js에서 파일 수정시 자동으로 서버를 내렸다가 올려보자
--   **bcrypt**　　=> node.js에서 데이터베이스에 저장할 비밀번호를 암호화 해보자
--   **multer**　　=> node.js에서 프론트 엔드에서 보내주는 이미지 데이터를 받아보자
--   **method-override**　　=> node.js에서 form태그로 delete, put 사용을 해보자
+-   **nodemon**　　=> node.js에서 파일 수정시 자동으로 서버를 내렸다가 올려주는 개발도구
+-   **bcrypt**　　=> node.js에서 데이터베이스에 저장할 비밀번호를 암호화 모듈
+-   **morgan**　　=> node.js에서 요청과 응답에 대한 정보를 콘솔에 자동 출력 모듈
+-   **multer**　　=> node.js에서 프론트 엔드에서 보내주는 이미지 데이터를 받는 모듈
+-   **method-override**　　=> node.js에서 form태그로 delete, put 사용을 가능하게 하는 모듈
+-   **static**　　=> node.js에서 정적인 파일들을 제공하는 라우터역할을 하는 모듈
+-   **body-parser**　　=> node.js에서 요청의 본문에 있는 데이터를 해석하여 req.body 객체로 만들어주는 모듈. 주로 form 데이터나 AJAX 요청의 데이터를 처리한다. 단 multipart 데이터는 처리못해서 multer 사용함. 
+-   **cookie-parser**　　=> node.js에서 동봉된 쿠키를 해석해 req.cookies 객체를 만드는 모듈
+-   **express-session**　　=> node.js에서 세션관리용 모듈, 세션은 사용자별로 req.session 객체 안에 유지됨.
+-   **passport**　　=> node.js에서 
+-   **passport-local**　　=> node.js에서 
+-   **mysql2**　　=> node.js에서 
+-   **nunjucks**　　=> node.js에서 
 
 라우팅
 - 웹 페이지와 DB를 연결하기 위한 REST API를 설계해 보았습니다.
