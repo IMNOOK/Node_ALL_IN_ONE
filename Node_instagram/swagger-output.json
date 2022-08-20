@@ -10,49 +10,79 @@
   "schemes": [
     "https"
   ],
+  "tags": [
+	  {
+        "name": "user",
+		"description": "About the user info"
+	  }, {
+        "name": "post",
+		"description": "About the posting and post interaction"
+	  }, {
+        "name": "page",
+		"description": "Get the page"
+	  }
+	],
   "paths": {
     "/join": {
       "get": {
-        "description": "",
+		"tags": [
+			"page"
+		],
+		"summary": "Bring posters with the same hashtag by date",
+        "description": "Bring the join page",
         "parameters": [],
         "responses": {}
       }
     },
     "/login": {
       "get": {
-        "description": "",
+		"tags": [
+			"page"
+		],
+		"summary": "Bring posters with the same hashtag by date",
+        "description": "Bring the login page",
         "parameters": [],
         "responses": {}
       }
     },
     "/logout": {
       "get": {
+		"tags": [
+			"user"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [],
         "responses": {}
       }
     },
     "/": {
-      "post": {
-        "description": "",
+      "get": {
+		"tags": [
+			"page"
+		],
+		"summary": "Bring posters with the same hashtag by date",
+        "description": "Bring the all poster by date",
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
+            "name": "page",
+            "in": "query",
             "schema": {
-              "type": "object",
-              "properties": {
-                "content": {
-                  "example": "any"
-                },
-                "url": {
-                  "example": "any"
-                }
-              }
+              "type": "integer"
             }
           }
         ],
         "responses": {
+		  "200": {
+			"description": "successful",
+		    "content": {
+		      "application/json": {
+				"shema": {
+				
+				}
+			  }
+			}
+		  },
           "403": {
             "description": "Forbidden"
           }
@@ -61,7 +91,11 @@
     },
     "/search/{title}": {
       "get": {
-        "description": "",
+		"tags": [
+			"page"
+		],
+		"summary": "Bring posters with the same hashtag by date",
+        "description": "Bring posters with the same hashtag by date",
         "parameters": [
           {
             "name": "title",
@@ -75,6 +109,10 @@
     },
     "/follow/{userId}": {
       "get": {
+		"tags": [
+			"user"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [
           {
@@ -93,6 +131,10 @@
     },
     "/follow/delete/{userId}": {
       "get": {
+		"tags": [
+			"user"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [
           {
@@ -111,6 +153,10 @@
     },
     "/profile": {
       "get": {
+		"tags": [
+			"page"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [],
         "responses": {
@@ -122,6 +168,10 @@
     },
     "/follow": {
       "get": {
+		"tags": [
+			"page"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [],
         "responses": {
@@ -133,6 +183,10 @@
     },
     "/post": {
       "get": {
+		"tags": [
+			"page"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [],
         "responses": {
@@ -144,6 +198,10 @@
     },
     "/{postId}": {
       "get": {
+		"tags": [
+			"post"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [
           {
@@ -156,6 +214,10 @@
         "responses": {}
       },
       "delete": {
+		"tags": [
+			"post"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [
           {
@@ -172,6 +234,10 @@
         }
       },
       "post": {
+		"tags": [
+			"post"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [
           {
@@ -202,6 +268,10 @@
     },
     "/img": {
       "post": {
+		"tags": [
+			"post"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [],
         "responses": {
@@ -216,6 +286,10 @@
     },
     "/comment/delete/{commentId}": {
       "get": {
+		"tags": [
+			"post"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [
           {
@@ -234,6 +308,10 @@
     },
     "/good/{postId}": {
       "get": {
+		"tags": [
+			"post"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [
           {
@@ -252,6 +330,10 @@
     },
     "/good/delete/{postId}": {
       "get": {
+		"tags": [
+			"post"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [
           {
@@ -270,6 +352,10 @@
     },
     "/{userId}": {
       "get": {
+		"tags": [
+			"user"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [
           {
@@ -286,6 +372,10 @@
         }
       },
       "post": {
+		"tags": [
+			"user"
+		],
+		"summary": "Bring posters with the same hashtag by date",
         "description": "",
         "parameters": [
           {
@@ -313,6 +403,20 @@
         "responses": {
           "403": {
             "description": "Forbidden"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas" : {
+	  "User": {
+	    "type": "object",
+	    "properties": {
+	      "id": {
+	        "type": "integer",
+	        "format": "int64",
+	        "example": "2"
           }
         }
       }
