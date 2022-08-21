@@ -12,12 +12,11 @@ module.exports = () => {
 		passwordField: 'password',
 	}, async (email, password, done) => {
 		try{
-			const rows = await items.User.check(email);
-			console.log(rows);
-			if(rows.length != 0) {
-				const result = await bcrypt.compare(password, rows.password);
+			const exUser = await items.User.check(email);
+			if(exUser) {
+				const result = await bcrypt.compare(password, exUser.password);
 				if(result) {
-					done(null, rows);
+					done(null, exUser);
 				} else {
 					done(null, false, { message: '비밀번호가 일치하지 않습니다.'});
 				}

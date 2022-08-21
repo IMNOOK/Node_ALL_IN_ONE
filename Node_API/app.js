@@ -30,7 +30,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
 	resave: false,
-	saveUninitalized: false,
+	saveUninitialized: false,
 	secret: process.env.COOKIE_SECRET,
 	cookie: {
 		httpOnly: true,
@@ -40,8 +40,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+/*
 app.use('/v1', v1);
 app.use('/v2', v2);
+*/
 app.use('/auth', authRouter);
 app.use('/', indexRouter);
 

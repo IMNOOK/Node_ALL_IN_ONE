@@ -1,6 +1,7 @@
 //다른 사람들이 만든 모듈
 const express = require('express');
-const passport = require('passport')
+const passport = require('passport');
+
 
 // 내가 만든 모듈 or 미리 설정한 값 가져옴 
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
