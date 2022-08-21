@@ -21,9 +21,9 @@ const items = {
 	},
 	
 	Domain: {
-		set: async (userId, host, type, clientSecret) => {
+		set: async (userId, userNick, host, type, clientSecret) => {
 			try{
-				let result = await con.query(`INSERT INTO Domain(userId, host, type, clientSecret) VALUES (?,?,?,?)`, [userId, host, type, clientSecret]);
+				let result = await con.query(`INSERT INTO Domain(userId, userNick, host, type, clientSecret) VALUES (?,?,?,?,?)`, [userId, userNick, host, type, clientSecret]);
 				return result[0].insertId;
 			} catch(err) {
 				console.error(err);
@@ -31,14 +31,20 @@ const items = {
 			}
 		},
 		
-		get: async (userId) => {
+		getAll: async (userId) => {
 			try{
 				const [rows, fields] = await con.query(`SELECT * FROM Domain WHERE Domain.userId = ?`, userId);
 				return rows; 
 			} catch(err) {
 				console.error(err);
 			}
+		},
+		
+		getByClientSecret: async (secret) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Domain WHERE Domain.clientSecret = ?`, secret);
+			return rows[0];
 		}
+		
 	},
 }
 

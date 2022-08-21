@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
 	try{
-		let domains = req.user ? await items.Domain.get(req.user.id) : null;
+		let domains = req.user ? await items.Domain.getAll(req.user.id) : null;
 		res.render('login', {
 			user: req.user,
 			domains: domains,
@@ -21,7 +21,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/domain', isLoggedIn, async (req, res, next) => {
 	try{
-		const result = await items.Domain.set(req.user.id, req.body.host, req.body.type, uuidv4());
+		const result = await items.Domain.set(req.user.id, req.user.nick, req.body.host, req.body.type, uuidv4());
 		res.redirect('/');
 	} catch (error) {
 		console.error(error);
