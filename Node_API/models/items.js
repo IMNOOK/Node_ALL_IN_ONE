@@ -46,6 +46,13 @@ const items = {
 		}
 		
 	},
+	
+	Follow: {
+		getFollowings: async (userId) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followingId = ?`, userId);
+			return rows;
+		},
+	},
 }
 
 module.exports = items;

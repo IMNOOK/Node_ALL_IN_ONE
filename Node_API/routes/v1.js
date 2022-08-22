@@ -40,4 +40,21 @@ router.get('/test', verifyToken, (req, res) => {
 	res.json(req.decoded);
 });
 
+router.get('/follow', verifyToken, async (req, res) => {
+	try{
+		const users = await items.Follow.getFollowings(req.decoded.id);
+		console.log(users);
+		res.json({
+			code: 200,
+			payload: users,
+		})
+	} catch(err) {
+		console.error(err);
+		return res.status(500).json({
+			code: 500,
+			message: '서버 에러',
+		});
+	};
+})
+
 module.exports = router;
