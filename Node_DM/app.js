@@ -3,9 +3,11 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const nunjucks = require('nunjucks');
+const path = require('path');
 const dotenv = require('dotenv');
 
 dotenv.config();
+const webSocket = require('./socket');
 const indexRouter = require('./routes');
 
 const app = express();
@@ -17,6 +19,10 @@ nunjucks.configure('views', {
 });
 
 app.use(morgan('dev'));
+app.use(express.static(path.join(__dirname, '../Node_instagram/public')));
+app.use('/img', express.static(path.join(__dirname, '../Node_instagram/uploads')));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false}));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
 	resave: false,
@@ -43,6 +49,8 @@ app.use((err, req, res, next) => {
 	res.render('error');
 });
 
-app.listen(app.get('port'), () => {
+const server = app.listen(app.get('port'), () => {
 	console.log(app.get('port'), '번 포트에서 대기 중');
 });
+
+webSocket(server);

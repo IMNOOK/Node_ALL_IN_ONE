@@ -1,14 +1,68 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>{{title}}</title>
-		<link rel="stylesheet" href="/main.css">
-	</head>
-	<body>
-		{% block content %}
-		{% endblock %}
-		{% block script %}
-		{% endblock %}
-	</body>
+  <head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel="stylesheet" href="/css/reset.css">
+	<link rel="stylesheet" href="/css/common.css">
+	<link rel="stylesheet" href="/css/style.css">
+	{% block head %}
+    {% endblock %}
+	  
+  </head>
+  <body>
+	<section id="container">
+		
+		<header id="header">
+			<section class="inner">
+
+				<h1 class="logo">
+					<a href="/">
+						<div class="sprite_insta_icon"></div>
+						<div class="sprite_write_logo"></div>
+					</a>
+				</h1>
+
+				<div class="search_box" id="input">
+					<input type="text" placeholder="검색" id="search-field">
+
+					<div class="fake_field">
+						<span class="sprite_small_search_icon"></span>
+						<span>검색</span>
+					</div>
+				</div>
+
+				<div class="right_icons">
+				</div>
+
+			</section>
+		</header>
+
+    	{% block content %}
+    	{% endblock %}
+		
+	</section> 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+		
+	window.onload = () => {
+		let title;
+		
+		document.getElementById('search-field').addEventListener('keyup', (e)=>{
+			if (e.keyCode === 13) { //Enter 입력시 이벤트
+			axios({
+			  method: 'get',
+			  url: '/search/' + title
+			});
+		  }else {
+			title = document.getElementById('search-field').value;
+			console.log(title);
+		  }
+		});
+      };
+    </script>
+	{% block script %}
+    {% endblock %}
+  </body>
 </html>

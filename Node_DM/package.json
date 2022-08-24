@@ -16,6 +16,8 @@
     "express-session": "^1.17.3",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.19",
-    "nunjucks": "^3.2.3"
+    "nunjucks": "^3.2.3",
+    "socket.io": "^2.5.0",
+    "ws": "^8.8.1"
   }
 }

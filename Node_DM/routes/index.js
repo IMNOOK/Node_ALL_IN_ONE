@@ -4,6 +4,7 @@ const axios = require('axios');
 const router = express.Router();
 const URL = 'https://node-all-in-one-api.run.goorm.io/v1';
 axios.defaults.headers.origin = 'https://node-all-in-one-dm.run.goorm.io';
+
 const request = async (req, api) => {
 	try{
 		if (!req.session.jwt) {
@@ -23,6 +24,10 @@ const request = async (req, api) => {
 		return err.response;
 	}
 }
+
+router.get('/', (req, res) => {
+	return res.render('main');
+})
 
 router.get('/test', async (req, res) => {
 	try{
