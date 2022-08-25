@@ -9,6 +9,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const webSocket = require('./socket');
 const indexRouter = require('./routes');
+const connect = require('./schemas');
 
 const app = express();
 app.set('port', process.env.PORT || 4000);
@@ -17,6 +18,7 @@ nunjucks.configure('views', {
 	express: app,
 	watch: true,
 });
+connect();
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, '../Node_instagram/public')));

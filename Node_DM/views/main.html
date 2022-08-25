@@ -6,41 +6,52 @@
 {% endblock %}
 
 {% block content %}
+<section id="main_container">
+	<div class="inner">
 
-    <section id="main_container">
-        <div class="inner">
-            <div class="side_box">
-                <div class="user_profile">
-                    <div class="profile_thumb">
-                        <img src="{{user.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
-                    </div>
-                    <div class="detail">
-                        <div class="id m_text">{{user.nick}}</div>
-                        <div class="ko_name">{{user.email}}</div>
-                    </div>
-                </div>
+		<div class="contents_box">
+			<input type="hidden" value="{{twit.userId}}" class="twit-user-id">
+			<input type="hidden" value="{{twit.id}}" class="twit-id">
+			<article class="contents" style="max-width: 999px;">
+				<div class="side_box" style="position: static; width: auto">
+					<div class="user_profile" style="padding: 5px 10px">
+						<div class="profile_thumb">
+							<img src="{{user.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
+						</div>
+						<div class="detail">
+							<div class="id m_text">{{user.nick}}</div>
+							<div class="ko_name">{{user.email}}</div>
+						</div>
+					</div>
 
-                <article class="story">
-                    <header class="story_header">
-                        <div>DM</div>
-                        <div class="more">모두 보기</div>
-                    </header>
-
-                    <div class="scroll_inner">
-                        <div class="thumb_user">
-                            <div class="profile_thumb">
-                                <img src="imgs/thumb02.jpg" alt="프로필사진" onerror="this.src='/img/1.png'">
-                            </div>
-                            <div class="detail">
-                                <div class="id">kind_tigerrrr</div>
-                                <div class="time">1시간 전</div>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
+					<article class="story" style="width: 100%; margin: 0px; border: 0px">
+						<div class="scroll_inner">
+							
+							<div class="thumb_user" style="display:flex; justify-content: space-between; border: solid #dbdbdb; border-width: 1px 0px 1px 0px;">
+								<div style="display: flex; flex-grow: 0">
+									<div class="profile_thumb">
+										<img src="imgs/thumb02.jpg" alt="프로필사진" onerror="this.src='/img/1.png'">
+									</div>
+									<div class="detail">
+										<div class="id">kind_tigerrrr</div>
+										<div class="time">1시간 전</div>
+									</div>
+								</div>
+								
+								<div class="lastWords" style="flex-grow: 1; display: flex; justify-content: center">
+									<div class="words" style="    font-size: 13px; letter-spacing: 0.3px; color: #999;">
+										야 뭐하냥
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</article>
+				</div>
+			</article>
+		</div>
+	</div>
+</section>
 {% endblock %}
 
 {% block script %}
