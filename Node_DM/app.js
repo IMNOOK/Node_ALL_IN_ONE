@@ -20,13 +20,7 @@ nunjucks.configure('views', {
 });
 connect();
 
-app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, '../Node_instagram/public')));
-app.use('/img', express.static(path.join(__dirname, '../Node_instagram/uploads')));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false}));
-app.use(cookieParser(process.env.COOKIE_SECRET));
-app.use(session({
+const sessionMiddleware = session({
 	resave: false,
 	saveUninitialized: false,
 	secret: process.env.COOKIE_SECRET,
@@ -34,7 +28,15 @@ app.use(session({
 		httpOnly: true,
 		secure: false,
 	},
-}));
+});
+
+app.use(morgan('dev'));
+app.use(express.static(path.join(__dirname, '../Node_instagram/public')));
+app.use('/img', express.static(path.join(__dirname, '../Node_instagram/uploads')));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false}));
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(sessionMiddleware);
 
 app.use('/', indexRouter);
 
@@ -55,4 +57,4 @@ const server = app.listen(app.get('port'), () => {
 	console.log(app.get('port'), '번 포트에서 대기 중');
 });
 
-webSocket(server);
+webSocket(server, app, sessionMiddleware);
