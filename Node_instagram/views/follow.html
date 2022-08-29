@@ -1,5 +1,10 @@
 {% extends 'layout.html' %}
 
+{% block head %}
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/login.css">
+{% endblock %}
+
 {% block content %}
 
     <div id="main_container">
@@ -7,15 +12,14 @@
         <section class="b_inner">
 
             <div class="contents_box">
-
-			{% for twit in twits %}
+				{% for twit in twits %}
 				<input type="hidden" value="{{twit.userId}}" class="twit-user-id">
 				<input type="hidden" value="{{twit.id}}" class="twit-id">
                 <article class="contents">
                     <header class="top">
                         <div class="user_container">
                             <div class="profile_img">
-                                <img src="{{twit.userImg}}" alt="프로필이미지">
+                                <img src="{{twit.userImg}}" alt="프로필이미지" onerror="this.src='/img/1.png'">
                             </div>
                             <div class="user_name">
                                 <div class="nick_name m_text">{{twit.userNick}}</div>
@@ -87,15 +91,21 @@
 
 					{% for comment in twit.comments %}
                     <div class="comment_container">
-                        <div class="comment">
-                            <div class="comment-detail">
-                                <div class="nick_name m_text">{{comment.userNick}}</div>
-                                <div>{{comment.content}}</div>
-                            </div>
-                        </div>
-                        <div class="small_heart" OnClick="location.href ='/post/comment/delete/{{comment.id}}'">
-                            <div class="sprite_small_heart_icon_outline"></div>
-                        </div>
+						<div>
+							<div class="comment">
+								<div class="comment_profile_img">
+									<img src="{{comment.userImg}}" alt="프로필이미지" onerror="this.src='/img/1.png'">
+								</div>
+								<div class="comment-detail">
+									<div class="nick_name m_text">{{comment.userNick}}</div>
+									<div>{{comment.content}}</div>
+								</div>
+                        	</div>
+						</div>
+						<div class="small_heart" OnClick="location.href ='/post/comment/delete/{{comment.id}}'">
+							<div class="sprite_small_heart_icon_outline"></div>
+						</div>
+
                     </div>
 					{% endfor %}
                     <div class="timer">{{twit.date}}</div>
@@ -106,7 +116,6 @@
                     </form>
 				</article>
         	{% endfor %}
-
             </div>
 
         </section>

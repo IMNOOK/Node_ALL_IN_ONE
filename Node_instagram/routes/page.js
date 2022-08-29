@@ -98,7 +98,16 @@ router.get('/follow', isLoggedIn, async (req, res) => {
 		const post = await items.Post.getByUserId(follow.followerId);
 		posts.push.apply(posts, post);
 		})
-	).then(() => {
+	).then( async () => {
+		
+		for(let i = 0; i < posts.length; i++){
+			//각 글마다 좋아요 갯수 세기
+			posts[i].goodNum = await items.Good.getLengthByPostId(posts[i].id);
+			
+			//각 글마다 마지막 댓글 가져오기
+			posts[i].comments = await items.Comment.getAllByPostId(posts[i].id);
+		}
+		
 		posts.sort((a,b) => {
 			return b.id - a.id;
 		})

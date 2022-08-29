@@ -12,7 +12,7 @@ const indexRouter = require('./routes');
 const connect = require('./schemas');
 
 const app = express();
-app.set('port', process.env.PORT || 4000);
+app.set('port', process.env.PORTS || 4001);
 app.set('view engine', 'html');
 nunjucks.configure('views', {
 	express: app,

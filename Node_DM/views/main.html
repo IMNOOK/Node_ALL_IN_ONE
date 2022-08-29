@@ -14,7 +14,7 @@
 			<input type="hidden" value="{{twit.id}}" class="twit-id">
 			<article class="contents" style="max-width: 999px;">
 				<div class="side_box" style="position: static; width: auto">
-					<div class="user_profile" style="padding: 5px 10px">
+					<div class="user_profile" style="padding: 5px 10px; border: solid #dbdbdb; border-width: 0px 0px 1px 0px;">
 						<div class="profile_thumb">
 							<img src="{{user.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
 						</div>
@@ -26,8 +26,26 @@
 
 					<article class="story" style="width: 100%; margin: 0px; border: 0px">
 						<div class="scroll_inner">
-							
+							{%for room in rooms %}
 							<div class="thumb_user" style="display:flex; justify-content: space-between; border: solid #dbdbdb; border-width: 1px 0px 1px 0px;">
+								<div style="display: flex; flex-grow: 0">
+									<div class="profile_thumb">
+										<img src="{{room.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
+									</div>
+									<div class="detail">
+										<div class="id">{{room.nick}}</div>
+										<div class="time">{{room.LastAt}} 전</div>
+									</div>
+								</div>
+								
+								<div class="lastWords" style="flex-grow: 1; display: flex; justify-content: center">
+									<div class="words" style="    font-size: 13px; letter-spacing: 0.3px; color: #999;">
+										{{room.title}}
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+							<div class="thumb_user" id="3"style="display:flex; justify-content: space-between; border: solid #dbdbdb; border-width: 0px 0px 1px 0px;">
 								<div style="display: flex; flex-grow: 0">
 									<div class="profile_thumb">
 										<img src="imgs/thumb02.jpg" alt="프로필사진" onerror="this.src='/img/1.png'">
@@ -44,7 +62,6 @@
 									</div>
 								</div>
 							</div>
-							
 						</div>
 					</article>
 				</div>
@@ -55,4 +72,42 @@
 {% endblock %}
 
 {% block script %}
+<script src="/socket.io/socket.io.js"></script>
+<script>
+	const socket = io.connect('http://localhost:8005/room', {
+		path: '/socket.io',
+	});
+	
+	socket.on('newRoom', function (data){
+		let inner = document.querySelector('.scroll_inner');
+		let div = document.createElement('div');
+		div.className = "thumb_user";
+		div.id = data.id;
+		div.style.cssText = style="display:flex; justify-content: space-between; border: solid #dbdbdb; border-width: 0px 0px 1px 0px;";
+		div.innerHTML = `<div style="display: flex; flex-grow: 0">
+	<div class="profile_thumb">
+		<img src="${data.img}" alt="프로필사진" onerror="this.src='/img/1.png'">
+	</div>
+	<div class="detail">
+		<div class="id">${data.nick}</div>
+		<div class="time">${room.LastAt} 전</div>
+	</div>
+</div>
+
+<div class="lastWords" style="flex-grow: 1; display: flex; justify-content: center">
+	<div class="words" style="    font-size: 13px; letter-spacing: 0.3px; color: #999;">
+		${room.title}
+	</div>
+</div>`;
+		inner.append(div);
+	})
+	
+	function addBtnEvent(e) {
+		location.href = '/room/' + e.target.id;
+	}
+	
+	document.querySelectorAll('.thumb_user').forEach(function (btn) {
+		btn.addEventListener('click', addBtnEvent);
+	})
+</script>
 {% endblock %}
