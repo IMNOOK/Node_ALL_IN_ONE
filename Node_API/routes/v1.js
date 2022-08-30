@@ -43,17 +43,14 @@ router.get('/test', verifyToken, (req, res) => {
 
 router.get('/login', verifyToken, async (req, res) => {
 	try{
-		console.log("일단 여기까진 도착");
+		console.log(req.body);
 		const { email, password } = req.body;
-		console.log(req.body.email);
-		console.log(req.email);
 		console.log(email);
 		const exUser = await items.User.check(email);
 		if(exUser) {
 			const result = await bcrypt.compare(password, exUser.password);
 			if(result) {
 				//로그인 완료
-				done(null, exUser);
 				return res.json({
 					code: 200,
 					message: '로그인이 완료되었습니다',
@@ -84,7 +81,8 @@ router.get('/login', verifyToken, async (req, res) => {
 
 router.get('/follow', verifyToken, async (req, res) => {
 	try{
-		const users = await items.Follow.getFollowings(req.decoded.id);
+		const { userId } = req.body;
+		const users = await items.Follow.getFollowings(userId);
 		console.log(users);
 		res.json({
 			code: 200,

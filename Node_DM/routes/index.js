@@ -6,6 +6,10 @@ const URL = 'https://node-all-in-one-api.run.goorm.io/v1';
 axios.defaults.headers.origin = 'https://node-all-in-one-dm.run.goorm.io';
 
 router.get('/', (req, res) => {
+	return res.render('main');
+})
+
+router.get('/login', (req, res) => {
 	return res.render('login');
 })
 
@@ -26,14 +30,17 @@ const request = async (req, api, data) => {
 		if(data.id == 1){
 			console.log(data.email, data.password);
 			return await axios.get(`${URL}${api}`, {
-				email: data.email,
-				password: data.password,
+				data: {
+					email: data.email,
+					password: data.password,	
+				},
 				headers: { authorization: req.session.jwt },
 			});
 		}
-		console.log('id == 2');
 		return await axios.get(`${URL}${api}`, {
-			userId: data.userId,
+			data: {
+				userId: data.userId	
+			},
 			headers: { authorization: req.session.jwt },
 		});
 	} catch(err) {
@@ -57,6 +64,9 @@ router.get('/test', async (req, res) => {
 
 router.get('/follow', async (req, res) => {
 	try{
+		if(!req.session.is_logined){
+			return res.redirect('/');
+		}
 		const data = {id: 2, userId: req.user.id};
 		const result = await request(req, '/follow', data);
 		console.log(result.data);
@@ -70,10 +80,20 @@ router.get('/follow', async (req, res) => {
 router.post('/login', async (req, res) => {
 	try{
 		const { email, password } = req.body;
-		const data = {id: 1, email, password};
+		let data = {id: 1, email, password};
 		const result = await request(req, '/login', data);
-		console.log(result.data);
-		return res.render('main');
+		console.log(result);
+		if(!result.data.user){
+			return res.redirect('/');
+		}
+		req.session.user = result.data.user;
+		req.session.is_logined = true;
+		
+		data = {id: 2, userId: result.data.user.id};
+		const result1 = await request(req, '/follow', data);
+		console.log(result1.data);
+		
+		return res.render('main', { user: result.data.user, });
 	} catch(err) {
 		console.error(err);
 		next(err);

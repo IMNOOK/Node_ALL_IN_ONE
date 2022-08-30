@@ -11,6 +11,7 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
 
 router.post('/login', isNotLoggedIn, async (req, res, next) => {
+	console.log('로그인 시작');
 	passport.authenticate('local', (authError, user, info) => {
 		if (authError) {
 			console.error(authError);

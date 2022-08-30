@@ -676,6 +676,9 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 
 11. sns에서 Room DB를 생성할 때, 어떻게 해야 A와 B 각각에서 1개의  DB만을 생성하고 찾기가 쉬울까?
 
+12. socket으로 html을 추가할때에는 createElement div로 하나 만들고 div.innerHTML =``으로 코드 박아버리기!
+
+13. axios.post 에서 data 보내서 그쪽에서 req.body로 받을려면 data{} 객체 안에 담아야 한다.
 FRONT
 	- modaling
 	

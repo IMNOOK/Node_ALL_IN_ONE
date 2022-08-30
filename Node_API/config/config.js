@@ -8,7 +8,7 @@ const config = {
 		user: 'IMNOOK',
 		password: 'dhksthxpa12',
 		database: 'nodeInstagram',
-		port: '53649',
+		port: '51358',
 	},
 	test:{
 		host: '',

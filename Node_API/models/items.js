@@ -1,15 +1,18 @@
 const con = require('./con');
 
 const items = {
-	ok: 3,
 	User:{
 		
 		check: async (email) => {
-			const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.email = ?`, email);
-			if (rows.length != 0) {
-				return rows[0];
-			} else {
-				return 0;
+			try{
+				const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.email = ?`, email);
+				if (rows.length != 0) {
+					return rows[0];
+				}
+				return 0;	
+			} catch (err) {
+				console.log(err);
+				return
 			}
 		},
 		
@@ -17,7 +20,27 @@ const items = {
 			const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.id = ?`, userId);
 			return rows[0]; 
 		},
-
+		
+		set: async (email, nick, password, img) => {
+			try{
+				let result = await con.query(`INSERT INTO User(email, nick, password, img) VALUES (?,?,?, ?)`, [email, nick, password, img]);
+				return result[0].insertId;
+			} catch (err) {
+				console.error(err);
+				return 0;
+			}
+			return 1;
+		},
+		
+		update: async (nick, img, userId) => {
+			try{
+				await con.query(`UPDATE User SET nick = ?, img =? WHERE id = ?`, [nick, img, userId]);
+			} catch (err) {
+				console.error(err);
+				return 0;
+			}
+			return 1;
+		},
 	},
 	
 	Domain: {
