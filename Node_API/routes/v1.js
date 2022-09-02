@@ -97,4 +97,23 @@ router.get('/follow', verifyToken, async (req, res) => {
 	};
 })
 
+router.get('/user/:id', verifyToken, async (req, res) => {
+	try{
+		const userId = req.params.id;
+		console.log(userId);
+		const userData = await items.User.getOne(userId);
+		console.log(userData);
+		res.json({
+			code: 200,
+			payload: userData,
+		})
+	} catch (err) {
+		console.error(err);
+		return res.statu(500).json({
+			code: 500,
+			message: '서버 에러',
+		})
+	}
+});
+
 module.exports = router;

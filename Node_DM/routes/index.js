@@ -24,29 +24,12 @@ const request = async (req, api, data) => {
 			});
 			req.session.jwt = tokenResult.data.token;
 		}
-		if(!data.id){
-			console.log('id == undefined');
-			return await axios.get(`${URL}${api}`, {
-				headers: { authorization: req.session.jwt },
-			});
-		}
-		if(data.id == 1){
-			console.log(data.email, data.password);
-			return await axios.get(`${URL}${api}`, {
-				data: {
-					email: data.email,
-					password: data.password,	
-				},
-				headers: { authorization: req.session.jwt },
-			});
-		}
 		return await axios.get(`${URL}${api}`, {
-			data: {
-				userId: data.userId	
-			},
+			data,
 			headers: { authorization: req.session.jwt },
 		});
 	} catch(err) {
+		console.log(err.response);
 		if( err.response.status === 419) {
 			delete req.session.jwt;
 			return request(req, api);
@@ -70,7 +53,7 @@ router.get('/follow', async (req, res) => {
 		if(!req.session.is_logined){
 			return res.redirect('/');
 		}
-		const data = {id: 2, userId: req.user.id};
+		const data = {userId: req.user.id};
 		const result = await request(req, '/follow', data);
 		console.log(result.data);
 		return res.json(result.data);
@@ -84,7 +67,7 @@ router.post('/login', async (req, res) => {
 	try{
 		// 로그인 
 		const { email, password } = req.body;
-		let data = {id: 1, email, password};
+		let data = {email, password};
 		const result = await request(req, '/login', data);
 		if(!result.data.user){
 			return res.redirect('/');
@@ -98,19 +81,6 @@ router.post('/login', async (req, res) => {
 		
 		//로그인 완료 이후 Room 가져오기
 		
-		const test = await Room.create({
-			aId: 0,
-			bId: 999,
-			title: 'sex',
-		});
-		
-		console.log(test);
-		
-		const testResult = await Room.find({
-			aId: 0,
-		});
-		console.log(testResult);
-		
 		let aId = []; //상대가 더 빨리 만든 아이디
 		let bId = []; //상대가 더 늦게 만든 아이디
 		result1.data.payload.forEach((obj) => {
@@ -120,10 +90,8 @@ router.post('/login', async (req, res) => {
 				aId.push(obj.followerId);
 			}
 		});
-		console.log(aId);
-		console.log(bId);
 		
-		let Room = [];
+		let Rooms = [];
 		const aIdRooms = await Room.find({ //상대가 더 빨리 만든 아이디의 방
 			bId: userId
 		});
@@ -132,10 +100,8 @@ router.post('/login', async (req, res) => {
 			aId: userId
 		});
 		
-		Room.push.apply(aIdRooms);
-		Room.push.apply(bIdRooms);
-		
-		Promise.all( aId.map(async (id) => {
+		//상대가 더 빨리 만든 아이디인데, 방이 없어서 생성
+		await Promise.all( aId.map(async (id) => {
 			let aIdCheck = (room) => {
 				if(room.aId === id){
 					return true;
@@ -150,11 +116,12 @@ router.post('/login', async (req, res) => {
 					title: 'DM을 시작해보세요!',
 				});
 				console.log(newRoom, '방을 생성했습니다.');
-				Room.push(newRoom);
+				aIdRooms.push(newRoom);
 			}
 		}))
 		
-		Promise.all( bId.map(async (id) => {
+		//상대가 더 늦게 만든 아이디인데, 방이 없어서 생성
+		await Promise.all( bId.map(async (id) => {
 			let bIdCheck = (room) => {
 				if(room.bId === id){
 					return true;
@@ -169,12 +136,33 @@ router.post('/login', async (req, res) => {
 					title: 'DM을 시작해보세요!',
 				});
 				console.log(newRoom, '방을 생성했습니다.');
-				Room.push(newRoom);
+				bIdRooms.push(newRoom);
 			}
 		}))
 		
-		console.log(Room);
-		return res.render('main', { user: result.data.user, rooms: Room });
+		let params;
+		let userData;
+		let tmp;
+		await Promise.all(aIdRooms.map( async (v, i) => {
+			params = {userId: v.aId};
+			userData = await request(req, `/user/${v.aId}`, params);
+			tmp = aIdRooms[i];
+			tmp.user = userData.data.payload;
+			console.log(tmp);
+			Rooms.push(tmp);
+			
+		}));
+		
+		await Promise.all(bIdRooms.map( async (v, i) => {
+			params = {userId: v.bId};
+			userData = await request(req, `/user/${v.bId}`, params);
+			bIdRooms[i].user = userData.data.payload;
+			Rooms.push(bIdRooms[i]);
+		}));
+		
+		console.log('방완성');
+		console.log(Rooms);
+		return res.render('main', { user: result.data.user, rooms: Rooms });
 	} catch(err) {
 		console.error(err);
 		next(err);
