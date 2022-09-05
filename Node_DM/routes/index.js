@@ -142,26 +142,30 @@ router.post('/login', async (req, res) => {
 		
 		let params;
 		let userData;
-		let tmp;
+		
 		await Promise.all(aIdRooms.map( async (v, i) => {
 			params = {userId: v.aId};
 			userData = await request(req, `/user/${v.aId}`, params);
-			tmp = aIdRooms[i];
-			tmp.user = userData.data.payload;
-			console.log(tmp);
-			Rooms.push(tmp);
-			
-		}));
+			v.user = userData.data.payload;
+			return v;
+		}))
+		.then( (result) => {
+			console.log(result);
+			Rooms.push(...result);
+		})
 		
 		await Promise.all(bIdRooms.map( async (v, i) => {
 			params = {userId: v.bId};
 			userData = await request(req, `/user/${v.bId}`, params);
-			bIdRooms[i].user = userData.data.payload;
-			Rooms.push(bIdRooms[i]);
-		}));
+			v.user = userData.data.payload;
+			return v;
+		}))
+		.then( (result) => {
+			console.log(result);
+			Rooms.push(...result);
+		})
 		
 		console.log('방완성');
-		console.log(Rooms);
 		return res.render('main', { user: result.data.user, rooms: Rooms });
 	} catch(err) {
 		console.error(err);

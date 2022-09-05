@@ -27,14 +27,14 @@
 					<article class="story" style="width: 100%; margin: 0px; border: 0px">
 						<div class="scroll_inner">
 							{%for room in rooms %}
-							<div class="thumb_user" style="display:flex; justify-content: space-between; border: solid #dbdbdb; border-width: 1px 0px 1px 0px;">
+							<div class="thumb_user" style="display:flex; justify-content: space-between; border: solid #dbdbdb; border-width: 0px 0px 1px 0px;">
 								<div style="display: flex; flex-grow: 0">
 									<div class="profile_thumb">
-										<img src="{{room.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
+										<img src="{{room.user.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
 									</div>
 									<div class="detail">
-										<div class="id">{{room.nick}}</div>
-										<div class="time">{{room.LastAt}} 전</div>
+										<div class="id">{{room.user.nick}}</div>
+										<div class="time">{{room.LastAt}}</div>
 									</div>
 								</div>
 								
