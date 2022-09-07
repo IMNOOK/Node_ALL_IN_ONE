@@ -5,12 +5,21 @@ const { Types: { ObjectId } } = Schema;
 const chatSchema = new Schema({
 	room: {
 		type: ObjectId,
-		require: true,
+		required: true,
 		ref: 'Room',
 	},
-	user: {
+	userId: {
 		type: Number,
-		requireed: true,
+		required: true,
+	},
+	userNick: {
+		type: String,
+		required: true,
+	},
+	userImg:{
+		type: String,
+		required: true,
+		
 	},
 	chat: String,
 	gif: String,

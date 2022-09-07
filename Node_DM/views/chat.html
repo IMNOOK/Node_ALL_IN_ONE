@@ -1,75 +1,90 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-  <h1>{{title}}</h1>
-  <a href="/" id="exit-btn">방 나가기</a>
-  <fieldset>
-    <legend>채팅 내용</legend>
-    <div id="chat-list">
-      {% for chat in chats %}
-        {% if chat.user === user %}
-          <div class="mine" style="color: {{chat.user}}">
-            <div>{{chat.user}}</div>
-            {% if chat.gif %}}
-              <img src="/gif/{{chat.gif}}">
-            {% else %}
-              <div>{{chat.chat}}</div>
-            {% endif %}
-          </div>
-        {% elif chat.user === 'system' %}
-          <div class="system">
-            <div>{{chat.chat}}</div>
-          </div>
-        {% else %}
-          <div class="other" style="color: {{chat.user}}">
-            <div>{{chat.user}}</div>
-            {% if chat.gif %}
-              <img src="/gif/{{chat.gif}}">
-            {% else %}
-              <div>{{chat.chat}}</div>
-            {% endif %}
-          </div>
-        {% endif %}
-      {% endfor %}
-    </div>
-  </fieldset>
-  <form action="/chat" id="chat-form" method="post" enctype="multipart/form-data">
-    <label for="gif">GIF 올리기</label>
-    <input type="file" id="gif" name="gif" accept="image/gif">
-    <input type="text" id="chat" name="chat">
-    <button type="submit">전송</button>
-  </form>
+<style>
+#exit-btn { position: absolute; top: 20px; right: 20px; }
+#chat-list { height: 500px; overflow: auto; padding: 5px; }
+#chat-form { text-align: right; }
+label[for='gif'], #chat, #chat-form [type='submit'] {
+  display: inline-block;
+  height: 30px;
+  vertical-align: top;
+}
+label[for='gif'] { cursor: pointer; padding: 5px; }
+#gif { display: none; }
+table, table th, table td {
+  text-align: center;
+  border: 1px solid silver;
+  border-collapse: collapse;
+}
+</style>
+
+<section id="main_container">
+	<div class="inner">
+
+		<div class="contents_box">
+			<article class="contents" style="max-width: 999px;">
+				<h1>{{title}}</h1>
+				<a href="/" id="exit-btn">방 나가기</a>
+				<fieldset>
+				<legend>채팅 내용</legend>
+				<div id="chat-list">
+				  {% for chat in chats %}
+					{% if chat.user === user %}
+					  <div class="mine" style="color: {{chat.user}}">
+						<div>{{chat.user}}</div>
+						{% if chat.gif %}}
+						  <img src="/gif/{{chat.gif}}">
+						{% else %}
+						  <div>{{chat.chat}}</div>
+						{% endif %}
+					  </div>
+					{% elif chat.user === 'system' %}
+					  <div class="system">
+						<div>{{chat.chat}}</div>
+					  </div>
+					{% else %}
+					  <div class="other" style="color: {{chat.user}}">
+						<div>{{chat.user}}</div>
+						{% if chat.gif %}
+						  <img src="/gif/{{chat.gif}}">
+						{% else %}
+						  <div>{{chat.chat}}</div>
+						{% endif %}
+					  </div>
+					{% endif %}
+				  {% endfor %}
+				</div>
+				</fieldset>
+				<form action="/chat" id="chat-form" method="post" enctype="multipart/form-data">
+				<label for="gif">GIF 올리기</label>
+				<input type="file" id="gif" name="gif" accept="image/gif">
+				<input type="text" id="chat" name="chat">
+				<button type="submit">전송</button>
+				</form>
+			</article>
+		</div>
+	</div>
+</section>
+{% endblock %}
+
+{% block script %}
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io.connect('https://node-all-in-dm.run.goorm.io/chat', {
       path: '/socket.io',
     });
-    socket.on('join', function (data) {
-      const div = document.createElement('div');
-      div.classList.add('system');
-      const chat = document.createElement('div');
-      div.textContent = data.chat;
-      div.appendChild(chat);
-      document.querySelector('#chat-list').appendChild(div);
-    });
-    socket.on('exit', function (data) {
-      const div = document.createElement('div');
-      div.classList.add('system');
-      const chat = document.createElement('div');
-      div.textContent = data.chat;
-      div.appendChild(chat);
-      document.querySelector('#chat-list').appendChild(div);
-    });
+	  
     socket.on('chat', function (data) {
       const div = document.createElement('div');
-      if (data.user === '{{user}}') {
+      if (data.userId === '{{userId}}') {
         div.classList.add('mine');
       } else {
         div.classList.add('other');
       }
       const name = document.createElement('div');
-      name.textContent = data.user;
+      name.textContent = data.userNick;
       div.appendChild(name);
       if (data.chat) {
         const chat = document.createElement('div');
@@ -80,9 +95,9 @@
         gif.src = '/gif/' + data.gif;
         div.appendChild(gif);
       }
-      div.style.color = data.user;
       document.querySelector('#chat-list').appendChild(div);
     });
+	  
     document.querySelector('#chat-form').addEventListener('submit', function (e) {
       e.preventDefault();
       if (e.target.chat.value) {
@@ -97,6 +112,7 @@
           });
       }
     });
+	  
     document.querySelector('#gif').addEventListener('change', function (e) {
       console.log(e.target.files);
       const formData = new FormData();
@@ -109,5 +125,6 @@
           console.error(err);
         });
     });
+	  
   </script>
 {% endblock %}

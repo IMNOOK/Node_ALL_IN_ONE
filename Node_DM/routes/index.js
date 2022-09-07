@@ -24,7 +24,7 @@ const request = async (req, api, data) => {
 		console.log(err.response);
 		if( err.response.status === 419) {
 			delete req.session.jwt;
-			return request(req, api);
+			return request(req, api, data);
 		}
 		return err.response;
 	}
@@ -40,7 +40,6 @@ router.get('/',  async (req, res) => {
 	let data = {userId};
 	const result1 = await request(req, '/follow', data);
 	console.log(result1.data);
-
 	let aId = []; //상대가 더 빨리 만든 아이디
 	let bId = []; //상대가 더 늦게 만든 아이디
 	result1.data.payload.forEach((obj) => {
@@ -127,12 +126,15 @@ router.get('/',  async (req, res) => {
 	})
 
 	console.log('방완성');
-	
+
 	return res.render('main', { user: req.session.user, rooms: Rooms });
 })
 
 router.get('/login', (req, res) => {
-	return res.render('login');
+	if(!req.session.user){
+		return res.render('login');
+	}
+	return res.redirect('/logout');
 })
 
 router.get('/follow', async (req, res) => {
