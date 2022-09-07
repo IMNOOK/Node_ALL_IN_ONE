@@ -9,6 +9,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const webSocket = require('./socket');
 const indexRouter = require('./routes');
+const roomRouter = require('./routes/room');
 const connect = require('./schemas');
 
 const app = express();
@@ -39,6 +40,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(sessionMiddleware);
 
 app.use('/', indexRouter);
+app.use('/room', roomRouter);
 
 app.use((req, res, next) => {
 	const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);

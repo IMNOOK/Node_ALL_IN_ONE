@@ -27,7 +27,7 @@
 					<article class="story" style="width: 100%; margin: 0px; border: 0px">
 						<div class="scroll_inner">
 							{%for room in rooms %}
-							<div class="thumb_user" style="display:flex; justify-content: space-between; border: solid #dbdbdb; border-width: 0px 0px 1px 0px;">
+							<div class="thumb_user" id="{{room._id}}" style="display:flex; justify-content: space-between; border: solid #dbdbdb; border-width: 0px 0px 1px 0px;">
 								<div style="display: flex; flex-grow: 0">
 									<div class="profile_thumb">
 										<img src="{{room.user.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
@@ -102,12 +102,13 @@
 		inner.append(div);
 	})
 	
-	function addBtnEvent(e) {
-		location.href = '/room/' + e.target.id;
+	function addBtnEvent(id) {
+		location.href = '/room/' + id;
 	}
 	
 	document.querySelectorAll('.thumb_user').forEach(function (btn) {
-		btn.addEventListener('click', addBtnEvent);
+		console.log(btn.id);
+		btn.addEventListener('click', addBtnEvent(btn.id));
 	})
 </script>
 {% endblock %}

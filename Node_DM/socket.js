@@ -19,7 +19,7 @@ module.exports = (server, app, sessionMiddleware) => {
 	});
 	
 	chat.on('connection', (socket) => {
-		console.log('chat 네임스페이스에 접속');
+		console.log('chat 네임스페이스에 접속');/*
 		const req = socket.request;
 		const { headers: { referer } } = req;
 		const roomId = referer.split('/')[referer.split('/').length - 1].replace(/\?.+/, '');
@@ -27,7 +27,7 @@ module.exports = (server, app, sessionMiddleware) => {
 		socket.to(roomId).emit('join', {
 			user: 'system',
 			chat: `${req.user.nick}님이 입장하셨습니다.`
-		});
+		});*/
 		
 		socket.on('disconect', () => {
 			console.log('chat 네임스페이스 접속 해제');
