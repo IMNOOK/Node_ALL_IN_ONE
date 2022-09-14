@@ -6,20 +6,23 @@ var mongoose = require('mongoose');
 
 const router = express.Router();
 
-router.get('/:roomId', async (req, res) => {
-	const roomId = req.params.roomId;
-	console.log(roomId);
-	const id = mongoose.Types.ObjectId(roomId);
-	console.log(id);	
-	const chats = await Chat.find({
-		room: id
-	}).sort('createdAt');
-	console.log(chats);
-	
-	return res.render('chat', { userId: req.session.user.id, chats });
+router.get('/:roomId', async (req, res, next) => {
+	try{
+		const roomId = req.params.roomId;
+		console.log(roomId);
+		const id = mongoose.Types.ObjectId(roomId);
+		console.log(id);	
+		const chats = await Chat.find({
+			room: id
+		}).sort('createdAt');
+		return res.render('chat', { userId: req.session.user.id, chats, roomId });	
+	} catch(err) {
+		console.error(err);
+		next(err);
+	}
 });
 
-router.post('/room/:roomId/chat', async (req, res) => {
+router.post('/:roomId/chat', async (req, res) => {
 	try{
 		const roomId = req.params.roomId;
 		console.log(roomId);
@@ -32,7 +35,7 @@ router.post('/room/:roomId/chat', async (req, res) => {
 			chat: req.body.chat,
 		});
 		console.log(chat);
-		req.app.get('io').of('/chat').to(req.params.id).emit('chat', chat);
+		req.app.get('io').of('/chat').to(req.params.roomId).emit('chat', chat);
 		res.send('ok');
 	} catch(err){
 		console.error(err);
