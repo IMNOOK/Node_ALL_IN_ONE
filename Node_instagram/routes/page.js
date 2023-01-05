@@ -131,4 +131,8 @@ router.get('/join', isNotLoggedIn, (req, res) => {
 	return res.render('join', { title: '내 정보 - NodeBird' });
 });
 
+router.get('/dm', isLoggedIn, (req, res) => {
+	return res.render('DM', { title: '내 정보 - NodeBird' });
+});
+
 module.exports = router;

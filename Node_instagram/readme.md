@@ -495,7 +495,6 @@ ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연�
 
 FRONT
 	- modaling
-	
 
 DB
 	- contraint -> 외래키, 키 모두 not null 설정해야 정상 동작
@@ -509,6 +508,9 @@ BACKEND
 ## ![hammer_and_wrench](https://github.githubassets.com/images/icons/emoji/unicode/1f6e0.png) 보안해야 할 점
 
 FRONT
+	0. 채팅을 위한 페이지 만들기 - 모달창 제작
+	1. React를 도입하여 SPA로 만들기 - 화면 끊김 
+	2. Js에서 애니메이션을 이용하여 더 부드러운 느낌 주기
 
 DB
 
@@ -516,7 +518,7 @@ DB
 	테스팅을 할 수 있는 사이트도 있으니 찾아보자.
 
 BACKEND
-
+	0. DM 구현
 	RESTful한 API를 생성하는 것이 매우매우 어려운 일이고 고민해야 하는 일이라는 것을 알게되었다.
 	요든 자원들의 요청 방식이 RESTful 해야 작업이 정상적으로 동작한다는 것을 느꼈다.
 	아직 미숙해서 라우팅과 여러 작업들이 미숙하다.

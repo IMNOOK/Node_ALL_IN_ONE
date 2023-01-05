@@ -1,0 +1,156 @@
+@import './reset.css';
+
+.inner {
+    max-width: 930px;
+    height: 80vh;
+}
+
+.last_text {
+    color: #77777777;
+}
+
+/*
+background-color: #fff;
+border: 1px solid #e6e6e6;
+*/
+
+.contents_box{
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+    display: flex;
+}
+
+.contents_box .user {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+}
+
+.contents_box .my_nick {
+    width: 350px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contents_box .my_nick h1{
+    font-weight: 600;
+
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.contents_box .users_nick {
+    width: 340px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    border-right: 1px solid #e6e6e6;
+    border-top: 1px solid #e6e6e6;
+    padding: 5px;
+}
+
+
+.box{
+    margin: 10px 20px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.users {
+    display: flex;
+}
+
+.user .users img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow:hidden;
+    margin-right: 10px;
+}
+
+.contents_box .detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+}
+
+.contents_box .message {
+    width: 580px;
+    display: flex;
+    flex-direction: column;
+}
+
+.contents_box .user_nick {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+
+
+
+.message .users img {
+    width: 32x;
+    height: 32px;
+    border-radius: 50%;
+    overflow:hidden;
+    margin-right: 10px;
+}
+
+.message .main {
+    width: 100%;
+    flex-grow: 1;
+}
+
+.message .message_ui {
+    height: 84px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.message .search_box {
+    width: 520px;
+    height: 44px;
+    padding: 0 11px;
+    border: 1px solid #77777777;
+    border-radius: 22px;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.message .search_box .sprite_camera_icon {
+    margin: 8px;
+}
+
+.message .search_box input{
+    width: 380px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    padding: 8px 9px;
+    outline: none;
+}
+
+.message .send button {
+    padding: 0;
+    height: 42px;
+    background-color: #fff;
+    border: none;
+    color: rgba(0, 55, 107);
+    font-size: 14px;
+    font-weight: 600;
+}

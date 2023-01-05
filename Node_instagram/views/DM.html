@@ -1,0 +1,94 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="/css/DM.css">
+{% endblock %}
+
+{% block content %}
+
+
+{% if user %}
+<div class="hidden_menu">
+		<div class="scroll_inner">
+			<div class="user">
+				<div class="thumb_img"><img src="{{user.img}}" alt="프로필사진"></div>
+				<div class="id">{{user.nick}}</div>
+			</div>
+		</div>
+	</div>
+{% endif %}
+
+    <section id="main_container">
+        <div class="inner">
+            <div class="contents_box">
+                <div class="user">
+                    <div class="my_nick">
+                        <h1>{{user.nick}}</h1>
+                    </div>
+                    <div class="users_nick">
+                        <div class="box">
+                            <div class="users">
+                                <div class="profile_thumb">
+                                    <img src="{{user.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
+                                </div>
+                                <div class="detail">
+                                    <div class="id m_text">이가민</div>
+                                    <div class="last_text">leeminwok@naver.com</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% for twit in twits %}
+                        <div class="box">
+                            <div class="users">
+                                <div class="profile_thumb">
+                                    <img src="{{user.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
+                                </div>
+                                <div class="detail">
+                                    <div class="id m_text">{{user.nick}}</div>
+                                    <div class="ko_name">{{user.email}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <div class="message">
+                    <div class="user_nick">
+                        <div class="box">
+                            <div class="users">
+                                <div class="profile_thumb">
+                                    <img src="{{user.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
+                                </div>
+                                <div class="detail">
+                                    <div class="id m_text">{{user.nick}}</div>
+                                    <div class="ko_name">{{user.email}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main">
+
+                    </div>
+                    <div class="message_ui">
+                        <div class="search_box" id="input">
+                            <div class="sprite_camera_icon"></div>
+                            <input type="text" placeholder="메시지 입력..." id="message_send">
+                            <div class="send">
+                                <button>보내기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block script %}
+<script> 
+	window.onload = function(){
+	}
+</script>
+{% endblock %}

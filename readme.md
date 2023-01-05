@@ -9,15 +9,28 @@ https://blog.naver.com/leeminwok/222778419100
 # ![thinking](https://github.githubassets.com/images/icons/emoji/unicode/1f914.png) 0. 구상
 
 먼저 어떤 기능을 하는 웹 페이지를 만들지 구상합니다.
-Instagram의 기능을 하는 웹 페이지를 클론 해본다.
 
-메인 페이지 - 사용자들의 모든 post를 새로만들어진 순서로 계시합니다.
-로그인 및 회원가입 페이지
-프로필 페이지 - 사용자가 올린 모든 post를 새로 만들어진 순서로 계시합니다. 본인 프로필일 경우 회원 정보 수정이 가능합니다.
-팔로우 페이지 - 팔로운 한 사람들만의 post를 볼 수 있는 페이지.
-채팅 페이지 - 웹 소켓을 통해 실시간 sns를 구현합니다
+sns 기능을 하는 웹 페이지를 기획 해본다.
 
-이후에 API서비스를 제공하여 해당 instagram을 사용하는 유저들의 DB를 사용하여 새로운 페이지를 만듭니다.
+Sns의 기본이 되는 게시물을 올리고 댓글을 달 수 있게 한다.
+ - 게시물에는 태그, 사진, 글을 올릴 수 있으며 유저를 호출하여 알림을 줄 수 있다.
+ - 댓글을 통해 게시물에서 관련된 대화를 할 수 있으며 여기서 또한 유저를 호출하여 알림을 줄 수 있다.
+ - 메인페이지에서는 팔로우한 사람들의 새로운 게시물을 확인할 수 있으며 밑에 내리면 모르는 사람들의 새로운 게시물을 확인할 수 있도록 한다.
+ - 게시물에서 바로 팔로우를 할 수 있다.
+
+계정의 정보가 들어가 있는 프로필에서 본인의 사진이나 상태메세지를 수정할 수 있다.
+ - 프로필 사진, 상태 메세지를 수정할 수 있으며, 팔로워나 팔로윙의 상대를 알 수 있다.
+ - 내가 여태까지 올린 게시글을 한눈에 볼 수 있게 하며 게시글을 클릭할시 해당 게시글로 이동한다.
+
+게시글을 올리는 곳
+ - 사진을 올리고 태그나 글로 게시물을 작성하여 올릴 수 있는 공간으로 사진을 올리면 미리보기를 통해 사진을 확인할 수 있다.
+
+DM
+ - 팔로잉한 사람이나 기존에 DM을 보낸적이 있는 사람들에게 DM을 통해 간단한 이미지나 문자를 보내거나 받을 수 있다.
+
+회원가입, 로그인 기능
+ - 해당 유저가 어떤 유저인지를 확인할 수 있다.
+
 
 # ![thinking](https://github.githubassets.com/images/icons/emoji/unicode/1f914.png) 1. 기획
 
@@ -26,94 +39,21 @@ Instagram의 기능을 하는 웹 페이지를 클론 해본다.
 
 https://ovenapp.io/project/H74UvSHifgHqPYXfGzDvTmvZCPjSr08W#P3cGu
 
+기획한 내용을 토대로 필요한 기능을 디자인하여 완성했을 때의 웹 페이지와 동작을 확인합니다.
+ - 디자인을 공부하지 않았기 때문에 instagram을 보며 따라해보았습니다.
+
 설계하면서 UI를 통해 서버와 어떻게 요청할지 구상합니다.
 
-공통 페이지
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2.1 DB
 
-	로그아웃
+기획한 UI를 토대로 개념적 데이터 모델링을 통해 실질적으로 DB에 저장해야할 객체를 구상합니다.
 
-메인 페이지
-	
-    기본 상태
-		글 가져 오기
-			유저가 작성했던 글 10개씩 1페이지로 가져오기
-			글에는 작성자 닉네임, 작성자의 프로필 사진, 내용(글), 사진, 작성한 시간, 댓글들, 좋아요 갯수가 필요하다.
-		
-		hashtag 검색한 글 가져오기 -> search로 hashtag 검색 -> req.body.title 로 해시태그 전달
-		유저가 작성했던 글 중 hashtag.title이 같은 것을 10개씩 1페이지로 가져오기
-		
-		댓글 보기 -> 파라미터 값으로 postId 전달
-			해당 게시글의 모든 댓글을 가져옴
-		
-		
-	로그인시
-		상시
-			해당 유저와 팔로우한 유저의 채팅방 뜸.
-			글을 가져 올 때, 회원이 이 사용자를 팔로우 했는지 않했는지, 회원이 이 글을 좋아요 했는지 안했는지 까지 추가
-		
-		글 삭제하기
-		
-		좋아요하기 -> 파라미터  값으로 postId 전달 
-			하트 빨간색으로 변경
-
-		좋아요 취소하기 -> 파라미터 값으로 postId 전달
-			하트 공백으로 변경
-
-		팔로우하기 -> 파라미터 값으로 userId 전달
-			팔로우 표시로 변경
-	
-		팔로우 취소하기 -> 파라미터 값으로 userId 전달
-			미 팔로우 상태로 변경
-	
-		댓글 달기 -> req.body.content로 내용이 파라미터 값으로 postId 전달
-			댓글이 달림
-		
-		Room 목록 가져오기
-			내가 기존에 연락하던 모든 Room들이 전달됨
-			Room들에는 다른 회원의 이름, 사진, 마지막 채팅 내용, 마지막 채팅 시간이 들어있음.
-	
-		Room 열기 -> 파라미터 값으로 roomId 전달
-			다른 회원과의 모든 채팅내용을 가져옴
-	
-		DM 보내기 -> req.body.content로 내용이 파라미터 값으로 roomId 전달
-		다른 사용자에게 문자를 보냄, 상대방에게도 event로 생성, 처음 상대와 대화창 열기를 하면 해당 유저와의 Room이 생성됨.
-
-로그인 페이지 & 회원가입 페이지
-
-	기본 상태
-		로그인 페이지 or 회원가입 페이지
-	
-	회원가입
-		회원가입 성공기 메인 페이지 이동, 안되면 메인페이지?error=message
-
-	로그인
-		로그인되면 메인 페이지로 이동, 안되면 메인페이지?error=message 
-
-포스트 페이지
-
-	글 쓰기
-		사진+글 올리기 -> 미리보기
-
-프로필 페이지
-
-	프로필 정보 수정
-		해당 user일 시 프로필 사진, 닉네임 변경가능
-	
-	팔로잉, 팔로워 숫자 보기
-	
-	로그아웃
-	
-	내가 게시한글 보기
-	내가 게시한글 이동하기
-
-
-
-## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2-1. DB
-
-기획한 UI를 토대로 개념적 데이터 모델링을 하고
+ERD에 구상한 데이터를 그려보며 어떤 모양을 하는지 구체적으로 정합니다.
 ![a](https://user-images.githubusercontent.com/51530880/173850440-a2eda00f-3e0f-44cf-904d-07e20b57fb54.png)
 
 주소: https://www.erdcloud.com/d/fojR3JHRiKhFcM6Zs
+
+참고한 내용: https://www.youtube.com/watch?v=Y1FbowQRcmI
 
 ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행했습니다.
 
@@ -138,250 +78,6 @@ ERD를 바탕으로 논리적 데이터 모델링과 제 3정규화까지 진행
 	PostHashtag: postId(INT), hashtagId(INT)
 
 이후에 Mysql을 통해 필요한 쿼리들을 작성해보았습니다.
-	
-User
-
-	check: async (email) => {
-		const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.email = ?`, email);
-		if (rows.length != 0) {
-			return rows[0];
-		} else {
-			return 0;
-		}
-	},
-
-	getOne: async (userId) => {
-		const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.id = ?`, userId);
-		return rows[0]; 
-	},
-
-	set: async (email, nick, password, img) => {
-		try{
-			let result = await con.query(`INSERT INTO User(email, nick, password, img) VALUES (?,?,?, ?)`, [email, nick, password, img]);
-			return result[0].insertId;
-		} catch (err) {
-			console.error(err);
-			return 0;
-		}
-		return 1;
-	},
-
-	update: async (nick, img, userId) => {
-		try{
-			await con.query(`UPDATE User SET nick = ?, img =? WHERE id = ?`, [nick, img, userId]);
-		} catch (err) {
-			console.error(err);
-			return 0;
-		}
-		return 1;
-	},
-
-Post
-
-	getAll: async (num = 0) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Post ORDER BY id DESC LIMIT 10 OFFSET ?`, num);
-		return rows;
-	},
-
-	getById: async (id) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Post WHERE id = ?`, id);
-		return rows;
-	}
-	,
-
-	getByUserId: async (id) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Post WHERE userId = ? ORDER BY id DESC`, id);
-		return rows;
-	},
-
-	getByHashtag: async (title) => {
-		const [rows, fields] = await con.query(`SELECT Post.id, Post.userNick, Post.userId, Post.img FROM Post inner JOIN PostHashtag ON Post.id = PostHashtag.postId inner join Hashtag on Hashtag.id = PostHashtag.hashtagId WHERE Hashtag.title = ? ORDER BY id DESC`, title);
-		return rows;
-	},
-
-	set: async (userId, userNick, userImg, img) => {
-		try{
-			const result = await con.query(`INSERT INTO Post(userId, userNick, userImg, img) VALUES (?,?,?,?)`, [userId, userNick, userImg, img]);
-			console.log(result);
-			return result[0].insertId;
-		} catch(err) {
-			console.error(err);
-			return 0;
-		}
-	},
-
-	update: async (content, img, postId) => {
-		try{
-			await con.query(`UPDATE Post SET content =?, img = ? WHERE postId = ?`, [content, img, postId]);
-		} catch(err) {
-			console.error(err);
-			return 0;
-		}
-		return 1;
-	},
-
-	delete: async (postId) => {
-		con.query(`DELETE FROM Post WHERE id = ?`, postId);
-	}
-
-Good
-
-	getLengthByPostId: async (postId) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ?`, postId);
-		return rows.length;
-	},
-
-	getAllByUserId: async (userId) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Good WHERE userId = ?`, userId);
-		return rows;
-	},
-
-	getByIds: async (userId, postId) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Good WHERE postId = ? AND userId = ?`, [postId, userId]);
-		if(rows.length == 0) return 0;
-		return 1;
-	},
-
-	set: async (userId, postId) => {
-		try{
-			let result = await con.query(`INSERT INTO Good (userId, postId) Values(?, ?)`, [userId, postId]);
-			return result.insertId;
-		} catch(err) {
-			console.error(err);
-			return 0;
-		}
-		return 1;
-	},
-
-	delete: async (userId, postId) => {
-		await con.query(`DELETE FROM Good WHERE userId = ? AND postId = ?`, [userId, postId]);
-	}
-
-Comment
-
-	getById: async (commentId) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Comment WHERE id = ?`, commentId);
-		return rows[0];
-	},
-
-	getAllByPostId: async (postId) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Comment WHERE postId = ?`, postId);
-		console.log(rows[0]);
-		return rows;
-	},
-
-	set: async (content, postId, userId, userNick, userImg) => {
-		try{
-			let result = await con.query(`INSERT INTO Comment (content, postId, userId, userNick, userImg) Values (?, ?, ?, ?, ?)`, [content, postId, userId, userNick, userImg]);
-			return result[0].insertId;
-		} catch(err) {
-			console.error(err);
-			return 0;
-		}
-	},
-
-	delete: async (commentId) => {
-		await con.query(`DELETE FROM Comment WHERE id = ?`, commentId);
-	}
-
-Follow
-
-	getFollowings: async (userId) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followingId = ?`, userId);
-		return rows;
-	},
-
-	getFollowers: async (userId) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followerId = ?`, userId);
-		return rows;
-	},
-
-	getByIds: async (userId, followerId) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followingId = ? AND followerId = ?`, [userId, followerId]);
-		if(rows.length == 0) return 0;
-		return 1;
-	},
-
-	set: async (userId, followerId) => {
-		try{
-			let result = await con.query(`INSERT INTO Follow (followingId, followerId) VALUES (?, ?)`, [userId, followerId]);
-			return result[0].insertId;
-		} catch (err) {
-			console.error(err);
-			return 0;
-		}
-		return 1;
-	},
-
-	delete: async (userId, followerId) => {
-		await con.query(`DELETE FROM Follow WHERE followingId = ? AND followerId = ?`, [userId, followerId]);
-	}
-
-
-Hashtag
-
-	get: async (title) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Hashtag WHERE title = ?`, title)
-		return rows[0];
-	},
-
-	set: async (title) => {
-		try{
-			let result = await con.query(`INSERT INTO Hashtag (title) VALUES (?)`, title);
-			return result[0].insertId;
-		} catch(err) {
-			console.error(err);
-			return 0;
-		}
-		return 1;
-	}
-
-Room
-
-	getByUserId: async (userId) => {
-		const [rows, fields] = await con.query(`SELECT * FROM Room WHERE aId = ? OR bId = ?`, [userId, userId]);
-		return rows[0];
-	},
-
-	set: async (userAId, userBId) => {
-		try{
-			let result = await con.query(`INSERT INTO Room (aId, bId) VALUES`, [userAId, userBId]);
-			return result[0].insertId;
-		} catch(err){
-			console.error(err);
-			return 0;
-		}
-	}
-
-DM
-
-	getByRoomId: async (roomId) => {
-		const [rows, fields] = await con.query(`SELECT * FROM DM WHERE roomId = ?`, roomId);
-		return rows[0];
-	},
-
-	set: async (roomId, content, sender) => {
-		try{
-			let result = await con.query(`INSERT INTO DM (roomId, content, sender) VALUES (?, ?, ?)`, [roomId, content, sender]);
-			return result[0].insertId;
-		} catch (err){
-			console.error(err);
-			return 0;
-		}
-	}
-
-PostHashtag
-
-	set: async (postId, hashtagId) => {
-		try{
-			let result = await con.query(`INSERT INTO PostHashtag (postId, hashtagId) VALUES (? ,?)`, [postId, hashtagId]);
-			return result[0].insertId;
-		} catch(err) {
-			console.error(err);
-			return 0;
-		}
-	},
-
 
 마지막으로 물리적 데이터 모델링 (성능 향상 중요!)
 find slow query를 통해 교정을 합니다.
@@ -403,23 +99,29 @@ find slow query를 통해 교정을 합니다.
 
 교정한 내용
 
-
 Models 파일에 items.js에 각각의 쿼리들 저장
 
+이후에 실질적으로 사용될 데이터 테이블을 작성한다. 
 
-## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2.2 백엔드
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2.2 프론트 엔드
 
-사용한 패키지
+ovenapp을 토대로 만든 html, css, js을 작성하고.
+DB에서 만든 실질적으로 사용할 데이터 테이블을 토대로 서버에서 가져와서 사용할 부분을 만들어 놓고
 
--   **Express**  　　　=> node.js의 웹 프레임워크
--   **eslint**　　　　=> node.js에서 팀 단위 협업시, 문법 검사를 해보자
--   **prettier**　　　=> node.js에서 팀 단위 협업시, 코딩 스타일을 통일해보자
--   **cors**　　=> node.js에서 cors 문제를 해결해보자
--   **nodemon**　　=> node.js에서 파일 수정시 자동으로 서버를 내렸다가 올려보자
--   **bcrypt**　　=> node.js에서 데이터베이스에 저장할 비밀번호를 암호화 해보자
--   **multer**　　=> node.js에서 프론트 엔드에서 보내주는 이미지 데이터를 받아보자
--   **jwt**　　=> node.js에서 jwt 토큰을 이용한 로그인 기능을 구현해보자
--   **method-override**　　=> node.js에서 form태그로 delete, put 사용을 해보자
+나중에 서버에 swagger을 통해 해당 내용을 서버에 요청하는 url만 입력하면 되겠금 만든다.
+
+## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2.3 백엔드
+
+Nodejs를 통해 서버를 제작했습니다.
+MVC모델링을 통해
+서버에 요청이 오면
+라우터를 통해 해당 요청을 받는 Controller가 응답해야할 처리를 한 후,
+해당 데이터를 가공하여 M(모델)에 담아 V로 전달하면
+V에서 반환할 전체적인 것을 WAS를 통해 구현 하고 사용자에게 전달하는 방식을 하고 있다.
+
+요청에는 정적인 요청과 동적인 요청이 있는데,
+정적인 요청을 서버에서 바로 그 값을 사용자에게 넘겨주면 되는 반면
+동적인 요청을 서버에서 WAS(웹 애플리케이션 서버)에게 넘겨주어서 실행시킨 후 사용자에게 넘겨줘야 한다.
 
 라우팅
 - 웹 페이지와 DB를 연결하기 위한 REST API를 설계해 보았습니다.
@@ -437,187 +139,8 @@ Models 파일에 items.js에 각각의 쿼리들 저장
 10. HATEOAS 적용
 11. JSON을 통한 ERROR 응답 처리
 
-라우터
-
-middlewares.js
-//미들웨어
-
-	isLoggedIn, isNotLoggedIn => passport의 req.isAuthenticated() 메소드를 통해
-	현재 로그인이 되어있는 상태를 판단하여 next나 error를 반환하는 미들웨어
-
-page.js
-/:
-
-	//로그인시 변해야할 UI
-	use(
-		로그인시
-			res.locals.user = req.user;
-			각 posts 중에 내가 좋아요한 것들 List
-			각 유저 중에 내가 팔로우 한 것들 List
-			Room창 열기 모달
-	)
-
-	//게시글
-	get('/?page=params'):
-		글 가져 오기 (page)
-			각 글마다 좋아요 가져오기 (postId),
-			각 글마다 댓글 가져오기 (postId)
-		return res.render('index', {title: 'Main', twits: posts});
-	
-	get('/search/:title') 
-		hashtag 검색한 글 가져오기 (title)
-			각 글마다 좋아요 가져오기 (postId),
-			각 글마다 댓글 가져오기 (postId)
-		return res.render('index', {title: 'Main', twits: posts});
-		
-	//팔로우	
-	get('/follow/:userId')
-    	팔로우하기 (userId, follower)
-	
-	delete('/follow/:userId')
-    	팔로우 취소하기 (userId, follower)  
-    
-	//페이지 이동
-	get('/login')
-		로그인 페이지 이동
-		return res.render('login', { title: "로그인"} );
-
-	get('/join')
-		회원가입 페이지 이동
-		return res.render('join', { title: "회원가입"});
-	
-	get('/post')
-		포스트 페이지 이동
-		return res.render('post', { title: "포스트"});
-		
-		
-	get('/profile')
-		포스트 페이지 이동
-		return res.render('profile', { title: "프로파일"});
-		
-		
-	get('/follow')
-		포스트 페이지 이동
-		return res.render('follow', { title: "팔로우"});
-
-auth.js
-/auth:
-
-	//사용자 계정
-	post('/join')
-		회원가입:
-    		유저 있는지 확인 (email)
-				return res.redirect('/join?error=exist');
-    		유저 추가 (email, password, nick)
-				res.redirect('/');
-			
-	post('/login')
-		passport로그인
-			authenticate('local') -> (authError, user, info)
-			authError
-				return next(authError);
-			!user
-				return res.redirect('/');
-			return req.login(user, (err) => {return redirect('/')}) //passport.serializeUser
-		
-		-> 로그인 완료시 deserializeUser를 통해 req.user에 유저 세션 저장 -> passport.session() 
-			
-	get('/logout)
-		로그아웃
-		req.logout()
-		req.session.destroy();
-		res.redirect('/');
-
-
-/post:
-	
-	fs.readdirSync('uploads') else fs.mkdirSync('uploads')
-	multer({ storage( destination, filename ), limits })
-
-	//게시판 글
-	post('/img')
-		이미지 올리기 (img)	
-
-	post('/')
-		글 쓰기 (userId, userNick, img)
-		글의 내용 쓰기(댓글)(content, postId, userId, userNick)
-		Promise.all(content.match(hashtag).map(async tag => {
-			if(해시태그 찾기(title))
-			else 해시태그 등록(title)
-			PostHashtag(postId, hashtagId)
-		}))
-		
-	delete('/:postId')
-		내가 게시한글 삭제하기 (postId)
-
-	//댓글
-	post('/:postId')
-		댓글달기(comment, postId, userId, userNick)
-	
-	delete('/:postId')
-		댓글 삭제하기(commentId)
-	
-	//좋아요
-	get('/good/:postId')
-		좋아요하기 (userId, postId)
-		
-	detele('/good/:postId)
-	좋아요 취소하기 (userId, postId)  
-
-/profile:
-	
-	//사용자 계정관리
-	get('/:userid')
-		유저 프로파일 페이지 이동
-		유저 정보 보기(userId)
-		팔로잉, 팔로워 숫자 보기:
-			팔로잉 숫자 보기 (userId)
-			팔로워 숫자 보기 (userId)
-
-		유저가 게시한글 보기 (userId)
-
-	update('/:userId')
-		프로필 정보 수정 (nick, email, img, userId)
-	
-/room:
-
-	get('/')
-    	Room 열기 = 목록 가져오기 (userId)
-	
-	post('/')
-    	Room 추가 하기(aId, bId)
-		
-	get('/:roomId')
-	    DM 읽기(roomId, page)
-		
-	post('/:roomId')
-    	DM 보내기 (roomId, content, sender)
-	
 설계 및 구현 이후
 Swagger OPEN API를 사용해보며 FRONT와의 협업에 어떻게 사용될지 알아보았습니다.
-
-
-## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 2.3 프론트 엔드
-ovenapp을 토대로 만든 html, css, js에 swagger을 토대로 서버와 연동시킨다.
-
--front-
-메인 페이지
-	사용자의 팔로우된 사람들의 게시물을 우선적으로 가져옵니다. 이후 랜덤 게시물을 가져온다.
-	게시물에는 로그인된 글쓴이가 글과 그림을 올릴 수 있으며 @기능으로 유저를 호출하거나 #기능으로 해시태그를 달 수 있다.
-	게시물에는 좋아요와 해당 글쓴이를 팔로우 할 수 있는 버튼이 있다.
-	게시물에는 로그인된 유저 모두가 댓글을 달 수 있으며 이때 @기능으로 유저를 호출할 수 있다.
-	만약 글쓴이가 본인이라면 게시물을 삭제할 수 있는 버튼이 활성화 된다.
-	DM이 왔을 경우 DM창이 뜨며 클릭시 모달창이 올라와 DM을 주고 받을 수 있다.
-	
-로그인 페이지
-	로그인할 수 있으며 회원가입을 클릭하면 모달창이 올라와서 회원가입을 할 수 있다.
-	
-프로필 페이지
-	본인이 올린 모든 게시물을 볼 수 있으며, 삭제할 수 있다.
-	본인으 follow 수와 following 수를 확인할 수 있다.
-	
-포스트 페이지 
-	게시물을 올릴 수 있는 곳이다.
 
 ## ![sunglasses](https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png) 4. 테스트
 
@@ -702,4 +225,3 @@ DB
 	테스팅을 할 수 있는 사이트도 있으니 찾아보자.
 
 BACKEND
-

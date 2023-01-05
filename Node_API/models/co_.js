@@ -8,6 +8,6 @@ const pool = mysql.createPool(
 	config[process.env.NODE_ENV || 'development']
 );
 
-const conn = pool.promise();
+const con = pool.promise();
 
-module.exports = conn;
+module.exports = con;
