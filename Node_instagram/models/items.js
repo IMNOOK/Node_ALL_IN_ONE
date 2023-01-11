@@ -171,9 +171,9 @@ const items = {
 			return 1;
 		},
 		
-		set: async (userId, followerId) => {
+		set: async (userId, userNick, userImg, followerId, followerNick, followerImg) => {
 			try{
-				let result = await con.query(`INSERT INTO Follow (followingId, followerId) VALUES (?, ?)`, [userId, followerId]);
+				let result = await con.query(`INSERT INTO Follow (followingId, followingNick, followingImg, followerId, followerNick, followerImg) VALUES (?, ?, ?, ?, ?, ?)`, [userId, userNick, userImg, followerId, followerNick, followerImg]);
 				return result[0].insertId;
 			} catch (err) {
 				console.error(err);
@@ -208,21 +208,22 @@ const items = {
 		
 	},
 	
-	/*
 	Room: {
-		get: async (id) => {
-			const [rows, fields] = await con.query(`SELECT * FROM Room WHERE id = ?`, id);
-			return rows[0];
-		},
-		
+
 		getByUserId: async (userId) => {
 			const [rows, fields] = await con.query(`SELECT * FROM Room WHERE aId = ? OR bId = ?`, [userId, userId]);
 			return rows;
 		},
+
+		getByUserIds: async (userId,  otherId) => {
+			const [rows, fields] = await con.query(`SELECT * FROM Room WHERE aId = ? AND bId = ? OR aId = ? AND bId = ?`, [userId, otherId, otherId, userId]);
+			if(rows.length == 0) return 0;
+			return 1;
+		},
 		
 		set: async (userAId, userBId) => {
 			try{
-				let result = await con.query(`INSERT INTO Room (aId, bId) VALUES`, [userAId, userBId]);
+				let result = await con.query(`INSERT INTO Room (aId, bId) VALUES (?, ?)`, [userAId, userBId]);
 				return result[0].insertId;
 			} catch(err){
 				console.error(err);
@@ -230,16 +231,26 @@ const items = {
 			}
 		}
 	},
-	
+
 	DM: {
-		getByRoomId: async (roomId) => {
+		getChat: async (roomId) => {
 			const [rows, fields] = await con.query(`SELECT * FROM DM WHERE roomId = ?`, roomId);
 			return rows;
 		},
 		
-		set: async (roomId, sender, content) => {
+		setChat: async (roomId, sender, content) => {
 			try{
-				let result = await con.query(`INSERT INTO DM (roomId, content, sender) VALUES (?, ?, ?)`, [roomId, content, sender]);
+				let result = await con.query(`INSERT INTO DM (roomId, chat, senderId) VALUES (?, ?, ?)`, [roomId, content, sender]);
+				return result[0].insertId;
+			} catch (err){
+				console.error(err);
+				return 0;
+			}
+		},
+
+		setGif: async (roomId, sender, content) => {
+			try{
+				let result = await con.query(`INSERT INTO DM (roomId, chat, senderId, gif) VALUES (?, ?, ?, ?)`, [roomId, content, sender, 1]);
 				return result[0].insertId;
 			} catch (err){
 				console.error(err);
@@ -247,7 +258,6 @@ const items = {
 			}
 		}
 	},
-	*/
 	
 	PostHashtag: {
 		set: async (postId, hashtagId) => {

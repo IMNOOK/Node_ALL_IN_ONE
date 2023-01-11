@@ -88,6 +88,7 @@ router.post('/', isLoggedIn, upload2.none() ,async (req, res) => {
 			})
 		}
 	}
+	return res.redirect('/');
 })
 
 router.delete('/:postId', isLoggedIn, async (req, res) => {

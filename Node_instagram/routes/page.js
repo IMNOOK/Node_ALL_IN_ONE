@@ -61,11 +61,15 @@ router.get('/search/:title', async (req, res) => {
 });
 
 //팔로우
-router.get('/follow/:userId', isLoggedIn, async (req, res) => {
+router.post('/follow/:userId', isLoggedIn, async (req, res) => {
 	try{
 		const one = await items.Follow.getByIds(req.user.id, req.params.userId);
+		const followerNick = req.body.followerNick;
+		const followerImg = req.body.followerImg;
+		console.log(req.user.nick);
+		console.log(req.user.img);
 		if(!one){	
-			const result = await items.Follow.set(req.user.id, req.params.userId);	
+			const result = await items.Follow.set(req.user.id, req.user.nick, req.user.img, req.params.userId, followerNick, followerImg);	
 		}
 	} catch (err) {
 		console.error(err);
@@ -129,10 +133,6 @@ router.get('/login', isNotLoggedIn, (req, res) => {
 
 router.get('/join', isNotLoggedIn, (req, res) => {
 	return res.render('join', { title: '내 정보 - NodeBird' });
-});
-
-router.get('/dm', isLoggedIn, (req, res) => {
-	return res.render('DM', { title: '내 정보 - NodeBird' });
 });
 
 module.exports = router;

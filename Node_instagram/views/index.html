@@ -41,15 +41,17 @@
                         <div class="sprite_more_icon" data-name="more">
                             <ul class="toggle_box" id="toggle">
 								{% if not followerIdList.includes(twit.userId) and twit.userId !== user.id %}
-                                <li><form method="get" action="/follow/{{twit.userId}}">
+                                <li><form method="post" action="/follow/{{twit.userId}}">
 								   <input type="submit" class="follow" value="follow" data-name="follow">
+								   <input type="hidden" name="followerNick" value="{{twit.userNick}}">
+								   <input type="hidden" name="followerImg" value="{{twit.userImg}}">
 								   </form>
 								</li>
 								{% endif %}
 								{% if followerIdList.includes(twit.userId) %}
 								<li><form method="get" action="/follow/delete/{{twit.userId}}">
-								   <input type="submit" class="follow" value="follow 취소" data-name="follow">
-								   </form>
+									   <input type="submit" class="follow" value="follow 취소" data-name="follow">
+									 </form>
 								</li>
 								{% endif %}
 								{% if twit.userNick == user.nick %}

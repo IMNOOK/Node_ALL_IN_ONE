@@ -9,6 +9,15 @@
     color: #77777777;
 }
 
+
+img {
+    width: 32x;
+    height: 32px;
+    border-radius: 50%;
+    overflow:hidden;
+    margin-right: 10px;
+}
+
 /*
 background-color: #fff;
 border: 1px solid #e6e6e6;
@@ -45,7 +54,8 @@ border: 1px solid #e6e6e6;
 
 .contents_box .users_nick {
     width: 340px;
-    flex-grow: 1;
+    height: 969px;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     justify-content: left;
@@ -97,19 +107,30 @@ border: 1px solid #e6e6e6;
 }
 
 
-
-
-.message .users img {
-    width: 32x;
-    height: 32px;
-    border-radius: 50%;
-    overflow:hidden;
-    margin-right: 10px;
+.add {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .message .main {
     width: 100%;
+    height: 880px;
+}
+
+#chat-list{
+    padding-top: 10px;
+    height: 870px;
+    overflow-y:scroll;
     flex-grow: 1;
+}
+
+#chat-list img{
+    max-width: 100%;
+    height: auto;
 }
 
 .message .message_ui {
@@ -153,4 +174,46 @@ border: 1px solid #e6e6e6;
     color: rgba(0, 55, 107);
     font-size: 14px;
     font-weight: 600;
+}
+
+.message form{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mine { text-align: right; }
+.system { text-align: center; }
+.mine img, .other img {
+  max-width: 300px;
+  display: inline-block;
+  border: 1px solid silver;
+  border-radius: 5px;
+  padding: 2px 5px;
+}
+.mine div:first-child, .other div:first-child { 
+    font-size: 12px;
+    padding: 5px;
+}
+
+.mine div:last-child {
+    background-color: #e6e6e6;
+}
+
+.other div:last-child{
+    border: 1px solid #e6e6e6;
+}
+
+.mine div:last-child, .other div:last-child {
+    height: 12px;
+    word-wrap: break-word;
+    white-space: normal;
+    display: inline-block;
+    border-radius: 22px;
+    padding: 16px;
+    max-width: 300px;
+}
+
+#gif::file-selector-button {
+    display: none;
 }

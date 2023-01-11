@@ -1,10 +1,91 @@
 {% extends 'layout.html' %}
 
 {% block head %}
+    <style>
+	#modal.modal-overlay {
+		z-index: 999;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+		display: none;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		background: rgba(255, 255, 255, 0.25);
+	}
+	#modal .modal-window {
+		background: white;
+		box-shadow: 0 2px 8px 0 rgba( 0, 0, 0, 0.37 );
+		border-radius: 10px;
+		border: 1px solid rgba(0,0,0,0.1);
+		width: 400px;
+		height: 500px;
+		position: relative;
+		top: -100px;
+		padding: 10px;
+	}
+	#modal .header{
+		width: 100%;
+		height: 30px;
+	}
+	#modal .title {
+		padding-left: 10px;
+		display: inline;
+		text-shadow: 1px 1px 2px gray;
+		color: white;
+
+	}
+	#modal .title h2 {
+		display: inline;
+	}
+	#modal .close-area {
+		display: inline;
+		float: right;
+		padding-right: 10px;
+		cursor: pointer;
+		text-shadow: 1px 1px 2px gray;
+		color: white;
+	}
+	#modal form {
+		display: flex;
+		flex-direction: column;
+        align-items: center;
+	}
+	</style>
     <link rel="stylesheet" href="/css/DM.css">
 {% endblock %}
 
 {% block content %}
+
+
+<div id="modal" class="modal-overlay">
+    <div class="modal-window">
+        <div class="header">
+            <div class="title">
+                <h2>새로운 메세지</h2>
+            </div>
+            <div class="close-area">X</div>
+        </div>
+        <div class="content">
+            <div class="recommand">
+                {% for follower in followers %}
+                <div class="box">
+                    <div class="users" id="{{follower.followerId}}">
+                        <div class="profile_thumb">
+                            <img src="{{follower.followerimg}}" alt="프로필사진" onerror="this.src='/img/1.png'">
+                        </div>
+                        <div class="detail">
+                            <div class="id m_text">{{follower.followerNick}}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 
 
 {% if user %}
@@ -26,27 +107,15 @@
                         <h1>{{user.nick}}</h1>
                     </div>
                     <div class="users_nick">
+                        {% for room in rooms %}
                         <div class="box">
-                            <div class="users">
+                            <div class="users" id="{{room.id}}/{{room.roomid}}">
                                 <div class="profile_thumb">
-                                    <img src="{{user.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
+                                    <img src="{{room.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
                                 </div>
                                 <div class="detail">
-                                    <div class="id m_text">이가민</div>
-                                    <div class="last_text">leeminwok@naver.com</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {% for twit in twits %}
-                        <div class="box">
-                            <div class="users">
-                                <div class="profile_thumb">
-                                    <img src="{{user.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
-                                </div>
-                                <div class="detail">
-                                    <div class="id m_text">{{user.nick}}</div>
-                                    <div class="ko_name">{{user.email}}</div>
+                                    <div class="id m_text">{{room.nick}}</div>
+                                    <div class="ko_name">{{room.email}}</div>
                                 </div>
                             </div>
                         </div>
@@ -54,41 +123,165 @@
 
                     </div>
                 </div>
+                {% if room.id == 0%}
+                    <div class="add">
+                        <div class="sendMessage">
+                            내 메시지
+                        </div>
+                        <div class="newRoomMessage">메세지 보내기</div>
+                    </div>
+                {% endif %}
+                {% if room.id != 0 %}
                 <div class="message">
                     <div class="user_nick">
                         <div class="box">
                             <div class="users">
                                 <div class="profile_thumb">
-                                    <img src="{{user.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
+                                    <img src="{{other.img}}" alt="프로필사진" onerror="this.src='/img/1.png'">
                                 </div>
                                 <div class="detail">
-                                    <div class="id m_text">{{user.nick}}</div>
-                                    <div class="ko_name">{{user.email}}</div>
+                                    <div class="id m_text">{{other.nick}}</div>
+                                    <div class="ko_name">{{other.email}}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="main">
-
+                        <div id="chat-list">
+                        {% for chat in chats %}
+                            {% if chat.senderId === user.id %}
+                            <div class="mine" style="color: black">
+                                <div>{{user.nick}}</div>
+                                {% if chat.gif == 1 %}
+                                <img src="/img/{{chat.chat}}">
+                                {% else %}
+                                <div>{{chat.chat}}</div>
+                                {% endif %}
+                            </div>
+                            {% elif chat.user === 'system' %}
+                            <div class="system">
+                                <div>{{chat.chat}}</div>
+                            </div>
+                            {% else %}
+                            <div class="other">
+                                <div>{{other.nick}}</div>
+                                {% if chat.gif == 1 %}
+                                <img src="/img/{{chat.chat}}">
+                                {% else %}
+                                <div>{{chat.chat}}</div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
                     </div>
                     <div class="message_ui">
                         <div class="search_box" id="input">
-                            <div class="sprite_camera_icon"></div>
-                            <input type="text" placeholder="메시지 입력..." id="message_send">
-                            <div class="send">
-                                <button>보내기</button>
-                            </div>
+                            <form id="chat-form" method="post" enctype="multipart/form-data">                        
+                                <label class="sprite_camera_icon" for="gif"></label>
+                                <input type="file" style="display: none;" id="gif" name="gif" accept="png/image/gif">
+                                <input type="text" placeholder="메시지 입력..." id="message_send" name="chat">
+                                <div class="send">
+                                    <button>보내기</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
+                {%endif%}
             </div>
         </div>
     </section>
 {% endblock %}
 
 {% block script %}
-<script> 
-	window.onload = function(){
-	}
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    
+    {% if room.id == 0 %}
+
+        const modal = document.querySelector("#modal");
+        const update = document.querySelector('.newRoomMessage');
+        
+        update.addEventListener('click', () => {
+            modal.style.display = "flex";
+        })
+        
+        const close = document.querySelector(".close-area");
+        close.addEventListener('click', () => {
+            modal.style.display = "none";
+        });
+
+    {%endif%}
+    
+    {% if room.id != 0 %}
+        const socket = io.connect('localhost:8002/chat', {
+        path: '/socket.io',});
+
+        socket.on('chat', function (data) {
+            console.log("{{user.id}} and ", data.user.id);
+            const div = document.createElement('div');
+            if (data.user.id == '{{user.id}}') {
+                div.classList.add('mine');
+            } else {
+                div.classList.add('other');
+            }
+            const name = document.createElement('div');
+            name.textContent = data.user.nick;
+            div.appendChild(name);
+            if (data.gif != 1) {
+                const chat = document.createElement('div');
+                chat.textContent = data.chat;
+                div.appendChild(chat);
+            } else {
+                const gif = document.createElement('img');
+                gif.src = '/img/' + data.chat;
+                div.appendChild(gif);
+
+            }
+            div.style.color = data.user;
+            document.querySelector('#chat-list').appendChild(div);
+            console.log('chat come is ',data,data.chat);
+        });
+
+
+        document.querySelector('#chat-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (e.target.chat.value) {
+                axios.post('/dm/{{room.id}}/chat', {
+                chat: this.chat.value,
+                })
+                .then(() => {
+                    e.target.chat.value = '';
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+            }
+        });
+
+        document.querySelector('#gif').addEventListener('change', function (e) {
+        console.log(e.target.files);
+        const formData = new FormData();
+        formData.append('gif', e.target.files[0]);
+        axios.post('/dm/{{room.id}}/gif', formData)
+            .then(() => {
+                e.target.file = null;
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+        });
+        
+    {%endif%}
+
+    document.querySelectorAll('.users').forEach(function (btn) {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log("value의 값은 ", btn.id);
+            location.href = '/dm/' + btn.id;
+        })
+    })
+
 </script>
 {% endblock %}
