@@ -10,7 +10,7 @@ const router = express.Router();
 
 //유저계정 UI
 router.use(async (req, res, next) => {
-	res.locals.user = req.user;
+	res.locals.user = await req.user;
 	res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.followerId) : [];
 	res.locals.goodPostIdList = req.user ? req.user.GoodPostIds.map(u => u.postId) : [];
 	next();

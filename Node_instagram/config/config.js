@@ -17,6 +17,14 @@ const config = {
 		database: '',
 		port: '',
 	},
+	production: {
+		host: 'localhost',
+		user: 'IMNOOK',
+		password: process.env.MYSQL_PASSWORD,
+		database: 'nodeInstagram',
+		port: '3306',
+		logging: false,
+	},
 };
 
 module.exports = config;

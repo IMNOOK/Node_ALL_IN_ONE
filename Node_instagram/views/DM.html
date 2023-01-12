@@ -215,7 +215,7 @@
     {%endif%}
     
     {% if room.id != 0 %}
-        const socket = io.connect('localhost:8002/chat', {
+        const socket = io.connect('localhost:80/chat', {
         path: '/socket.io',});
 
         socket.on('chat', function (data) {
