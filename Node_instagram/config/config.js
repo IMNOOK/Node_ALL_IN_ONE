@@ -21,7 +21,7 @@ const config = {
 		host: 'localhost',
 		user: 'IMNOOK',
 		password: process.env.MYSQL_PASSWORD,
-		database: 'nodeInstagram',
+		database: 'node',
 		port: '3306',
 		logging: false,
 	},
