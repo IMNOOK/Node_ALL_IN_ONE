@@ -23,7 +23,6 @@ const config = {
 		password: process.env.MYSQL_PASSWORD,
 		database: 'node',
 		port: '3306',
-		logging: false,
 	},
 };
 

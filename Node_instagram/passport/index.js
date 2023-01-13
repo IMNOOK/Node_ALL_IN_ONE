@@ -13,7 +13,7 @@ module.exports = () => {
 	
 	passport.deserializeUser( async (userId, done) => {
 		try{
-			const user = await items.User.getOne(userId);
+			let user = await items.User.getOne(userId);
 			user.Followings = await items.Follow.getFollowings(userId);
 			user.GoodPostIds = await items.Good.getAllByUserId(userId);
 			//user.rooms = await items.Room.getByUserId(userId);

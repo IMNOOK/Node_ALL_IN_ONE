@@ -57,7 +57,7 @@ redisClient.connect().then(() => {
   });
 
   // 미들웨어 장착
-
+/*
   if(process.env.NODE_ENV === 'production'){
     app.use(morgan('combined'));
     app.use(helmet({ contentSecurityPolicy: false}));
@@ -65,6 +65,8 @@ redisClient.connect().then(() => {
   } else {
     app.use(morgan('dev'));
   }
+  */
+  app.use(morgan('dev'));
   app.use(express.static(path.join(__dirname, 'public'))); //사용자가 public 폴더안의 것 사용
   app.use('/img', express.static(path.join(__dirname, 'uploads'))); // + 사용자는 img로 보임
   app.use(express.json()); // body의 json들을 객체로 만들어줌.
