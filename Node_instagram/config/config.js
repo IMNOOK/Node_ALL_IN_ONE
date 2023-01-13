@@ -18,7 +18,7 @@ const config = {
 		port: '',
 	},
 	production: {
-		host: '192.168.219.111',
+		host: 'localhost',
 		user: 'IMNOOK',
 		password: process.env.MYSQL_PASSWORD,
 		database: 'node',
